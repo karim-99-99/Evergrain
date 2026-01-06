@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useLanguage } from '../context/LanguageContext';
+import { en } from '../translations/en';
+import { ar } from '../translations/ar';
 
 const Contact = () => {
+  const { language } = useLanguage();
+  const t = language === 'ar' ? ar : en;
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -21,7 +27,7 @@ const Contact = () => {
     e.preventDefault();
     // Handle form submission here
     console.log('Form submitted:', formData);
-    alert('Thank you for your message! We will get back to you soon.');
+    alert(t.contact.thankYou);
     setFormData({ name: '', email: '', subject: '', message: '' });
   };
 
@@ -42,12 +48,12 @@ const Contact = () => {
           <h1 className="text-5xl md:text-6xl font-bold text-[#332B2B] mb-4" style={{
             textShadow: '2px 2px 4px rgba(255, 255, 255, 0.8)'
           }}>
-            Contact Us
+            {t.contact.title}
           </h1>
           <p className="text-lg text-[#5C4A37] max-w-2xl" style={{
             textShadow: '1px 1px 2px rgba(255, 255, 255, 0.6)'
           }}>
-            Have a question or want to learn more about our handcrafted wooden kitchenware? We'd love to hear from you.
+            {t.contact.description}
           </p>
         </div>
       </section>
@@ -58,11 +64,11 @@ const Contact = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div className="bg-white rounded-lg p-8 shadow-lg">
-              <h2 className="text-3xl font-bold text-[#332B2B] mb-6">Send us a Message</h2>
+              <h2 className="text-3xl font-bold text-[#332B2B] mb-6">{t.contact.sendMessage}</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-[#332B2B] mb-2">
-                    Name *
+                    <label htmlFor="name" className="block text-sm font-medium text-[#332B2B] mb-2">
+                    {t.contact.name} *
                   </label>
                   <input
                     type="text"
@@ -72,13 +78,13 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
-                    placeholder="Your name"
+                    placeholder={t.contact.namePlaceholder}
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-[#332B2B] mb-2">
-                    Email *
+                    <label htmlFor="email" className="block text-sm font-medium text-[#332B2B] mb-2">
+                    {t.contact.email} *
                   </label>
                   <input
                     type="email"
@@ -88,13 +94,13 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
-                    placeholder="your.email@example.com"
+                    placeholder={t.contact.emailPlaceholder}
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-[#332B2B] mb-2">
-                    Subject *
+                    <label htmlFor="subject" className="block text-sm font-medium text-[#332B2B] mb-2">
+                    {t.contact.subject} *
                   </label>
                   <input
                     type="text"
@@ -104,13 +110,13 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
-                    placeholder="What is this regarding?"
+                    placeholder={t.contact.subjectPlaceholder}
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-[#332B2B] mb-2">
-                    Message *
+                    <label htmlFor="message" className="block text-sm font-medium text-[#332B2B] mb-2">
+                    {t.contact.message} *
                   </label>
                   <textarea
                     id="message"
@@ -120,7 +126,7 @@ const Contact = () => {
                     required
                     rows="6"
                     className="w-full px-4 py-3 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] resize-none"
-                    placeholder="Tell us more about your inquiry..."
+                    placeholder={t.contact.messagePlaceholder}
                   ></textarea>
                 </div>
                 
@@ -128,7 +134,7 @@ const Contact = () => {
                   type="submit"
                   className="w-full bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors duration-300"
                 >
-                  Send Message
+                  {t.contact.send}
                 </button>
               </form>
             </div>
@@ -136,7 +142,7 @@ const Contact = () => {
             {/* Contact Information */}
             <div className="space-y-8">
               <div className="bg-white rounded-lg p-8 shadow-lg">
-                <h2 className="text-3xl font-bold text-[#332B2B] mb-6">Get in Touch</h2>
+                <h2 className="text-3xl font-bold text-[#332B2B] mb-6">{t.contact.getInTouch}</h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-[#5C4A37] rounded-full flex items-center justify-center flex-shrink-0">
@@ -145,7 +151,7 @@ const Contact = () => {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-[#332B2B] mb-1">Email</h3>
+                      <h3 className="text-lg font-bold text-[#332B2B] mb-1">{t.contact.email}</h3>
                       <p className="text-[#5C4A37]">Kitchen2025@gmail.com</p>
                     </div>
                   </div>
@@ -157,7 +163,7 @@ const Contact = () => {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-[#332B2B] mb-1">Phone</h3>
+                      <h3 className="text-lg font-bold text-[#332B2B] mb-1">{t.contact.phone}</h3>
                       <p className="text-[#5C4A37]">+1 (555) 123-4567</p>
                     </div>
                   </div>
@@ -170,7 +176,7 @@ const Contact = () => {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-[#332B2B] mb-1">Address</h3>
+                      <h3 className="text-lg font-bold text-[#332B2B] mb-1">{t.contact.address}</h3>
                       <p className="text-[#5C4A37]">
                         123 Craftsmanship Lane<br />
                         Woodville, CA 90210<br />
@@ -183,19 +189,19 @@ const Contact = () => {
 
               {/* Business Hours */}
               <div className="bg-white rounded-lg p-8 shadow-lg">
-                <h3 className="text-2xl font-bold text-[#332B2B] mb-4">Business Hours</h3>
+                <h3 className="text-2xl font-bold text-[#332B2B] mb-4">{t.contact.businessHours}</h3>
                 <div className="space-y-2 text-[#5C4A37]">
                   <div className="flex justify-between">
-                    <span>Monday - Friday</span>
+                    <span>{t.contact.mondayFriday}</span>
                     <span>9:00 AM - 6:00 PM</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Saturday</span>
+                    <span>{t.contact.saturday}</span>
                     <span>10:00 AM - 4:00 PM</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Sunday</span>
-                    <span>Closed</span>
+                    <span>{t.contact.sunday}</span>
+                    <span>{t.contact.closed}</span>
                   </div>
                 </div>
               </div>

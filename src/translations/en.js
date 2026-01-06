@@ -1,0 +1,245 @@
+export const en = {
+  // Navigation
+  nav: {
+    shop: "Shop",
+    about: "About",
+    contact: "Contact",
+    home: "Home"
+  },
+  // Home Page
+  home: {
+    heroTitle: "Premium Handcrafted",
+    heroTitle2: "Wooden Kitchenware",
+    heroDescription: "Masterfully crafted from the finest hardwoods to elevate your culinary experience and pass the test of time.",
+    shopNow: "SHOP NOW",
+    craftedFromTime: "Crafted from Time",
+    craftedDescription: "At Evergrain, we craft timeless kitchen tools from the world's finest hardwoods, designed for those who value quality, beauty, and durability. Our pieces are made to stand the test of time, both in their form and function.",
+    exploreCollection: "Explore",
+    ourCollection: "Our Collection",
+    exploreDescription: "Discover our range of handcrafted cutting boards, utensils, and kitchen accessories, each made from the highest quality hardwood.",
+    discoverCollection: "Discover Curated Collection",
+    viewAll: "VIEW ALL",
+    ourCraft: "Our Craft",
+    madeToLast: "MADE TO LAST A LIFETIME",
+    craftDescription: "We believe in the power of enduring craftsmanship. Each Evergrain piece is carefully made by skilled artisans who take pride in every detail, from the selection of premium hardwoods to the final hand-finished touch.",
+    craftsmanshipMotion: "Our Craftsmanship in Motion",
+    // Features
+    solidWalnut: "Solid American walnut hardwood",
+    endGrain: "End grain construction",
+    handFinished: "2-inch thick & hand finished",
+    // Product Features
+    features: {
+      solidWalnut: "Solid American walnut hardwood",
+      edgeGrain: "Edge grain construction",
+      twoInchThick: "2-inch thick",
+      handFinished: "Hand-finished",
+      premiumWalnut: "Premium walnut wood",
+      comfortableGrip: "Comfortable grip",
+      setOfFive: "Set of 5 pieces",
+      knifeRest: "Built-in knife rest",
+      juiceGroove: "Juice groove",
+      largeSurface: "Large surface area",
+      thickHandConstruction: "Thick hand construction",
+      superiorKnifeProtection: "Superior knife protection",
+      naturalAntibacterial: "Natural antibacterial properties",
+      elegantFinish: "Elegant finish",
+      durableConstruction: "Durable construction",
+      easyMaintenance: "Easy maintenance",
+      timelessDesign: "Timeless design",
+      versatileUse: "Versatile use",
+      easyToClean: "Easy to clean",
+      naturalWoodFinish: "Natural wood finish",
+      uniqueGrainPatterns: "Unique grain patterns",
+      artisanCrafted: "Artisan crafted",
+      attentionToDetail: "Attention to detail",
+      naturalBeauty: "Natural beauty",
+      premiumHardwood: "Premium hardwood",
+      selectHardwood: "Select hardwood",
+      masterCraftsmanship: "Master craftsmanship",
+      premiumQuality: "Premium quality",
+      lifetimeDurability: "Lifetime durability",
+      signatureDesign: "Signature design",
+      discerningChefQuality: "Discerning chef quality",
+      limitedEdition: "Limited edition"
+    }
+  },
+  // Shop Page
+  shop: {
+    title: "Our Complete Collection",
+    description: "Explore our full range of handcrafted wooden kitchenware, each piece carefully made from the finest hardwoods.",
+    categories: {
+      all: "ALL",
+      bestSeller: "BEST SELLER",
+      newArrival: "NEW ARRIVAL",
+      popular: "POPULAR",
+      limited: "LIMITED",
+      onlyTwoLeft: "ONLY TWO LEFT"
+    },
+    viewDetails: "View Details",
+    searchResults: "Search results for:",
+    clear: "Clear"
+  },
+  // Products
+  products: {
+    heritage: {
+      title: "Heritage Cutting Board",
+      description: "Solid walnut, edge grain Fine Detail."
+    },
+    utensil: {
+      title: "Walnut Utensil Set",
+      description: "Source material, Hand-finished, comfortable."
+    },
+    carving: {
+      title: "Walnut Carving Board",
+      description: "Knife rest, designed for carving."
+    },
+    endGrain: {
+      title: "Walnut End Grain Board",
+      description: "Solid walnut, edge grain. Made of thick hand construction."
+    },
+    premium: {
+      title: "Premium Cutting Board",
+      description: "Handcrafted from premium hardwood with elegant finish."
+    },
+    classic: {
+      title: "Classic Wooden Board",
+      description: "Timeless design, perfect for any kitchen."
+    },
+    artisan: {
+      title: "Artisan Kitchen Board",
+      description: "Beautifully crafted with attention to detail."
+    },
+    master: {
+      title: "Master Craft Board",
+      description: "Expertly made from select hardwood materials."
+    },
+    signature: {
+      title: "Signature Collection Board",
+      description: "Premium quality, designed for the discerning chef."
+    }
+  },
+  // Cart Page
+  cart: {
+    title: "Your Cart",
+    empty: "Your cart is empty",
+    continueShopping: "Continue Shopping",
+    discountCode: "Discount Code:",
+    apply: "Apply",
+    orderSummary: "Order Summary",
+    subtotal: "Subtotal:",
+    shipping: "Shipping",
+    calculated: "Calculated at checkout",
+    total: "Total",
+    proceedCheckout: "Proceed to Checkout",
+    quantity: "Qty:",
+    enterCode: "Enter code",
+    freeShipping: "Free Shipping on Orders Over $100",
+    moneyBack: "30 Day Money Back Guarantee",
+    handcrafted: "Handcrafted from the Finest Hardwoods"
+  },
+  // Product Detail
+  productDetail: {
+    notFound: "Product not found",
+    backToShop: "Back to Shop",
+    reviews: "reviews",
+    features: "Features:",
+    specifications: "Specifications:",
+    dimensions: "Dimensions:",
+    weight: "Weight:",
+    quantity: "Quantity:",
+    addToCart: "Add to Cart",
+    continueShopping: "Continue Shopping"
+  },
+  // About Page
+  about: {
+    title: "About Evergrain",
+    description: "Crafting timeless kitchen tools from the world's finest hardwoods, designed for those who value quality, beauty, and durability.",
+    ourStory: "Our Story",
+    storyText1: "Evergrain was born from a passion for creating kitchen tools that stand the test of time. We believe that the tools you use in your kitchen should be as beautiful as they are functional, crafted with care and attention to detail that honors the natural beauty of wood.",
+    storyText2: "Every piece in our collection is handcrafted by skilled artisans who take pride in their work, using only the finest hardwoods sourced from sustainable forests. We don't just make cutting boards and kitchen accessories—we create heirlooms that will be passed down through generations.",
+    ourMission: "Our Mission",
+    missionText: "To create beautiful, durable kitchen tools that bring joy to everyday cooking while honoring traditional craftsmanship and sustainable practices.",
+    qualityFirst: "Quality First",
+    qualityText: "We use only the finest materials and time-tested techniques.",
+    handcrafted: "Handcrafted",
+    handcraftedText: "Every piece is carefully made by skilled artisans.",
+    sustainable: "Sustainable",
+    sustainableText: "We source our materials from sustainable forests.",
+    ourCraftsmanship: "Our Craftsmanship",
+    craftsmanshipText: "At Evergrain, we believe in the power of enduring craftsmanship. Each piece is carefully made by skilled artisans who take pride in every detail, from the selection of premium hardwoods to the final hand-finished touch.",
+    whyChoose: "Why Choose Evergrain",
+    whyChooseText: "We combine traditional woodworking techniques with modern design to create pieces that are both beautiful and functional.",
+    premiumMaterials: "Premium Materials",
+    premiumText: "Only the finest hardwoods from sustainable sources",
+    expertCraft: "Expert Craftsmanship",
+    expertText: "Handcrafted by skilled artisans with years of experience",
+    lifetimeQuality: "Lifetime Quality",
+    lifetimeText: "Built to last and become family heirlooms",
+    ecoFriendly: "Eco-Friendly",
+    ecoText: "Sustainable practices and environmentally conscious",
+    exploreCollection: "Explore Our Collection"
+  },
+  // Contact Page
+  contact: {
+    title: "Contact Us",
+    description: "Have a question or want to learn more about our handcrafted wooden kitchenware? We'd love to hear from you.",
+    sendMessage: "Send us a Message",
+    name: "Name",
+    email: "Email",
+    subject: "Subject",
+    message: "Message",
+    send: "Send Message",
+    getInTouch: "Get in Touch",
+    phone: "Phone",
+    address: "Address",
+    businessHours: "Business Hours",
+    mondayFriday: "Monday - Friday",
+    saturday: "Saturday",
+    sunday: "Sunday",
+    closed: "Closed",
+    namePlaceholder: "Your name",
+    emailPlaceholder: "your.email@example.com",
+    subjectPlaceholder: "What is this regarding?",
+    messagePlaceholder: "Tell us more about your inquiry...",
+    thankYou: "Thank you for your message! We will get back to you soon."
+  },
+  // Footer
+  footer: {
+    ourProcess: "OUR PROCESS",
+    howWeCraft: "How We Craft",
+    materials: "Materials",
+    careInstructions: "Care Instructions",
+    gallery: "GALLERY",
+    productGallery: "Product Gallery",
+    customerPhotos: "Customer Photos",
+    workshop: "Workshop",
+    contact: "CONTACT",
+    getInTouch: "Get in Touch",
+    support: "Support",
+    faq: "FAQ",
+    companyInfo: "COMPANY INFO",
+    aboutUs: "About Us",
+    careers: "Careers",
+    pressMedia: "Press & Media",
+    blog: "Blog",
+    quickLinks: "QUICK LINKS",
+    productsServices: "Products/Services",
+    testimonials: "Testimonials",
+    pricing: "Pricing",
+    faqs: "FAQs",
+    legalLinks: "LEGAL LINKS",
+    termsOfService: "Terms of Service",
+    privacyPolicy: "Privacy Policy",
+    refundPolicy: "Refund Policy",
+    copyright: "Copyright By EVERGRAIN - 2025. All Rights Reserved.",
+    enterEmail: "Enter your email",
+    joinFree: "JOIN FREE"
+  },
+  // Search
+  search: {
+    placeholder: "Search products...",
+    browseCategory: "Browse by Category:",
+    search: "Search"
+  }
+};
+

@@ -3,6 +3,9 @@ import { useCart } from '../context/CartContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Link, useRouter } from '../utils/Router';
+import { useLanguage } from '../context/LanguageContext';
+import { en } from '../translations/en';
+import { ar } from '../translations/ar';
 // Import all images
 import photo1 from '../assets/photo1.png';
 import photo2 from '../assets/photo2.jpg';
@@ -14,110 +17,113 @@ import photo7 from '../assets/photo7.jpg';
 import photo8 from '../assets/photo8.jpg';
 import photo9 from '../assets/photo9.jpg';
 
-// All products data
-const allProducts = [
+const ProductDetail = () => {
+  const { language } = useLanguage();
+  const t = language === 'ar' ? ar : en;
+  
+  // All products data with translations
+  const allProducts = [
   {
     id: 1,
-    title: "Heritage Cutting Board",
-    description: "Solid walnut, edge grain Fine Detail. This premium cutting board is crafted from the finest American walnut hardwood, featuring elegant edge grain construction that showcases the natural beauty of the wood.",
+    title: t.products.heritage.title,
+    description: t.products.heritage.description,
     price: "$85",
-    badge: "BEST SELLER",
+      badge: language === 'ar' ? 'الأكثر مبيعاً' : "BEST SELLER",
     images: [photo1, photo2, photo3],
-    features: ["Solid American walnut hardwood", "Edge grain construction", "2-inch thick", "Hand-finished"],
+    features: [t.home.features.solidWalnut, t.home.features.edgeGrain, t.home.features.twoInchThick, t.home.features.handFinished],
     dimensions: "18\" x 12\" x 2\"",
     weight: "5.2 lbs"
   },
   {
     id: 2,
-    title: "Walnut Utensil Set",
-    description: "Source material, Hand-finished, comfortable. A complete set of kitchen utensils crafted from premium walnut, designed for both functionality and aesthetic appeal.",
+    title: t.products.utensil.title,
+    description: t.products.utensil.description,
     price: "$55",
-    badge: "NEW ARRIVAL",
+      badge: language === 'ar' ? 'وصل حديثاً' : "NEW ARRIVAL",
     images: [photo2, photo4, photo5],
-    features: ["Premium walnut wood", "Hand-finished", "Comfortable grip", "Set of 5 pieces"],
+    features: [t.home.features.premiumWalnut, t.home.features.handFinished, t.home.features.comfortableGrip, t.home.features.setOfFive],
     dimensions: "Various sizes",
     weight: "1.8 lbs"
   },
   {
     id: 3,
-    title: "Walnut Carving Board",
-    description: "Knife rest, designed for carving. This specialized carving board features a built-in knife rest and juice groove, perfect for carving meats and serving.",
+    title: t.products.carving.title,
+    description: t.products.carving.description,
     price: "$110",
-    badge: "ONLY TWO LEFT",
+      badge: language === 'ar' ? 'بقي اثنان فقط' : "ONLY TWO LEFT",
     images: [photo3, photo6, photo7],
-    features: ["Built-in knife rest", "Juice groove", "End grain construction", "Large surface area"],
+    features: [t.home.features.knifeRest, t.home.features.juiceGroove, t.home.features.endGrain, t.home.features.largeSurface],
     dimensions: "24\" x 16\" x 2.5\"",
     weight: "8.5 lbs"
   },
   {
     id: 4,
-    title: "Walnut End Grain Board",
-    description: "Solid walnut, edge grain. Made of thick hand construction. This end grain board is the ultimate choice for serious chefs, offering superior knife protection.",
+    title: t.products.endGrain.title,
+    description: t.products.endGrain.description,
     price: "$95",
-    badge: "NEW ARRIVAL",
+      badge: language === 'ar' ? 'وصل حديثاً' : "NEW ARRIVAL",
     images: [photo4, photo8, photo9],
-    features: ["End grain construction", "Thick hand construction", "Superior knife protection", "Natural antibacterial properties"],
+    features: [t.home.features.endGrain, t.home.features.thickHandConstruction, t.home.features.superiorKnifeProtection, t.home.features.naturalAntibacterial],
     dimensions: "20\" x 14\" x 2\"",
     weight: "6.8 lbs"
   },
   {
     id: 5,
-    title: "Premium Cutting Board",
-    description: "Handcrafted from premium hardwood with elegant finish. This board combines beauty and durability for the modern kitchen.",
+    title: t.products.premium.title,
+    description: t.products.premium.description,
     price: "$120",
-    badge: "BEST SELLER",
+      badge: language === 'ar' ? 'الأكثر مبيعاً' : "BEST SELLER",
     images: [photo5, photo1, photo3],
-    features: ["Premium hardwood", "Elegant finish", "Durable construction", "Easy maintenance"],
+    features: [t.home.features.premiumHardwood, t.home.features.elegantFinish, t.home.features.durableConstruction, t.home.features.easyMaintenance],
     dimensions: "22\" x 15\" x 2\"",
     weight: "7.2 lbs"
   },
   {
     id: 6,
-    title: "Classic Wooden Board",
-    description: "Timeless design, perfect for any kitchen. A versatile board that works for cutting, chopping, and serving.",
+    title: t.products.classic.title,
+    description: t.products.classic.description,
     price: "$75",
-    badge: "POPULAR",
+      badge: language === 'ar' ? 'شائع' : "POPULAR",
     images: [photo6, photo2, photo4],
-    features: ["Timeless design", "Versatile use", "Easy to clean", "Natural wood finish"],
+    features: [t.home.features.timelessDesign, t.home.features.versatileUse, t.home.features.easyToClean, t.home.features.naturalWoodFinish],
     dimensions: "16\" x 12\" x 1.5\"",
     weight: "4.5 lbs"
   },
   {
     id: 7,
-    title: "Artisan Kitchen Board",
-    description: "Beautifully crafted with attention to detail. Each board is unique, showcasing the natural grain patterns of the wood.",
+    title: t.products.artisan.title,
+    description: t.products.artisan.description,
     price: "$90",
-    badge: "NEW ARRIVAL",
+      badge: language === 'ar' ? 'وصل حديثاً' : "NEW ARRIVAL",
     images: [photo7, photo5, photo8],
-    features: ["Unique grain patterns", "Artisan crafted", "Attention to detail", "Natural beauty"],
+    features: [t.home.features.uniqueGrainPatterns, t.home.features.artisanCrafted, t.home.features.attentionToDetail, t.home.features.naturalBeauty],
     dimensions: "18\" x 13\" x 2\"",
     weight: "5.8 lbs"
   },
   {
     id: 8,
-    title: "Master Craft Board",
-    description: "Expertly made from select hardwood materials. This board represents the pinnacle of craftsmanship and quality.",
+    title: t.products.master.title,
+    description: t.products.master.description,
     price: "$105",
-    badge: "BEST SELLER",
+      badge: language === 'ar' ? 'الأكثر مبيعاً' : "BEST SELLER",
     images: [photo8, photo9, photo1],
-    features: ["Select hardwood", "Master craftsmanship", "Premium quality", "Lifetime durability"],
+    features: [t.home.features.selectHardwood, t.home.features.masterCraftsmanship, t.home.features.premiumQuality, t.home.features.lifetimeDurability],
     dimensions: "20\" x 14\" x 2.5\"",
     weight: "7.5 lbs"
   },
   {
     id: 9,
-    title: "Signature Collection Board",
-    description: "Premium quality, designed for the discerning chef. This signature piece combines elegance with functionality.",
+    title: t.products.signature.title,
+    description: t.products.signature.description,
     price: "$135",
-    badge: "LIMITED",
+      badge: language === 'ar' ? 'محدود' : "LIMITED",
     images: [photo9, photo7, photo6],
-    features: ["Signature design", "Premium quality", "Discerning chef quality", "Limited edition"],
+    features: [t.home.features.signatureDesign, t.home.features.premiumQuality, t.home.features.discerningChefQuality, t.home.features.limitedEdition],
     dimensions: "24\" x 16\" x 2.5\"",
     weight: "9.2 lbs"
   }
 ];
 
-const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -132,7 +138,7 @@ const ProductDetail = () => {
     if (foundProduct) {
       setSelectedImage(0);
     }
-  }, [currentPath]);
+  }, [currentPath, allProducts]);
 
   const handleAddToCart = () => {
     if (product) {
@@ -149,9 +155,9 @@ const ProductDetail = () => {
       <div className="min-h-screen bg-[#F5F0E8]">
         <Header />
         <div className="pt-24 pb-12 text-center">
-          <p className="text-2xl text-[#5C4A37]">Product not found</p>
+          <p className="text-2xl text-[#5C4A37]">{t.productDetail.notFound}</p>
           <Link to="/shop" className="text-[#5C4A37] hover:text-[#332B2B] mt-4 inline-block">
-            Back to Shop
+            {t.productDetail.backToShop}
           </Link>
         </div>
         <Footer />
@@ -224,7 +230,7 @@ const ProductDetail = () => {
                     <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
                   </svg>
                 ))}
-                <span className="text-sm text-[#5C4A37] ml-2">(17 reviews)</span>
+                <span className="text-sm text-[#5C4A37] ml-2">(17 {t.productDetail.reviews})</span>
               </div>
               
               <p className="text-3xl font-bold text-[#332B2B] mb-6">{product.price}</p>
@@ -235,7 +241,7 @@ const ProductDetail = () => {
 
               {/* Features */}
               <div className="mb-8">
-                <h3 className="text-xl font-bold text-[#332B2B] mb-4">Features:</h3>
+                <h3 className="text-xl font-bold text-[#332B2B] mb-4">{t.productDetail.features}</h3>
                 <ul className="space-y-2">
                   {product.features.map((feature, index) => (
                     <li key={index} className="flex items-center text-[#5C4A37]">
@@ -250,14 +256,14 @@ const ProductDetail = () => {
 
               {/* Specifications */}
               <div className="mb-8 p-4 bg-white rounded-lg shadow-md">
-                <h3 className="text-lg font-bold text-[#332B2B] mb-3">Specifications:</h3>
+                <h3 className="text-lg font-bold text-[#332B2B] mb-3">{t.productDetail.specifications}</h3>
                 <div className="grid grid-cols-2 gap-4 text-[#5C4A37]">
                   <div>
-                    <span className="font-medium">Dimensions:</span>
+                    <span className="font-medium">{t.productDetail.dimensions}</span>
                     <p>{product.dimensions}</p>
                   </div>
                   <div>
-                    <span className="font-medium">Weight:</span>
+                    <span className="font-medium">{t.productDetail.weight}</span>
                     <p>{product.weight}</p>
                   </div>
                 </div>
@@ -266,7 +272,7 @@ const ProductDetail = () => {
               {/* Quantity and Add to Cart */}
               <div className="border-t border-[#8B7355]/20 pt-8">
                 <div className="flex items-center gap-4 mb-6">
-                  <label className="text-lg font-medium text-[#332B2B]">Quantity:</label>
+                  <label className="text-lg font-medium text-[#332B2B]">{t.productDetail.quantity}</label>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -294,11 +300,11 @@ const ProductDetail = () => {
                   onClick={handleAddToCart}
                   className="w-full bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors duration-300 mb-4"
                 >
-                  Add to Cart
+                  {t.productDetail.addToCart}
                 </button>
                 
                 <Link to="/shop" className="block text-center text-[#5C4A37] hover:text-[#332B2B] transition-colors">
-                  Continue Shopping
+                  {t.productDetail.continueShopping}
                 </Link>
               </div>
             </div>

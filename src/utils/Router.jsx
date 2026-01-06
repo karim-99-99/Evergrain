@@ -8,6 +8,8 @@ export const Router = ({ children }) => {
   useEffect(() => {
     const onLocationChange = () => {
       setCurrentPath(window.location.pathname);
+      // Scroll to top when route changes
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     // Listen for browser back/forward buttons
@@ -17,6 +19,11 @@ export const Router = ({ children }) => {
       window.removeEventListener('popstate', onLocationChange);
     };
   }, []);
+
+  // Scroll to top when currentPath changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPath]);
 
   return (
     <RouterContext.Provider value={{ currentPath }}>
@@ -55,6 +62,8 @@ export const Link = ({ to, children, className, ...props }) => {
     window.history.pushState({}, '', to);
     // Trigger navigation update by dispatching popstate event
     window.dispatchEvent(new PopStateEvent('popstate'));
+    // Scroll to top immediately for instant feedback
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (

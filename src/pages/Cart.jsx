@@ -3,6 +3,9 @@ import { useCart } from '../context/CartContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Link } from '../utils/Router';
+import { useLanguage } from '../context/LanguageContext';
+import { en } from '../translations/en';
+import { ar } from '../translations/ar';
 // Import all images
 import photo1 from '../assets/photo1.png';
 import photo2 from '../assets/photo2.jpg';
@@ -65,7 +68,7 @@ const Cart = () => {
             <h1 className="text-5xl md:text-6xl font-bold text-[#332B2B]" style={{
               textShadow: '2px 2px 4px rgba(255, 255, 255, 0.8)'
             }}>
-              Your Cart
+              {t.cart.title}
             </h1>
             <div className="hidden md:block">
               <div className="w-32 h-32 bg-gradient-to-br from-[#8B7355] to-[#5C4A37] rounded-lg opacity-20 blur-sm"></div>
@@ -79,10 +82,10 @@ const Cart = () => {
         <div className="container mx-auto px-4">
           {cartItems.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-2xl text-[#5C4A37] mb-8">Your cart is empty</p>
+              <p className="text-2xl text-[#5C4A37] mb-8">{t.cart.empty}</p>
               <Link to="/shop">
                 <button className="bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors duration-300">
-                  Continue Shopping
+                  {t.cart.continueShopping}
                 </button>
               </Link>
             </div>
@@ -123,7 +126,7 @@ const Cart = () => {
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="flex items-center gap-2">
-                            <label className="text-sm text-[#5C4A37]">Qty:</label>
+                            <label className="text-sm text-[#5C4A37]">{t.cart.quantity}</label>
                             <select
                               value={item.quantity}
                               onChange={(e) => handleQuantityChange(item.id, e.target.value)}
@@ -158,39 +161,39 @@ const Cart = () => {
                   {/* Discount Code */}
                   <div className="mb-6">
                     <label className="block text-sm font-medium text-[#332B2B] mb-2">
-                      Discount Code:
+                      {t.cart.discountCode}
                     </label>
                     <div className="flex gap-2">
                       <input
                         type="text"
                         value={discountCode}
                         onChange={(e) => setDiscountCode(e.target.value)}
-                        placeholder="Enter code"
+                        placeholder={t.cart.enterCode}
                         className="flex-1 border border-[#8B7355] rounded px-4 py-2 text-[#332B2B] focus:outline-none focus:border-[#5C4A37]"
                       />
                       <button
                         onClick={handleApplyDiscount}
                         className="bg-[#5C4A37] text-white px-6 py-2 rounded font-semibold hover:bg-[#4A3A2A] transition-colors duration-300"
                       >
-                        Apply
+                        {t.cart.apply}
                       </button>
                     </div>
                   </div>
 
                   {/* Order Summary */}
                   <div className="border-t border-[#8B7355]/20 pt-6 mb-6">
-                    <h3 className="text-lg font-bold text-[#332B2B] mb-4">Order Summary</h3>
+                    <h3 className="text-lg font-bold text-[#332B2B] mb-4">{t.cart.orderSummary}</h3>
                     <div className="space-y-3">
                       <div className="flex justify-between text-[#5C4A37]">
-                        <span>Subtotal:</span>
+                        <span>{t.cart.subtotal}</span>
                         <span>${subtotal.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between text-[#5C4A37]">
-                        <span>Shipping:</span>
+                        <span>{t.cart.shipping}:</span>
                         <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
                       </div>
                       <div className="border-t border-[#8B7355]/20 pt-3 flex justify-between">
-                        <span className="text-lg font-bold text-[#332B2B]">Total:</span>
+                        <span className="text-lg font-bold text-[#332B2B]">{t.cart.total}:</span>
                         <span className="text-lg font-bold text-[#332B2B]">${total.toFixed(2)}</span>
                       </div>
                     </div>
@@ -199,12 +202,12 @@ const Cart = () => {
                   {/* Checkout Button */}
                   <Link to="/checkout" className="block w-full">
                     <button className="w-full bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors duration-300 mb-4">
-                      Proceed to Checkout
+                      {t.cart.proceedCheckout}
                     </button>
                   </Link>
                   
                   <Link to="/shop" className="block text-center text-[#5C4A37] hover:text-[#332B2B] transition-colors">
-                    Continue Shopping
+                    {t.cart.continueShopping}
                   </Link>
                 </div>
               </div>
@@ -231,7 +234,7 @@ const Cart = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <p className="text-[#332B2B] font-medium">30 Day Money Back Guarantee</p>
+              <p className="text-[#332B2B] font-medium">{t.cart.moneyBack}</p>
             </div>
             <div className="flex flex-col items-center">
               <div className="w-16 h-16 bg-[#5C4A37] rounded-full flex items-center justify-center mb-4">
@@ -239,7 +242,7 @@ const Cart = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z" />
                 </svg>
               </div>
-              <p className="text-[#332B2B] font-medium">Handcrafted from the Finest Hardwoods</p>
+              <p className="text-[#332B2B] font-medium">{t.cart.handcrafted}</p>
             </div>
           </div>
         </div>

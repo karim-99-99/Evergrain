@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, useRouter } from '../utils/Router';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useLanguage } from '../context/LanguageContext';
+import { en } from '../translations/en';
+import { ar } from '../translations/ar';
 // Import all images
 import photo1 from '../assets/photo1.png';
 import photo2 from '../assets/photo2.jpg';
@@ -14,78 +17,80 @@ import photo8 from '../assets/photo8.jpg';
 import photo9 from '../assets/photo9.jpg';
 
 const Shop = () => {
+  const { language } = useLanguage();
+  const t = language === 'ar' ? ar : en;
   // All products using all available photos
   const allProducts = [
     {
       id: 1,
-      title: "Heritage Cutting Board",
-      description: "Solid walnut, edge grain Fine Detail.",
+      title: t.products.heritage.title,
+      description: t.products.heritage.description,
       price: "$85",
-      badge: "BEST SELLER",
+      badge: language === 'ar' ? 'الأكثر مبيعاً' : "BEST SELLER",
       image: photo1
     },
     {
       id: 2,
-      title: "Walnut Utensil Set",
-      description: "Source material, Hand-finished, comfortable.",
+      title: t.products.utensil.title,
+      description: t.products.utensil.description,
       price: "$55",
-      badge: "NEW ARRIVAL",
+      badge: language === 'ar' ? 'وصل حديثاً' : "NEW ARRIVAL",
       image: photo2
     },
     {
       id: 3,
-      title: "Walnut Carving Board",
-      description: "Knife rest, designed for carving.",
+      title: t.products.carving.title,
+      description: t.products.carving.description,
       price: "$110",
-      badge: "ONLY TWO LEFT",
+      badge: language === 'ar' ? 'بقي اثنان فقط' : "ONLY TWO LEFT",
       image: photo3
     },
     {
       id: 4,
-      title: "Walnut End Grain Board",
-      description: "Solid walnut, edge grain. Made of thick hand construction.",
+      title: t.products.endGrain.title,
+      description: t.products.endGrain.description,
       price: "$95",
-      badge: "NEW ARRIVAL",
+      badge: language === 'ar' ? 'وصل حديثاً' : "NEW ARRIVAL",
       image: photo4
     },
     {
       id: 5,
-      title: "Premium Cutting Board",
-      description: "Handcrafted from premium hardwood with elegant finish.",
+      title: t.products.premium.title,
+      description: t.products.premium.description,
       price: "$120",
-      badge: "BEST SELLER",
+      badge: language === 'ar' ? 'الأكثر مبيعاً' : "BEST SELLER",
       image: photo5
     },
     {
       id: 6,
-      title: "Classic Wooden Board",
-      description: "Timeless design, perfect for any kitchen.",
+      title: t.products.classic.title,
+      description: t.products.classic.description,
       price: "$75",
-      badge: "POPULAR",
+      badge: language === 'ar' ? 'شائع' : "POPULAR",
       image: photo6
     },
     {
       id: 7,
-      title: "Artisan Kitchen Board",
-      description: "Beautifully crafted with attention to detail.",
+      title: t.products.artisan.title,
+      description: t.products.artisan.description,
       price: "$90",
-      badge: "NEW ARRIVAL",
+      badge: language === 'ar' ? 'وصل حديثاً' : "NEW ARRIVAL",
       image: photo7
     },
     {
       id: 8,
-      title: "Master Craft Board",
-      description: "Expertly made from select hardwood materials.",
+      title: t.products.master.title,
+      description: t.products.master.description,
       price: "$105",
-      badge: "BEST SELLER",
+      badge: language === 'ar' ? 'الأكثر مبيعاً' : "BEST SELLER",
       image: photo8
     },
     {
       id: 9,
-      title: "Signature Collection Board",
-      description: "Premium quality, designed for the discerning chef.",
+      title: t.products.signature.title,
+      description: t.products.signature.description,
       price: "$135",
-      badge: "LIMITED",
+      badge: language === 'ar' ? 'محدود' : "LIMITED",
       image: photo9
     }
   ];
@@ -94,7 +99,9 @@ const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const categories = ['ALL', 'BEST SELLER', 'NEW ARRIVAL', 'POPULAR', 'LIMITED', 'ONLY TWO LEFT'];
+  const categories = language === 'ar' 
+    ? ['الكل', 'الأكثر مبيعاً', 'وصل حديثاً', 'شائع', 'محدود', 'بقي اثنان فقط']
+    : ['ALL', 'BEST SELLER', 'NEW ARRIVAL', 'POPULAR', 'LIMITED', 'ONLY TWO LEFT'];
 
   // Read URL parameters on mount and when path changes
   useEffect(() => {
@@ -113,7 +120,8 @@ const Shop = () => {
 
   // Filter products based on category and search
   const filteredProducts = allProducts.filter(product => {
-    const matchesCategory = selectedCategory === 'ALL' || product.badge === selectedCategory;
+    const allCategory = language === 'ar' ? 'الكل' : 'ALL';
+    const matchesCategory = selectedCategory === allCategory || product.badge === selectedCategory;
     const matchesSearch = !searchQuery || 
       product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -128,15 +136,15 @@ const Shop = () => {
       <section className="pt-24 pb-12 bg-[#F5F0E8]">
         <div className="container mx-auto px-4">
           <h1 className="text-5xl md:text-6xl font-bold text-[#332B2B] mb-4">
-            Our Complete Collection
+            {t.shop.title}
           </h1>
           <p className="text-lg text-[#5C4A37] max-w-2xl">
-            Explore our full range of handcrafted wooden kitchenware, each piece carefully made from the finest hardwoods.
+            {t.shop.description}
           </p>
           {searchQuery && (
             <div className="mt-4">
               <p className="text-[#5C4A37]">
-                Search results for: <span className="font-semibold text-[#332B2B]">"{searchQuery}"</span>
+                {t.shop.searchResults} <span className="font-semibold text-[#332B2B]">"{searchQuery}"</span>
                 <button
                   onClick={() => {
                     setSearchQuery('');
@@ -145,7 +153,7 @@ const Shop = () => {
                   }}
                   className="ml-2 text-[#5C4A37] hover:text-[#332B2B] underline"
                 >
-                  Clear
+                  {t.shop.clear}
                 </button>
               </p>
             </div>
@@ -206,7 +214,7 @@ const Shop = () => {
                     <span className="text-2xl font-bold text-[#332B2B]">{product.price}</span>
                     <Link to={`/product/${product.id}`}>
                       <button className="bg-[#5C4A37] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#4A3A2A] transition-colors duration-300">
-                        View Details
+                        {t.shop.viewDetails}
                       </button>
                     </Link>
                   </div>

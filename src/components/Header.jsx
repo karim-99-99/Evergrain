@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from '../utils/Router';
 import { useCart } from '../context/CartContext';
+import { useLanguage } from '../context/LanguageContext';
+import { en } from '../translations/en';
+import { ar } from '../translations/ar';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -8,8 +11,12 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
+  const { language, toggleLanguage } = useLanguage();
+  const t = language === 'ar' ? ar : en;
 
-  const categories = ['ALL', 'BEST SELLER', 'NEW ARRIVAL', 'POPULAR', 'LIMITED', 'ONLY TWO LEFT'];
+  const categories = language === 'ar' 
+    ? ['الكل', 'الأكثر مبيعاً', 'وصل حديثاً', 'شائع', 'محدود', 'بقي اثنان فقط']
+    : ['ALL', 'BEST SELLER', 'NEW ARRIVAL', 'POPULAR', 'LIMITED', 'ONLY TWO LEFT'];
 
   const handleCategoryClick = (category) => {
     setIsSearchOpen(false);
@@ -69,18 +76,25 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <Link to="/shop" className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 font-medium">
-              Shop
+              {t.nav.shop}
             </Link>
             <Link to="/about" className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 font-medium">
-              About
+              {t.nav.about}
             </Link>
             <Link to="/contact" className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 font-medium">
-              Contact
+              {t.nav.contact}
             </Link>
           </nav>
 
           {/* Icons */}
           <div className="flex items-center gap-4">
+            {/* Language Switcher */}
+            <button
+              onClick={toggleLanguage}
+              className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 px-3 py-1 rounded border border-[#8B7355]/30 hover:border-[#5C4A37] text-sm font-medium"
+            >
+              {language === 'ar' ? 'EN' : 'عربي'}
+            </button>
             <div className="relative mt-2">
               <button 
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -101,7 +115,7 @@ const Header = () => {
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search products..."
+                        placeholder={t.search.placeholder}
                         className="flex-1 px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
                         autoFocus
                       />
@@ -109,13 +123,13 @@ const Header = () => {
                         type="submit"
                         className="bg-[#5C4A37] text-white px-4 py-2 rounded-lg hover:bg-[#4A3A2A] transition-colors"
                       >
-                        Search
+                        {t.search.search}
                       </button>
                     </div>
                   </form>
                   
                   <div className="border-t border-[#8B7355]/20 pt-4">
-                    <p className="text-sm font-semibold text-[#332B2B] mb-3">Browse by Category:</p>
+                    <p className="text-sm font-semibold text-[#332B2B] mb-3">{t.search.browseCategory}</p>
                     <div className="grid grid-cols-2 gap-2">
                       {categories.map((category) => (
                         <button
@@ -165,14 +179,20 @@ const Header = () => {
           <div className="md:hidden mt-4 pb-4 border-t border-[#8B7355]/20">
             <nav className="flex flex-col gap-4 mt-4">
               <Link to="/shop" className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 font-medium">
-                Shop
+                {t.nav.shop}
               </Link>
               <Link to="/about" className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 font-medium">
-                About
+                {t.nav.about}
               </Link>
               <Link to="/contact" className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 font-medium">
-                Contact
+                {t.nav.contact}
               </Link>
+              <button
+                onClick={toggleLanguage}
+                className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 font-medium text-left"
+              >
+                {language === 'ar' ? 'English' : 'العربية'}
+              </button>
             </nav>
           </div>
         )}

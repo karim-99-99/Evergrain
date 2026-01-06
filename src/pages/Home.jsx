@@ -2,6 +2,9 @@ import { useState, useRef } from 'react';
 import { Link } from '../utils/Router';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useLanguage } from '../context/LanguageContext';
+import { en } from '../translations/en';
+import { ar } from '../translations/ar';
 // Import images
 import photo1 from '../assets/photo1.png';
 import photo2 from '../assets/photo2.jpg';
@@ -79,37 +82,40 @@ const VideoCard = ({ video }) => {
 };
 
 const Home = () => {
+  const { language } = useLanguage();
+  const t = language === 'ar' ? ar : en;
+  
   const products = [
     {
       id: 1,
-      title: "Heritage Cutting Board",
-      description: "Solid walnut, edge grain Fine Detail.",
+      title: t.products.heritage.title,
+      description: t.products.heritage.description,
       price: "$85",
-      badge: "BEST SELLER",
+      badge: language === 'ar' ? 'الأكثر مبيعاً' : "BEST SELLER",
       image: photo1
     },
     {
       id: 2,
-      title: "Walnut Utensil Set",
-      description: "Source material, Hand-finished, comfortable.",
+      title: t.products.utensil.title,
+      description: t.products.utensil.description,
       price: "$55",
-      badge: "NEW ARRIVAL",
+      badge: language === 'ar' ? 'وصل حديثاً' : "NEW ARRIVAL",
       image: photo2
     },
     {
       id: 3,
-      title: "Walnut Carving Board",
-      description: "Knife rest, designed for carving.",
+      title: t.products.carving.title,
+      description: t.products.carving.description,
       price: "$110",
-      badge: "ONLY TWO LEFT",
+      badge: language === 'ar' ? 'بقي اثنان فقط' : "ONLY TWO LEFT",
       image: photo3
     },
     {
       id: 4,
-      title: "Walnut End Grain Board",
-      description: "Solid walnut, edge grain. Made of thick hand construction.",
+      title: t.products.endGrain.title,
+      description: t.products.endGrain.description,
       price: "$95",
-      badge: "NEW ARRIVAL",
+      badge: language === 'ar' ? 'وصل حديثاً' : "NEW ARRIVAL",
       image: photo4
     }
   ];
@@ -136,14 +142,14 @@ const Home = () => {
             {/* Left Content */}
             <div className="space-y-6">
               <h1 className="text-5xl md:text-7xl font-bold text-[#332B2B] leading-tight">
-                Premium Handcrafted<br />Wooden Kitchenware
+                {t.home.heroTitle}<br />{t.home.heroTitle2}
               </h1>
               <p className="text-lg text-[#5C4A37] leading-relaxed">
-                Masterfully crafted from the finest hardwoods to elevate your culinary experience and pass the test of time.
+                {t.home.heroDescription}
               </p>
               <Link to="/shop">
                 <button className="bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors duration-300">
-                  SHOP NOW
+                  {t.home.shopNow}
                 </button>
               </Link>
             </div>
@@ -169,14 +175,14 @@ const Home = () => {
             {/* Left - Text */}
             <div className="space-y-6">
               <h2 className="text-5xl md:text-6xl font-bold text-[#332B2B]">
-                Crafted from Time
+                {t.home.craftedFromTime}
               </h2>
               <p className="text-lg text-[#5C4A37] leading-relaxed">
-                At Evergrain, we craft timeless kitchen tools from the world's finest hardwoods, designed for those who value quality, beauty, and durability. Our pieces are made to stand the test of time, both in their form and function.
+                {t.home.craftedDescription}
               </p>
               <Link to="/shop">
                 <button className="bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors duration-300">
-                  SHOP NOW
+                  {t.home.shopNow}
                 </button>
               </Link>
             </div>
@@ -216,8 +222,8 @@ const Home = () => {
             textShadow: '0 2px 20px rgba(0, 0, 0, 0.8), 0 4px 40px rgba(0, 0, 0, 0.4)',
             letterSpacing: '-0.02em'
           }}>
-            Explore <span className="relative inline-block pb-3">
-              Our Collection
+            {t.home.exploreCollection} <span className="relative inline-block pb-3">
+              {t.home.ourCollection}
               <span className="absolute bottom-1 left-0 right-0 h-[1.5px] bg-white/90" style={{
                 boxShadow: '0 1px 3px rgba(255, 255, 255, 0.3)'
               }}></span>
@@ -227,13 +233,13 @@ const Home = () => {
             textShadow: '0 1px 10px rgba(0, 0, 0, 0.6)',
             letterSpacing: '0.01em'
           }}>
-            Discover our range of handcrafted cutting boards, utensils, and kitchen accessories, each made from the highest quality hardwood.
+            {t.home.exploreDescription}
           </p>
           <Link to="/shop">
             <button className="bg-[#6B5A47] hover:bg-[#7A6752] active:bg-[#5C4A37] text-white px-12 py-5 rounded-sm font-semibold uppercase tracking-[0.15em] transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.05)] hover:shadow-[0_6px_30px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.1)] hover:translate-y-[-2px] text-sm" style={{
               letterSpacing: '0.2em'
             }}>
-              SHOP NOW
+              {t.home.shopNow}
             </button>
           </Link>
         </div>
@@ -243,7 +249,7 @@ const Home = () => {
       <section id="shop" className="py-20 bg-[#F5F0E8]">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-[#332B2B] mb-4">
-            Discover Curated Collection
+            {t.home.discoverCollection}
           </h2>
           
           {/* Category Tabs */}
@@ -292,7 +298,7 @@ const Home = () => {
                     <span className="text-2xl font-bold text-[#332B2B]">{product.price}</span>
                     <Link to={`/product/${product.id}`}>
                       <button className="bg-[#5C4A37] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#4A3A2A] transition-colors duration-300">
-                        View Details
+                        {t.shop.viewDetails}
                       </button>
                     </Link>
                   </div>
@@ -304,7 +310,7 @@ const Home = () => {
           <div className="text-center">
             <Link to="/shop">
               <button className="bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors duration-300">
-                VIEW ALL
+                {t.home.viewAll}
               </button>
             </Link>
           </div>
@@ -316,11 +322,11 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-bold text-[#332B2B] mb-4">
-              Our Craft
+              {t.home.ourCraft}
             </h2>
-            <p className="text-xl text-[#5C4A37] mb-4">MADE TO LAST A LIFETIME</p>
+            <p className="text-xl text-[#5C4A37] mb-4">{t.home.madeToLast}</p>
             <p className="text-lg text-[#5C4A37] max-w-3xl mx-auto">
-              We believe in the power of enduring craftsmanship. Each Evergrain piece is carefully made by skilled artisans who take pride in every detail, from the selection of premium hardwoods to the final hand-finished touch.
+              {t.home.craftDescription}
             </p>
           </div>
 
@@ -332,7 +338,7 @@ const Home = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-[#332B2B] mb-2">Solid  walnut hardwood</h3>
+              <h3 className="text-xl font-bold text-[#332B2B] mb-2">{t.home.solidWalnut}</h3>
             </div>
             <div className="bg-white p-8 rounded-lg shadow-lg">
               <div className="w-16 h-16 bg-[#5C4A37] rounded-full flex items-center justify-center mb-4">
@@ -340,7 +346,7 @@ const Home = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-[#332B2B] mb-2">End grain construction</h3>
+              <h3 className="text-xl font-bold text-[#332B2B] mb-2">{t.home.endGrain}</h3>
             </div>
             <div className="bg-white p-8 rounded-lg shadow-lg">
               <div className="w-16 h-16 bg-[#5C4A37] rounded-full flex items-center justify-center mb-4">
@@ -348,7 +354,7 @@ const Home = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-[#332B2B] mb-2">2-inch thick & hand finished</h3>
+              <h3 className="text-xl font-bold text-[#332B2B] mb-2">{t.home.handFinished}</h3>
             </div>
           </div>
 
@@ -368,7 +374,7 @@ const Home = () => {
           {/* Video Gallery Section */}
           <div className="mt-16">
             <h3 className="text-3xl md:text-4xl font-bold text-[#332B2B] mb-8 text-center">
-              Our Craftsmanship in Motion
+              {t.home.craftsmanshipMotion}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[video2, video3, video4].map((video, index) => (
