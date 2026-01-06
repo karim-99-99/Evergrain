@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useRouter } from '../utils/Router';
+import { Link } from '../utils/Router';
 import { useCart } from '../context/CartContext';
 
 const Header = () => {
@@ -8,7 +8,6 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
-  const currentPath = useRouter();
 
   const categories = ['ALL', 'BEST SELLER', 'NEW ARRIVAL', 'POPULAR', 'LIMITED', 'ONLY TWO LEFT'];
 
@@ -54,17 +53,17 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-2 md:gap-3">
             <img 
               src="/logo.png" 
               alt="Evergrain Logo" 
-              className="h-10 w-auto object-contain"
+              className="h-8 md:h-10 w-auto object-contain"
               style={{ 
                 mixBlendMode: 'multiply',
                 filter: 'contrast(1.1) brightness(0.95)'
               }}
             />
-            <span className="text-2xl font-bold text-[#332B2B] tracking-wide">EVERGRAIN</span>
+            <span className="text-lg md:text-2xl font-bold text-[#332B2B] tracking-wide">EVERGRAIN</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -82,7 +81,7 @@ const Header = () => {
 
           {/* Icons */}
           <div className="flex items-center gap-4">
-            <div className="relative">
+            <div className="relative mt-2">
               <button 
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300"
@@ -94,7 +93,7 @@ const Header = () => {
               
               {/* Search Dropdown */}
               {isSearchOpen && (
-                <div ref={searchRef} className="absolute top-full right-0 mt-2 w-96 bg-white rounded-lg shadow-2xl border border-[#8B7355]/20 z-50">
+                <div ref={searchRef} className="absolute  right-0 mt-8 w-96 bg-white rounded-lg shadow-2xl border border-[#8B7355]/20 z-50">
                 <div className="p-4">
                   <form onSubmit={handleSearchSubmit} className="mb-4">
                     <div className="flex gap-2">
@@ -133,11 +132,11 @@ const Header = () => {
               </div>
             )}
             </div>
-            <button className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300">
+            {/* <button className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
-            </button>
+            </button> */}
             <Link to="/cart" className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 relative">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
