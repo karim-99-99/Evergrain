@@ -12,10 +12,10 @@ import photo7 from '../assets/photo7.jpg';
 import photo8 from '../assets/photo8.jpg';
 import photo9 from '../assets/photo9.jpg';
 // Import videos
-import video1 from '../assets/video1.MP4';
-import video2 from '../assets/video2.MP4';
-import video3 from '../assets/video3.MP4';
-import video4 from '../assets/video4.MP4';
+import video1 from '../assets/video1.mp4';
+import video2 from '../assets/video2.mp4';
+import video3 from '../assets/video3.mp4';
+import video4 from '../assets/video4.mp4';
 
 // Video Card Component
 const VideoCard = ({ video }) => {
