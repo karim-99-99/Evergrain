@@ -32,10 +32,12 @@ const productImages = {
 
 const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart, getCartTotal } = useCart();
+  const { language } = useLanguage();
+  const t = language === 'ar' ? ar : en;
   const [discountCode, setDiscountCode] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState(false);
 
-  const subtotal = getCartTotal();
+  const subtotal = getCartTotal() || 0;
   const shipping = subtotal >= 100 ? 0 : 10;
   const total = subtotal + shipping;
 
@@ -93,13 +95,16 @@ const Cart = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Cart Items */}
               <div className="lg:col-span-2 space-y-6">
-                {cartItems.map((item) => (
-                  <div key={item.id} className="bg-white rounded-lg p-6 shadow-lg flex flex-col md:flex-row gap-6">
+                {cartItems.map((item) => {
+                  if (!item || !item.id) return null;
+                  
+                  return (
+                    <div key={item.id} className="bg-white rounded-lg p-6 shadow-lg flex flex-col md:flex-row gap-6">
                     {/* Product Image */}
                     <div className="flex-shrink-0">
                       <img 
                         src={item.image || productImages[item.id] || photo1} 
-                        alt={item.title}
+                        alt={item.title || 'Product'}
                         className="w-32 h-32 object-cover rounded-lg"
                       />
                     </div>
@@ -107,8 +112,8 @@ const Cart = () => {
                     {/* Product Details */}
                     <div className="flex-1 flex flex-col md:flex-row justify-between gap-4">
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-[#332B2B] mb-2">{item.title}</h3>
-                        <p className="text-sm text-[#5C4A37] mb-3">{item.description}</p>
+                        <h3 className="text-xl font-bold text-[#332B2B] mb-2">{item.title || 'Product'}</h3>
+                        <p className="text-sm text-[#5C4A37] mb-3">{item.description || ''}</p>
                         <div className="flex items-center gap-1 mb-3">
                           {[...Array(5)].map((_, i) => (
                             <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
@@ -138,7 +143,7 @@ const Cart = () => {
                             </select>
                           </div>
                           <p className="text-xl font-bold text-[#332B2B]">
-                            ${(parseFloat(item.price.replace('$', '')) * item.quantity).toFixed(2)}
+                            ${((parseFloat((item.price || '$0').replace('$', '')) || 0) * (item.quantity || 1)).toFixed(2)}
                           </p>
                           <button
                             onClick={() => removeFromCart(item.id)}
@@ -151,8 +156,9 @@ const Cart = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Order Summary */}
@@ -163,17 +169,17 @@ const Cart = () => {
                     <label className="block text-sm font-medium text-[#332B2B] mb-2">
                       {t.cart.discountCode}
                     </label>
-                    <div className="flex gap-2">
+                    <div className="relative">
                       <input
                         type="text"
                         value={discountCode}
                         onChange={(e) => setDiscountCode(e.target.value)}
                         placeholder={t.cart.enterCode}
-                        className="flex-1 border border-[#8B7355] rounded px-4 py-2 text-[#332B2B] focus:outline-none focus:border-[#5C4A37]"
+                        className="w-full border border-[#8B7355] rounded px-4 py-2 pr-24 md:pr-28 text-[#332B2B] focus:outline-none focus:border-[#5C4A37]"
                       />
                       <button
                         onClick={handleApplyDiscount}
-                        className="bg-[#5C4A37] text-white px-6 py-2 rounded font-semibold hover:bg-[#4A3A2A] transition-colors duration-300"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 bg-[#5C4A37] text-white px-4 md:px-6 py-1.5 md:py-2 rounded font-semibold hover:bg-[#4A3A2A] transition-colors duration-300 text-sm md:text-base"
                       >
                         {t.cart.apply}
                       </button>

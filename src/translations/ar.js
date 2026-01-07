@@ -148,7 +148,8 @@ export const ar = {
     weight: "الوزن:",
     quantity: "الكمية:",
     addToCart: "أضف إلى السلة",
-    continueShopping: "متابعة التسوق"
+    continueShopping: "متابعة التسوق",
+    addedToCart: "تمت الإضافة إلى السلة"
   },
   // About Page
   about: {

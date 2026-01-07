@@ -148,7 +148,8 @@ export const en = {
     weight: "Weight:",
     quantity: "Quantity:",
     addToCart: "Add to Cart",
-    continueShopping: "Continue Shopping"
+    continueShopping: "Continue Shopping",
+    addedToCart: "added to cart"
   },
   // About Page
   about: {

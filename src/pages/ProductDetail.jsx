@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useCart } from '../context/CartContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -21,8 +21,8 @@ const ProductDetail = () => {
   const { language } = useLanguage();
   const t = language === 'ar' ? ar : en;
   
-  // All products data with translations
-  const allProducts = [
+  // All products data with translations - memoized to prevent recreation
+  const allProducts = useMemo(() => [
   {
     id: 1,
     title: t.products.heritage.title,
@@ -122,11 +122,13 @@ const ProductDetail = () => {
     dimensions: "24\" x 16\" x 2.5\"",
     weight: "9.2 lbs"
   }
-];
+], [t, language]);
 
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
   const { addToCart } = useCart();
   const currentPath = useRouter();
 
@@ -134,21 +136,56 @@ const ProductDetail = () => {
     // Get product ID from URL
     const productId = parseInt(currentPath.split('/product/')[1]);
     const foundProduct = allProducts.find(p => p.id === productId);
-    setProduct(foundProduct);
-    if (foundProduct) {
+    
+    // Only reset selectedImage if product actually changed
+    if (foundProduct && (!product || product.id !== foundProduct.id)) {
       setSelectedImage(0);
     }
-  }, [currentPath, allProducts]);
+    setProduct(foundProduct);
+  }, [currentPath, allProducts, product]);
 
   const handleAddToCart = () => {
     if (product) {
       for (let i = 0; i < quantity; i++) {
         addToCart(product);
       }
-      // Show success message or navigate to cart
-      alert(`${quantity} ${product.title}(s) added to cart!`);
+      // Show success notification
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
     }
   };
+
+  const handleNextImage = () => {
+    if (product) {
+      setSelectedImage((prev) => (prev + 1) % product.images.length);
+    }
+  };
+
+  const handlePrevImage = () => {
+    if (product) {
+      setSelectedImage((prev) => (prev - 1 + product.images.length) % product.images.length);
+    }
+  };
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') {
+        handleNextImage();
+      } else if (e.key === 'ArrowLeft') {
+        handlePrevImage();
+      } else if (e.key === 'Escape') {
+        setIsLightboxOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isLightboxOpen, product]);
 
   if (!product) {
     return (
@@ -169,6 +206,33 @@ const ProductDetail = () => {
     <div className="min-h-screen bg-[#F5F0E8]">
       <Header />
       
+      {/* Success Notification */}
+      {showNotification && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 animate-slide-down">
+          <div className="bg-[#5C4A37] text-white px-6 py-4 rounded-lg shadow-2xl flex items-center gap-4 min-w-[300px] max-w-md">
+            <div className="flex-shrink-0">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="font-semibold text-lg">
+                {quantity} {quantity === 1 ? product?.title : `${product?.title}(s)`} {t.productDetail.addedToCart}
+              </p>
+            </div>
+            <button
+              onClick={() => setShowNotification(false)}
+              className="flex-shrink-0 text-white/80 hover:text-white transition-colors"
+              aria-label="Close notification"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+      
       <section className="pt-24 pb-12 bg-[#F5F0E8]">
         <div className="container mx-auto px-4">
           {/* Breadcrumb */}
@@ -184,30 +248,65 @@ const ProductDetail = () => {
             {/* Product Images */}
             <div>
               {/* Main Image */}
-              <div className="mb-4 bg-white rounded-lg overflow-hidden shadow-lg">
+              <div className="mb-4 bg-white rounded-lg overflow-hidden shadow-lg relative group">
                 <img 
                   src={product.images[selectedImage]} 
                   alt={product.title}
-                  className="w-full h-[500px] object-cover"
+                  className="w-full h-[500px] object-cover cursor-pointer"
+                  onClick={() => setIsLightboxOpen(true)}
                 />
+                {/* Navigation Arrows on Hover */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePrevImage();
+                  }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  aria-label="Previous image"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNextImage();
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  aria-label="Next image"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
               
               {/* Thumbnail Images */}
               <div className="grid grid-cols-3 gap-4">
                 {product.images.map((image, index) => (
-                  <button
+                  <div
                     key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow ${
-                      selectedImage === index ? 'ring-2 ring-[#5C4A37]' : ''
+                    onClick={() => {
+                      setSelectedImage(index);
+                    }}
+                    className={`relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                      selectedImage === index 
+                        ? 'ring-4 ring-[#5C4A37] ring-offset-2 scale-105' 
+                        : 'ring-2 ring-transparent hover:ring-[#8B7355]/50'
                     }`}
                   >
                     <img 
                       src={image} 
                       alt={`${product.title} view ${index + 1}`}
-                      className="w-full h-32 object-cover"
+                      className={`w-full h-32 object-cover transition-opacity duration-300 pointer-events-none ${
+                        selectedImage === index ? 'opacity-100' : 'opacity-80 hover:opacity-100'
+                      }`}
                     />
-                  </button>
+                    {selectedImage === index && (
+                      <div className="absolute inset-0 bg-[#5C4A37]/10 pointer-events-none"></div>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
@@ -311,6 +410,78 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
+
+      {/* Lightbox Modal */}
+      {isLightboxOpen && (
+        <div 
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+          onClick={() => setIsLightboxOpen(false)}
+        >
+          {/* Close Button */}
+          <button
+            onClick={() => setIsLightboxOpen(false)}
+            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10"
+            aria-label="Close lightbox"
+          >
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          {/* Main Image Container */}
+          <div className="relative max-w-7xl w-full h-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            <img 
+              src={product.images[selectedImage]} 
+              alt={product.title}
+              className="max-w-full max-h-full object-contain"
+            />
+            
+            {/* Navigation Arrows */}
+            <button
+              onClick={handlePrevImage}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-4 rounded-full transition-colors duration-300"
+              aria-label="Previous image"
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              onClick={handleNextImage}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-4 rounded-full transition-colors duration-300"
+              aria-label="Next image"
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            {/* Image Counter */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
+              {selectedImage + 1} / {product.images.length}
+            </div>
+
+            {/* Thumbnail Strip */}
+            <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-2 max-w-full overflow-x-auto px-4">
+              {product.images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(index)}
+                  className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                    selectedImage === index ? 'border-white scale-110' : 'border-white/50 hover:border-white/75'
+                  }`}
+                >
+                  <img 
+                    src={image} 
+                    alt={`${product.title} view ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

@@ -3,30 +3,43 @@ import { useState, useEffect, createContext, useContext } from 'react';
 const RouterContext = createContext();
 
 export const Router = ({ children }) => {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const [currentPath, setCurrentPath] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.pathname;
+    }
+    return '/';
+  });
 
   useEffect(() => {
     const onLocationChange = () => {
-      setCurrentPath(window.location.pathname);
-      // Scroll to top when route changes
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof window !== 'undefined') {
+        setCurrentPath(window.location.pathname);
+        // Scroll to top when route changes
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     };
 
     // Listen for browser back/forward buttons
-    window.addEventListener('popstate', onLocationChange);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('popstate', onLocationChange);
+    }
 
     return () => {
-      window.removeEventListener('popstate', onLocationChange);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('popstate', onLocationChange);
+      }
     };
   }, []);
 
   // Scroll to top when currentPath changes
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, [currentPath]);
 
   return (
-    <RouterContext.Provider value={{ currentPath }}>
+    <RouterContext.Provider value={{ currentPath, setCurrentPath }}>
       {children}
     </RouterContext.Provider>
   );
@@ -57,13 +70,35 @@ export const useRouter = () => {
 };
 
 export const Link = ({ to, children, className, ...props }) => {
+  const context = useContext(RouterContext);
+  
   const handleClick = (e) => {
     e.preventDefault();
-    window.history.pushState({}, '', to);
-    // Trigger navigation update by dispatching popstate event
-    window.dispatchEvent(new PopStateEvent('popstate'));
-    // Scroll to top immediately for instant feedback
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    if (typeof window === 'undefined') {
+      return;
+    }
+    
+    try {
+      window.history.pushState({}, '', to);
+      
+      // Update the Router's state directly if context is available
+      if (context && context.setCurrentPath) {
+        context.setCurrentPath(to);
+      } else {
+        // Fallback: trigger navigation update by dispatching popstate event
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      }
+      
+      // Scroll to top immediately for instant feedback
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      console.error('Navigation error:', error);
+      // Fallback: just update the path
+      if (context && context.setCurrentPath) {
+        context.setCurrentPath(to);
+      }
+    }
   };
 
   return (
