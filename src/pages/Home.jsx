@@ -1,24 +1,24 @@
-import { useState, useRef } from 'react';
-import { Link } from '../utils/Router';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import { useLanguage } from '../context/LanguageContext';
-import { en } from '../translations/en';
-import { ar } from '../translations/ar';
-// Import images
-import photo1 from '../assets/photo1.png';
-import photo2 from '../assets/photo2.jpg';
-import photo3 from '../assets/photo3.jpg';
-import photo4 from '../assets/photo4.jpg';
-import photo5 from '../assets/photo5.jpg';
-import photo7 from '../assets/photo7.jpg';
-import photo8 from '../assets/photo8.jpg';
-import photo9 from '../assets/photo9.jpg';
-// Import videos
-import video1 from '../assets/video1.mp4';
-import video2 from '../assets/video2.mp4';
-import video3 from '../assets/video3.mp4';
-import video4 from '../assets/video4.mp4';
+import { useState, useRef } from "react";
+import { Link } from "../utils/Router";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import { useLanguage } from "../context/LanguageContext";
+import { en } from "../translations/en";
+import { ar } from "../translations/ar";
+import { getProductFirstImageUrl } from "../utils/productMedia";
+// Import images and videos from src/wood (bundled with the site when you deploy)
+import photo1 from "../wood/photo1.png";
+import photo2 from "../wood/photo2.jpg";
+import photo3 from "../wood/photo3.jpg";
+import photo4 from "../wood/photo4.jpg";
+import photo5 from "../wood/photo5.jpg";
+import photo7 from "../wood/photo7.jpg";
+import photo8 from "../wood/photo8.jpg";
+import photo9 from "../wood/photo9.jpg";
+import video1 from "../wood/video1.mp4";
+import video2 from "../wood/video2.mp4";
+import video3 from "../wood/video3.mp4";
+import video4 from "../wood/video4.mp4";
 
 // Video Card Component
 const VideoCard = ({ video }) => {
@@ -28,7 +28,9 @@ const VideoCard = ({ video }) => {
   const handleMouseEnter = () => {
     if (videoRef.current) {
       videoRef.current.volume = 0.7; // Set volume to 70%
-      videoRef.current.play().catch(err => console.log('Video play error:', err));
+      videoRef.current
+        .play()
+        .catch((err) => console.log("Video play error:", err));
       setIsPlaying(true);
     }
   };
@@ -42,20 +44,20 @@ const VideoCard = ({ video }) => {
   };
 
   return (
-    <div 
+    <div
       className="relative rounded-lg overflow-hidden shadow-2xl group cursor-pointer"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <video 
+      <video
         ref={videoRef}
         className="w-full aspect-square object-cover transition-all duration-300"
         loop
         playsInline
         preload="auto"
         style={{
-          transform: isPlaying ? 'scale(1.02)' : 'scale(1)',
-          transition: 'all 0.3s ease'
+          transform: isPlaying ? "scale(1.02)" : "scale(1)",
+          transition: "all 0.3s ease",
         }}
       >
         <source src={video} type="video/mp4" />
@@ -64,16 +66,24 @@ const VideoCard = ({ video }) => {
       {!isPlaying && (
         <div className="absolute inset-0 bg-black/10 flex items-center justify-center backdrop-blur-[1px]">
           <div className="bg-white/20 backdrop-blur-sm rounded-full p-4">
-            <svg className="w-16 h-16 text-white opacity-90" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z"/>
+            <svg
+              className="w-16 h-16 text-white opacity-90"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M8 5v14l11-7z" />
             </svg>
           </div>
         </div>
       )}
       {isPlaying && (
         <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm rounded-full p-2">
-          <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+          <svg
+            className="w-5 h-5 text-white"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
           </svg>
         </div>
       )}
@@ -83,54 +93,54 @@ const VideoCard = ({ video }) => {
 
 const Home = () => {
   const { language } = useLanguage();
-  const t = language === 'ar' ? ar : en;
-  
+  const t = language === "ar" ? ar : en;
+
   const products = [
     {
       id: 1,
       title: t.products.heritage.title,
       description: t.products.heritage.description,
       price: "$85",
-      badge: language === 'ar' ? 'الأكثر مبيعاً' : "BEST SELLER",
-      image: photo1
+      badge: language === "ar" ? "الأكثر مبيعاً" : "BEST SELLER",
+      image: photo1,
     },
     {
       id: 2,
       title: t.products.utensil.title,
       description: t.products.utensil.description,
       price: "$55",
-      badge: language === 'ar' ? 'وصل حديثاً' : "NEW ARRIVAL",
-      image: photo2
+      badge: language === "ar" ? "وصل حديثاً" : "NEW ARRIVAL",
+      image: photo2,
     },
     {
       id: 3,
       title: t.products.carving.title,
       description: t.products.carving.description,
       price: "$110",
-      badge: language === 'ar' ? 'بقي اثنان فقط' : "ONLY TWO LEFT",
-      image: photo3
+      badge: language === "ar" ? "بقي اثنان فقط" : "ONLY TWO LEFT",
+      image: photo3,
     },
     {
       id: 4,
       title: t.products.endGrain.title,
       description: t.products.endGrain.description,
       price: "$95",
-      badge: language === 'ar' ? 'وصل حديثاً' : "NEW ARRIVAL",
-      image: photo4
-    }
+      badge: language === "ar" ? "وصل حديثاً" : "NEW ARRIVAL",
+      image: photo4,
+    },
   ];
 
   return (
     <div className="min-h-screen bg-[#F5F0E8]">
       <Header />
-      
+
       {/* Hero Section */}
       <section className="relative pt-24 pb-16 min-h-screen flex items-center overflow-hidden">
         {/* Video Background */}
-        <video 
-          autoPlay 
-          loop 
-          muted 
+        <video
+          autoPlay
+          loop
+          muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover z-0"
         >
@@ -142,7 +152,9 @@ const Home = () => {
             {/* Left Content */}
             <div className="space-y-6">
               <h1 className="text-5xl md:text-7xl font-bold text-[#332B2B] leading-tight">
-                {t.home.heroTitle}<br />{t.home.heroTitle2}
+                {t.home.heroTitle}
+                <br />
+                {t.home.heroTitle2}
               </h1>
               <p className="text-lg text-[#5C4A37] leading-relaxed">
                 {t.home.heroDescription}
@@ -157,9 +169,9 @@ const Home = () => {
             {/* Right Content - Product Display */}
             <div className="relative">
               <div className="relative bg-white/80 backdrop-blur-sm p-8 rounded-lg shadow-2xl overflow-hidden">
-                <img 
-                  src={photo5} 
-                  alt="Evergrain Product" 
+                <img
+                  src={photo5}
+                  alt="Evergrain Product"
                   className="aspect-square w-full object-cover rounded-lg"
                 />
               </div>
@@ -190,9 +202,9 @@ const Home = () => {
             {/* Right - Image */}
             <div className="relative">
               <div className="relative rounded-lg overflow-hidden shadow-2xl">
-                <img 
-                  src={photo1} 
-                  alt="Crafted from Time" 
+                <img
+                  src={photo1}
+                  alt="Crafted from Time"
                   className="aspect-[4/3.5] w-full object-cover"
                 />
               </div>
@@ -202,43 +214,60 @@ const Home = () => {
       </section>
 
       {/* Explore Our Collection Section */}
-      <section className="py-40 px-4 relative overflow-hidden" style={{
-        backgroundColor: '#1a1410',
-        backgroundImage: `
+      <section
+        className="py-40 px-4 relative overflow-hidden"
+        style={{
+          backgroundColor: "#1a1410",
+          backgroundImage: `
           repeating-linear-gradient(0deg, rgba(30, 22, 16, 0.4) 0px, transparent 1px, transparent 3px, rgba(30, 22, 16, 0.4) 4px),
           repeating-linear-gradient(90deg, rgba(20, 15, 10, 0.6) 0px, transparent 1px, transparent 2px, rgba(20, 15, 10, 0.6) 3px),
           radial-gradient(ellipse at 25% 35%, rgba(61, 47, 31, 0.08) 0%, transparent 70%),
           radial-gradient(ellipse at 75% 65%, rgba(42, 31, 21, 0.08) 0%, transparent 70%),
           linear-gradient(135deg, #1a1410 0%, #15100b 20%, #1a1410 40%, #15100b 60%, #1a1410 80%, #15100b 100%)
         `,
-        backgroundSize: '100% 100%, 100% 100%, 50% 50%, 50% 50%, 100% 100%',
-        boxShadow: 'inset 0 0 200px rgba(0, 0, 0, 0.5)'
-      }}>
+          backgroundSize: "100% 100%, 100% 100%, 50% 50%, 50% 50%, 100% 100%",
+          boxShadow: "inset 0 0 200px rgba(0, 0, 0, 0.5)",
+        }}
+      >
         {/* Subtle overlay for depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none"></div>
-        
+
         <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-6xl md:text-7xl font-serif text-white mb-10 leading-[1.1] tracking-tight" style={{
-            textShadow: '0 2px 20px rgba(0, 0, 0, 0.8), 0 4px 40px rgba(0, 0, 0, 0.4)',
-            letterSpacing: '-0.02em'
-          }}>
-            {t.home.exploreCollection} <span className="relative inline-block pb-3">
+          <h2
+            className="text-6xl md:text-7xl font-serif text-white mb-10 leading-[1.1] tracking-tight"
+            style={{
+              textShadow:
+                "0 2px 20px rgba(0, 0, 0, 0.8), 0 4px 40px rgba(0, 0, 0, 0.4)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {t.home.exploreCollection}{" "}
+            <span className="relative inline-block pb-3">
               {t.home.ourCollection}
-              <span className="absolute bottom-1 left-0 right-0 h-[1.5px] bg-white/90" style={{
-                boxShadow: '0 1px 3px rgba(255, 255, 255, 0.3)'
-              }}></span>
+              <span
+                className="absolute bottom-1 left-0 right-0 h-[1.5px] bg-white/90"
+                style={{
+                  boxShadow: "0 1px 3px rgba(255, 255, 255, 0.3)",
+                }}
+              ></span>
             </span>
           </h2>
-          <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed font-sans font-light tracking-wide" style={{
-            textShadow: '0 1px 10px rgba(0, 0, 0, 0.6)',
-            letterSpacing: '0.01em'
-          }}>
+          <p
+            className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed font-sans font-light tracking-wide"
+            style={{
+              textShadow: "0 1px 10px rgba(0, 0, 0, 0.6)",
+              letterSpacing: "0.01em",
+            }}
+          >
             {t.home.exploreDescription}
           </p>
           <Link to="/shop">
-            <button className="bg-[#6B5A47] hover:bg-[#7A6752] active:bg-[#5C4A37] text-white px-12 py-5 rounded-sm font-semibold uppercase tracking-[0.15em] transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.05)] hover:shadow-[0_6px_30px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.1)] hover:translate-y-[-2px] text-sm" style={{
-              letterSpacing: '0.2em'
-            }}>
+            <button
+              className="bg-[#6B5A47] hover:bg-[#7A6752] active:bg-[#5C4A37] text-white px-12 py-5 rounded-sm font-semibold uppercase tracking-[0.15em] transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.05)] hover:shadow-[0_6px_30px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.1)] hover:translate-y-[-2px] text-sm"
+              style={{
+                letterSpacing: "0.2em",
+              }}
+            >
               {t.home.shopNow}
             </button>
           </Link>
@@ -251,7 +280,7 @@ const Home = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-[#332B2B] mb-4">
             {t.home.discoverCollection}
           </h2>
-          
+
           {/* Category Tabs */}
           {/* <div className="flex gap-4 mb-12 flex-wrap">
             <button className="px-6 py-2 bg-[#5C4A37] text-white rounded-lg font-medium">
@@ -271,7 +300,10 @@ const Home = () => {
           {/* Product Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {products.map((product) => (
-              <div key={product.id} className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+              <div
+                key={product.id}
+                className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
+              >
                 {/* Badge */}
                 <div className="relative">
                   <div className="absolute top-4 left-4 z-10">
@@ -280,22 +312,34 @@ const Home = () => {
                     </span>
                   </div>
                   <Link to={`/product/${product.id}`}>
-                    <img 
-                      src={product.image} 
-                      alt={product.title}
-                      className="aspect-square w-full object-cover cursor-pointer"
-                    />
+                    {getProductFirstImageUrl(product) ? (
+                      <img
+                        src={getProductFirstImageUrl(product)}
+                        alt={product.title}
+                        className="aspect-square w-full object-cover cursor-pointer"
+                      />
+                    ) : (
+                      <div className="aspect-square w-full bg-[#F5F0E8] flex items-center justify-center text-[#8B7355] text-sm">
+                        No image
+                      </div>
+                    )}
                   </Link>
                 </div>
-                
+
                 {/* Product Info */}
                 <div className="p-6">
                   <Link to={`/product/${product.id}`}>
-                    <h3 className="text-xl font-bold text-[#332B2B] mb-2 hover:text-[#5C4A37] transition-colors cursor-pointer">{product.title}</h3>
+                    <h3 className="text-xl font-bold text-[#332B2B] mb-2 hover:text-[#5C4A37] transition-colors cursor-pointer">
+                      {product.title}
+                    </h3>
                   </Link>
-                  <p className="text-[#5C4A37] text-sm mb-4">{product.description}</p>
+                  <p className="text-[#5C4A37] text-sm mb-4">
+                    {product.shortDescription || product.description}
+                  </p>
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-[#332B2B]">{product.price}</span>
+                    <span className="text-2xl font-bold text-[#332B2B]">
+                      {product.price}
+                    </span>
                     <Link to={`/product/${product.id}`}>
                       <button className="bg-[#5C4A37] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#4A3A2A] transition-colors duration-300">
                         {t.shop.viewDetails}
@@ -334,43 +378,82 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <div className="bg-white p-8 rounded-lg shadow-lg">
               <div className="w-16 h-16 bg-[#5C4A37] rounded-full flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-[#332B2B] mb-2">{t.home.solidWalnut}</h3>
+              <h3 className="text-xl font-bold text-[#332B2B] mb-2">
+                {t.home.solidWalnut}
+              </h3>
             </div>
             <div className="bg-white p-8 rounded-lg shadow-lg">
               <div className="w-16 h-16 bg-[#5C4A37] rounded-full flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-[#332B2B] mb-2">{t.home.endGrain}</h3>
+              <h3 className="text-xl font-bold text-[#332B2B] mb-2">
+                {t.home.endGrain}
+              </h3>
             </div>
             <div className="bg-white p-8 rounded-lg shadow-lg">
               <div className="w-16 h-16 bg-[#5C4A37] rounded-full flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-[#332B2B] mb-2">{t.home.handFinished}</h3>
+              <h3 className="text-xl font-bold text-[#332B2B] mb-2">
+                {t.home.handFinished}
+              </h3>
             </div>
           </div>
 
           {/* Product Gallery */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[photo7, photo8, photo9].map((photo, index) => (
-              <div key={index} className="relative rounded-lg overflow-hidden shadow-lg group">
-                <img 
-                  src={photo} 
+              <div
+                key={index}
+                className="relative rounded-lg overflow-hidden shadow-lg group"
+              >
+                <img
+                  src={photo}
                   alt={`Gallery ${index + 1}`}
                   className="aspect-[4/5] w-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
             ))}
           </div>
-          
+
           {/* Video Gallery Section */}
           <div className="mt-16">
             <h3 className="text-3xl md:text-4xl font-bold text-[#332B2B] mb-8 text-center">
@@ -391,6 +474,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
-
