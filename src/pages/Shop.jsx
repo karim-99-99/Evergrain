@@ -26,27 +26,24 @@ const Shop = () => {
   );
 
   const currentPath = useRouter();
-  const [selectedCategory, setSelectedCategory] = useState("ALL");
+  const allCategoryLabel = language === "ar" ? "الكل" : "ALL";
+  const [selectedCategory, setSelectedCategory] = useState(allCategoryLabel);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const categories =
-    language === "ar"
-      ? [
-          "الكل",
-          "الأكثر مبيعاً",
-          "وصل حديثاً",
-          "شائع",
-          "محدود",
-          "بقي اثنان فقط",
-        ]
-      : [
-          "ALL",
-          "BEST SELLER",
-          "NEW ARRIVAL",
-          "POPULAR",
-          "LIMITED",
-          "ONLY TWO LEFT",
-        ];
+  // Build category list from actual product badges so any category you add in Admin appears here
+  const categories = useMemo(() => {
+    const badges = [
+      allCategoryLabel,
+      ...Array.from(
+        new Set(
+          allProducts
+            .map((p) => p.badge)
+            .filter((b) => b != null && String(b).trim() !== "")
+        )
+      ),
+    ];
+    return badges;
+  }, [allProducts, allCategoryLabel]);
 
   // Read URL parameters on mount and when path changes
   useEffect(() => {
@@ -59,15 +56,22 @@ const Shop = () => {
       setSearchQuery("");
     } else if (searchParam) {
       setSearchQuery(searchParam);
-      setSelectedCategory("ALL");
+      setSelectedCategory(allCategoryLabel);
     }
-  }, [currentPath]);
+  }, [currentPath, allCategoryLabel]);
+
+  // If current selection is no longer in the list (e.g. category was removed), switch to ALL
+  useEffect(() => {
+    if (categories.length > 0 && !categories.includes(selectedCategory)) {
+      setSelectedCategory(allCategoryLabel);
+    }
+  }, [categories, selectedCategory, allCategoryLabel]);
 
   // Filter products based on category and search
   const filteredProducts = allProducts.filter((product) => {
-    const allCategory = language === "ar" ? "الكل" : "ALL";
     const matchesCategory =
-      selectedCategory === allCategory || product.badge === selectedCategory;
+      selectedCategory === allCategoryLabel ||
+      product.badge === selectedCategory;
     const matchesSearch =
       !searchQuery ||
       product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

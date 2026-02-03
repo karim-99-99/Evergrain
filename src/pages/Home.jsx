@@ -1,11 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { Link } from "../utils/Router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useLanguage } from "../context/LanguageContext";
+import { useProducts } from "../context/ProductsContext";
 import { en } from "../translations/en";
 import { ar } from "../translations/ar";
 import { getProductFirstImageUrl } from "../utils/productMedia";
+import { getDefaultProducts } from "../data/defaultProducts";
 // Import images and videos from src/wood (bundled with the site when you deploy)
 import photo1 from "../wood/photo1.png";
 import photo2 from "../wood/photo2.jpg";
@@ -94,41 +96,18 @@ const VideoCard = ({ video }) => {
 const Home = () => {
   const { language } = useLanguage();
   const t = language === "ar" ? ar : en;
-
-  const products = [
-    {
-      id: 1,
-      title: t.products.heritage.title,
-      description: t.products.heritage.description,
-      price: "$85",
-      badge: language === "ar" ? "الأكثر مبيعاً" : "BEST SELLER",
-      image: photo1,
-    },
-    {
-      id: 2,
-      title: t.products.utensil.title,
-      description: t.products.utensil.description,
-      price: "$55",
-      badge: language === "ar" ? "وصل حديثاً" : "NEW ARRIVAL",
-      image: photo2,
-    },
-    {
-      id: 3,
-      title: t.products.carving.title,
-      description: t.products.carving.description,
-      price: "$110",
-      badge: language === "ar" ? "بقي اثنان فقط" : "ONLY TWO LEFT",
-      image: photo3,
-    },
-    {
-      id: 4,
-      title: t.products.endGrain.title,
-      description: t.products.endGrain.description,
-      price: "$95",
-      badge: language === "ar" ? "وصل حديثاً" : "NEW ARRIVAL",
-      image: photo4,
-    },
-  ];
+  const { removedIds, customProducts } = useProducts();
+  const defaultProducts = useMemo(
+    () => getDefaultProducts(t, language),
+    [t, language]
+  );
+  const products = useMemo(
+    () => [
+      ...defaultProducts.filter((p) => !removedIds.includes(p.id)),
+      ...customProducts,
+    ],
+    [defaultProducts, removedIds, customProducts]
+  );
 
   return (
     <div className="min-h-screen bg-[#F5F0E8]">
