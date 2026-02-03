@@ -34,6 +34,30 @@ export const ProductsProvider = ({ children }) => {
     () => loadSaved().customProducts
   );
 
+  // On first load, if localStorage is empty, seed from public/initial-products.json (for Vercel deploy)
+  useEffect(() => {
+    const saved = loadSaved();
+    if (saved.customProducts.length > 0 || saved.removedIds.length > 0) return;
+    fetch("/initial-products.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) return;
+        const products = Array.isArray(data.customProducts)
+          ? data.customProducts
+          : [];
+        const ids = Array.isArray(data.removedIds) ? data.removedIds : [];
+        if (products.length > 0 || ids.length > 0) {
+          setCustomProducts(products);
+          setRemovedIds(ids);
+          localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({ removedIds: ids, customProducts: products })
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     localStorage.setItem(
       STORAGE_KEY,

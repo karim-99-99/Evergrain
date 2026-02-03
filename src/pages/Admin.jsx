@@ -246,6 +246,34 @@ const Admin = () => {
             </div>
           </div>
 
+          {/* Export for Vercel */}
+          <div className="bg-[#5C4A37]/10 border border-[#5C4A37]/30 rounded-lg p-4 mb-6">
+            <h3 className="font-bold text-[#332B2B] mb-2">
+              {t.admin.exportForVercel}
+            </h3>
+            <p className="text-sm text-[#5C4A37] mb-3">
+              {t.admin.exportForVercelHint}
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                const data = { removedIds, customProducts };
+                const blob = new Blob([JSON.stringify(data, null, 2)], {
+                  type: "application/json",
+                });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "initial-products.json";
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="bg-[#5C4A37] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#4A3A2A] transition-colors"
+            >
+              {t.admin.downloadProductsJson}
+            </button>
+          </div>
+
           {/* Add / Edit Product Form */}
           <div className="bg-white rounded-lg shadow-lg border border-[#8B7355]/20 p-6 mb-10">
             <h2 className="text-xl font-bold text-[#332B2B] mb-4">
