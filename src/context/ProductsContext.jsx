@@ -34,6 +34,28 @@ export const ProductsProvider = ({ children }) => {
     () => loadSaved().customProducts
   );
 
+  // الملف في المستودع (public/initial-products.json) هو المصدر الدائم: عند كل تحميل نجلبه ونستخدمه إن وُجد
+  useEffect(() => {
+    fetch("/initial-products.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) return;
+        const products = Array.isArray(data.customProducts)
+          ? data.customProducts
+          : [];
+        const ids = Array.isArray(data.removedIds) ? data.removedIds : [];
+        if (products.length > 0 || ids.length > 0) {
+          setCustomProducts(products);
+          setRemovedIds(ids);
+          localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({ removedIds: ids, customProducts: products })
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     localStorage.setItem(
       STORAGE_KEY,
@@ -83,7 +105,7 @@ export const ProductsProvider = ({ children }) => {
   };
 
   const updateProduct = (id, updates) => {
-    if (id >= 1 && id <= 9) return; // default products not editable
+    if (id >= 1 && id <= 9) return;
     setCustomProducts((prev) =>
       prev.map((p) => {
         if (p.id !== id) return p;

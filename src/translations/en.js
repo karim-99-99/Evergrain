@@ -302,5 +302,14 @@ export const en = {
     editProductTitle: "Edit Product",
     saveEdit: "Save",
     cancelEdit: "Cancel",
+    exportForVercel: "Take your localhost edits to Vercel",
+    exportForVercelHint:
+      "Your products and edits are on this device. To show them on the live site: (1) Click the button below to download the file. (2) In your project folder, replace public/initial-products.json with the downloaded file. (3) Commit and push to GitHub. Vercel will then display your data.",
+    downloadProductsJson: "Download initial-products.json",
+    exportStep1: "Click the button below to download the file.",
+    exportStep2:
+      "Replace public/initial-products.json in your project with the downloaded file.",
+    exportStep3:
+      "Commit and push to GitHub — Vercel will then show your products.",
   },
 };

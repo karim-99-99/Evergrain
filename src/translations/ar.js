@@ -302,5 +302,14 @@ export const ar = {
     editProductTitle: "تعديل المنتج",
     saveEdit: "حفظ",
     cancelEdit: "إلغاء",
+    exportForVercel: "نقل تعديلاتك من localhost إلى Vercel",
+    exportForVercelHint:
+      "المنتجات والتعديلات موجودة على هذا الجهاز. لعرضها على الموقع المباشر: (1) اضغط الزر أدناه لتحميل الملف. (2) في مجلد المشروع، استبدل الملف public/initial-products.json بالملف المحمّل. (3) اعمل commit ثم push إلى GitHub. بعدها سيظهر كل شيء على Vercel.",
+    downloadProductsJson: "تحميل initial-products.json",
+    exportStep1: "اضغط الزر أدناه لتحميل الملف.",
+    exportStep2:
+      "استبدل الملف public/initial-products.json في مشروعك بالملف المحمّل.",
+    exportStep3:
+      "اعمل commit ثم push إلى GitHub — بعدها سيظهر كل شيء على Vercel.",
   },
 };
