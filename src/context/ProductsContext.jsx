@@ -2,6 +2,15 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const STORAGE_KEY = "evergrain_products";
 
+// localStorage has ~5MB limit; product data with base64 images/videos often exceeds it — never crash, just skip saving
+const safeSaveToStorage = (payload) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  } catch {
+    // QuotaExceededError or other — data stays in memory; use initial-products.json in repo for persistence
+  }
+};
+
 const loadSaved = () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -51,20 +60,14 @@ export const ProductsProvider = ({ children }) => {
         if (products.length > 0 || ids.length > 0) {
           setCustomProducts(products);
           setRemovedIds(ids);
-          localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify({ removedIds: ids, customProducts: products })
-          );
+          safeSaveToStorage({ removedIds: ids, customProducts: products });
         }
       })
       .catch(() => {});
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({ removedIds, customProducts })
-    );
+    safeSaveToStorage({ removedIds, customProducts });
   }, [removedIds, customProducts]);
 
   const addProduct = (product) => {
