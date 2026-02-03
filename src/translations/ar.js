@@ -302,9 +302,5 @@ export const ar = {
     editProductTitle: "تعديل المنتج",
     saveEdit: "حفظ",
     cancelEdit: "إلغاء",
-    exportForVercel: "نشر منتجاتك على Vercel",
-    exportForVercelHint:
-      "حمّل الملف، ضعه في المشروع كـ public/initial-products.json، ثم اعمل commit و push. ستظهر منتجاتك على الموقع المباشر.",
-    downloadProductsJson: "تحميل initial-products.json",
   },
 };

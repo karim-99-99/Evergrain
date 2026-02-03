@@ -302,9 +302,5 @@ export const en = {
     editProductTitle: "Edit Product",
     saveEdit: "Save",
     cancelEdit: "Cancel",
-    exportForVercel: "Deploy your products to Vercel",
-    exportForVercelHint:
-      "Download the file, put it in your project as public/initial-products.json, then commit and push. Your products will appear on the live site.",
-    downloadProductsJson: "Download initial-products.json",
   },
 };
