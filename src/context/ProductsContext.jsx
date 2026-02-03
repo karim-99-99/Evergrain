@@ -36,7 +36,11 @@ export const ProductsProvider = ({ children }) => {
 
   // الملف في المستودع (public/initial-products.json) هو المصدر الدائم: عند كل تحميل نجلبه ونستخدمه إن وُجد
   useEffect(() => {
-    fetch("/initial-products.json")
+    const base =
+      typeof import.meta.env !== "undefined" && import.meta.env.BASE_URL
+        ? import.meta.env.BASE_URL
+        : "/";
+    fetch(`${base}initial-products.json`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (!data) return;
