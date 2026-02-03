@@ -243,7 +243,7 @@ const ProductDetail = () => {
                       <img
                         src={item.url}
                         alt={product.title}
-                        className="w-full h-[500px] object-cover cursor-pointer"
+                        className="w-full h-[500px] object-contain cursor-pointer"
                         onClick={() => setIsLightboxOpen(true)}
                       />
                     );
@@ -320,7 +320,7 @@ const ProductDetail = () => {
                         <img
                           src={item.url}
                           alt={`${product.title} ${index + 1}`}
-                          className={`w-full h-32 object-cover transition-opacity duration-300 pointer-events-none ${
+                          className={`w-full h-32 object-contain transition-opacity duration-300 pointer-events-none ${
                             selectedMediaIndex === index
                               ? "opacity-100"
                               : "opacity-80 hover:opacity-100"
@@ -602,7 +602,7 @@ const ProductDetail = () => {
                     <img
                       src={item.url}
                       alt=""
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   ) : (
                     <div className="w-full h-full bg-[#332B2B] flex items-center justify-center">
