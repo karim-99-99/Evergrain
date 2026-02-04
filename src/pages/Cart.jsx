@@ -6,6 +6,7 @@ import { Link } from "../utils/Router";
 import { useLanguage } from "../context/LanguageContext";
 import { en } from "../translations/en";
 import { ar } from "../translations/ar";
+import { getProductTitle, getProductPrice } from "../utils/productText";
 // Import all images
 import photo1 from "../wood/photo1.png";
 import photo2 from "../wood/photo2.jpg";
@@ -118,7 +119,7 @@ const Cart = () => {
                             productImages[item.id] ??
                             photo1
                           }
-                          alt={item.title || "Product"}
+                          alt={getProductTitle(item, language) || "Product"}
                           className="w-32 h-32 object-cover rounded-lg"
                         />
                       </div>
@@ -127,7 +128,7 @@ const Cart = () => {
                       <div className="flex-1 flex flex-col md:flex-row justify-between gap-4">
                         <div className="flex-1">
                           <h3 className="text-xl font-bold text-[#332B2B] mb-2">
-                            {item.title || "Product"}
+                            {getProductTitle(item, language) || "Product"}
                           </h3>
                           <p className="text-sm text-[#5C4A37] mb-3">
                             {item.description || ""}
@@ -152,7 +153,7 @@ const Cart = () => {
                         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
                           <div className="text-right">
                             <p className="text-2xl font-bold text-[#332B2B]">
-                              {item.price}
+                              {getProductPrice(item, language)}
                             </p>
                           </div>
                           <div className="flex items-center gap-4">
@@ -175,12 +176,33 @@ const Cart = () => {
                               </select>
                             </div>
                             <p className="text-xl font-bold text-[#332B2B]">
-                              $
-                              {(
-                                (parseFloat(
-                                  (item.price || "$0").replace("$", "")
-                                ) || 0) * (item.quantity || 1)
-                              ).toFixed(2)}
+                              {(() => {
+                                const priceStr = getProductPrice(
+                                  item,
+                                  language
+                                );
+                                const priceNum =
+                                  parseFloat(
+                                    priceStr.replace(/[^0-9.]/g, "")
+                                  ) || 0;
+                                const total = priceNum * (item.quantity || 1);
+                                // If price contains currency symbol, preserve it
+                                if (priceStr.includes("$")) {
+                                  return `$${total.toFixed(2)}`;
+                                } else if (
+                                  priceStr.includes("جنيه") ||
+                                  priceStr.includes("EG")
+                                ) {
+                                  return `${total.toFixed(2)} ${
+                                    priceStr.match(/(جنيه|EG|ج\.م)/)?.[0] ||
+                                    "جنيه"
+                                  }`;
+                                }
+                                return priceStr.replace(
+                                  /[\d.]+/,
+                                  total.toFixed(2)
+                                );
+                              })()}
                             </p>
                             <button
                               onClick={() => removeFromCart(item.id)}

@@ -89,16 +89,34 @@ export const ProductsProvider = ({ children }) => {
     const firstImageUrl = imageUrls[0] || media[0]?.url || "";
     const newProduct = {
       id: maxId + 1,
-      title: product.title || "New Product",
-      description: product.description || "",
-      shortDescription: product.shortDescription || "",
-      price: product.price || "$0",
-      badge: product.badge || "NEW ARRIVAL",
+      // Bilingual fields
+      title_en: product.title_en || product.title || "New Product",
+      title_ar: product.title_ar || "",
+      description_en: product.description_en || product.description || "",
+      description_ar: product.description_ar || "",
+      shortDescription_en:
+        product.shortDescription_en || product.shortDescription || "",
+      shortDescription_ar: product.shortDescription_ar || "",
+      badge_en: product.badge_en || product.badge || "NEW ARRIVAL",
+      badge_ar: product.badge_ar || "",
+      features_en: product.features_en || product.features || [],
+      features_ar: product.features_ar || [],
+      // Legacy fields for backward compatibility
+      title: product.title_en || product.title || "New Product",
+      description: product.description_en || product.description || "",
+      shortDescription:
+        product.shortDescription_en || product.shortDescription || "",
+      badge: product.badge_en || product.badge || "NEW ARRIVAL",
+      features: product.features_en || product.features || [],
+      // Price fields - bilingual
+      price_en: product.price_en || product.price || "$0",
+      price_ar: product.price_ar || "",
+      // Legacy price field for backward compatibility
+      price: product.price_en || product.price || "$0",
       media: media.length > 0 ? media : [],
       image: firstImageUrl,
       images:
         imageUrls.length > 0 ? imageUrls : firstImageUrl ? [firstImageUrl] : [],
-      features: product.features || [],
     };
     setCustomProducts((prev) => [...prev, newProduct]);
   };

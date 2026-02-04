@@ -26,12 +26,21 @@ const Admin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [newTitle, setNewTitle] = useState("");
-  const [newDescription, setNewDescription] = useState("");
-  const [newShortDescription, setNewShortDescription] = useState("");
-  const [newPrice, setNewPrice] = useState("");
-  const [newBadge, setNewBadge] = useState("NEW ARRIVAL");
-  const [newFeatures, setNewFeatures] = useState("");
+  // English fields
+  const [newTitleEn, setNewTitleEn] = useState("");
+  const [newDescriptionEn, setNewDescriptionEn] = useState("");
+  const [newShortDescriptionEn, setNewShortDescriptionEn] = useState("");
+  const [newBadgeEn, setNewBadgeEn] = useState("NEW ARRIVAL");
+  const [newFeaturesEn, setNewFeaturesEn] = useState("");
+  // Arabic fields
+  const [newTitleAr, setNewTitleAr] = useState("");
+  const [newDescriptionAr, setNewDescriptionAr] = useState("");
+  const [newShortDescriptionAr, setNewShortDescriptionAr] = useState("");
+  const [newBadgeAr, setNewBadgeAr] = useState("وصل حديثاً");
+  const [newFeaturesAr, setNewFeaturesAr] = useState("");
+  // Price fields - bilingual
+  const [newPriceEn, setNewPriceEn] = useState("");
+  const [newPriceAr, setNewPriceAr] = useState("");
   const [mediaItems, setMediaItems] = useState([]); // { type: 'image'|'video', url: string }[] in order of insert
   const [newImageUrlInput, setNewImageUrlInput] = useState("");
   const [newVideoUrlInput, setNewVideoUrlInput] = useState("");
@@ -52,12 +61,18 @@ const Admin = () => {
 
   const resetForm = () => {
     setEditingId(null);
-    setNewTitle("");
-    setNewDescription("");
-    setNewShortDescription("");
-    setNewPrice("");
-    setNewBadge("NEW ARRIVAL");
-    setNewFeatures("");
+    setNewTitleEn("");
+    setNewDescriptionEn("");
+    setNewShortDescriptionEn("");
+    setNewBadgeEn("NEW ARRIVAL");
+    setNewFeaturesEn("");
+    setNewTitleAr("");
+    setNewDescriptionAr("");
+    setNewShortDescriptionAr("");
+    setNewBadgeAr("وصل حديثاً");
+    setNewFeaturesAr("");
+    setNewPriceEn("");
+    setNewPriceAr("");
     setMediaItems([]);
     setNewImageUrlInput("");
     setNewVideoUrlInput("");
@@ -66,12 +81,25 @@ const Admin = () => {
   const startEdit = (product) => {
     if (product.id >= 1 && product.id <= 9) return; // default products not editable
     setEditingId(product.id);
-    setNewTitle(product.title || "");
-    setNewDescription(product.description || "");
-    setNewShortDescription(product.shortDescription || "");
-    setNewPrice(product.price || "");
-    setNewBadge(product.badge || "NEW ARRIVAL");
-    setNewFeatures((product.features || []).join("\n"));
+    // English fields
+    setNewTitleEn(product.title_en || product.title || "");
+    setNewDescriptionEn(product.description_en || product.description || "");
+    setNewShortDescriptionEn(
+      product.shortDescription_en || product.shortDescription || ""
+    );
+    setNewBadgeEn(product.badge_en || product.badge || "NEW ARRIVAL");
+    setNewFeaturesEn(
+      (product.features_en || product.features || []).join("\n")
+    );
+    // Arabic fields
+    setNewTitleAr(product.title_ar || "");
+    setNewDescriptionAr(product.description_ar || "");
+    setNewShortDescriptionAr(product.shortDescription_ar || "");
+    setNewBadgeAr(product.badge_ar || "وصل حديثاً");
+    setNewFeaturesAr((product.features_ar || []).join("\n"));
+    // Price fields
+    setNewPriceEn(product.price_en || product.price || "");
+    setNewPriceAr(product.price_ar || "");
     setMediaItems(getProductMedia(product));
     setNewImageUrlInput("");
     setNewVideoUrlInput("");
@@ -79,17 +107,35 @@ const Admin = () => {
 
   const handleAddProduct = (e) => {
     e.preventDefault();
-    const features = newFeatures
+    const featuresEn = newFeaturesEn
+      .split("\n")
+      .map((f) => f.trim())
+      .filter(Boolean);
+    const featuresAr = newFeaturesAr
       .split("\n")
       .map((f) => f.trim())
       .filter(Boolean);
     addProduct({
-      title: newTitle.trim() || "New Product",
-      description: newDescription.trim(),
-      shortDescription: newShortDescription.trim(),
-      price: newPrice.trim() || "$0",
-      badge: newBadge.trim() || "NEW ARRIVAL",
-      features: features.length > 0 ? features : [],
+      title_en: newTitleEn.trim() || "New Product",
+      title_ar: newTitleAr.trim() || "",
+      description_en: newDescriptionEn.trim(),
+      description_ar: newDescriptionAr.trim(),
+      shortDescription_en: newShortDescriptionEn.trim(),
+      shortDescription_ar: newShortDescriptionAr.trim(),
+      price_en: newPriceEn.trim() || "$0",
+      price_ar: newPriceAr.trim() || "",
+      badge_en: newBadgeEn.trim() || "NEW ARRIVAL",
+      badge_ar: newBadgeAr.trim() || "وصل حديثاً",
+      features_en: featuresEn.length > 0 ? featuresEn : [],
+      features_ar: featuresAr.length > 0 ? featuresAr : [],
+      // Legacy fields for backward compatibility
+      title: newTitleEn.trim() || newTitleAr.trim() || "New Product",
+      description: newDescriptionEn.trim() || newDescriptionAr.trim(),
+      shortDescription:
+        newShortDescriptionEn.trim() || newShortDescriptionAr.trim(),
+      price: newPriceEn.trim() || newPriceAr.trim() || "$0",
+      badge: newBadgeEn.trim() || newBadgeAr.trim() || "NEW ARRIVAL",
+      features: featuresEn.length > 0 ? featuresEn : featuresAr,
       media: mediaItems.length > 0 ? mediaItems : undefined,
     });
     resetForm();
@@ -97,17 +143,34 @@ const Admin = () => {
 
   const handleSaveEdit = (e) => {
     e.preventDefault();
-    const features = newFeatures
+    const featuresEn = newFeaturesEn
+      .split("\n")
+      .map((f) => f.trim())
+      .filter(Boolean);
+    const featuresAr = newFeaturesAr
       .split("\n")
       .map((f) => f.trim())
       .filter(Boolean);
     updateProduct(editingId, {
-      title: newTitle.trim() || "New Product",
-      description: newDescription.trim(),
-      shortDescription: newShortDescription.trim(),
-      price: newPrice.trim() || "$0",
-      badge: newBadge.trim() || "NEW ARRIVAL",
-      features: features.length > 0 ? features : [],
+      title_en: newTitleEn.trim() || "New Product",
+      title_ar: newTitleAr.trim() || "",
+      description_en: newDescriptionEn.trim(),
+      description_ar: newDescriptionAr.trim(),
+      shortDescription_en: newShortDescriptionEn.trim(),
+      shortDescription_ar: newShortDescriptionAr.trim(),
+      price_en: newPriceEn.trim() || "$0",
+      price_ar: newPriceAr.trim() || "",
+      badge_en: newBadgeEn.trim() || "NEW ARRIVAL",
+      badge_ar: newBadgeAr.trim() || "وصل حديثاً",
+      features_en: featuresEn.length > 0 ? featuresEn : [],
+      features_ar: featuresAr.length > 0 ? featuresAr : [],
+      // Legacy fields for backward compatibility
+      title: newTitleEn.trim() || newTitleAr.trim() || "New Product",
+      description: newDescriptionEn.trim() || newDescriptionAr.trim(),
+      shortDescription:
+        newShortDescriptionEn.trim() || newShortDescriptionAr.trim(),
+      badge: newBadgeEn.trim() || newBadgeAr.trim() || "NEW ARRIVAL",
+      features: featuresEn.length > 0 ? featuresEn : featuresAr,
       media: mediaItems.length > 0 ? mediaItems : undefined,
     });
     resetForm();
@@ -332,82 +395,215 @@ const Admin = () => {
             </h2>
             <form
               onSubmit={editingId ? handleSaveEdit : handleAddProduct}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              className="space-y-6"
             >
-              <div>
-                <label className="block text-sm font-medium text-[#332B2B] mb-1">
-                  {t.admin.newTitle}
-                </label>
-                <input
-                  type="text"
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
-                  placeholder="e.g. Oak Cutting Board"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-[#332B2B] mb-1">
+              {/* Price - Bilingual */}
+              <div className="border-t border-[#8B7355]/20 pt-4">
+                <h3 className="text-lg font-semibold text-[#332B2B] mb-3">
                   {t.admin.newPrice}
-                </label>
-                <input
-                  type="text"
-                  value={newPrice}
-                  onChange={(e) => setNewPrice(e.target.value)}
-                  className="w-full px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
-                  placeholder="$99"
-                />
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      English *
+                    </label>
+                    <input
+                      type="text"
+                      value={newPriceEn}
+                      onChange={(e) => setNewPriceEn(e.target.value)}
+                      className="w-full px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
+                      placeholder="$99"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      Arabic
+                    </label>
+                    <input
+                      type="text"
+                      value={newPriceAr}
+                      onChange={(e) => setNewPriceAr(e.target.value)}
+                      className="w-full px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
+                      placeholder="600 جنيه"
+                      dir="rtl"
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-[#332B2B] mb-1">
+
+              {/* Title - Bilingual */}
+              <div className="border-t border-[#8B7355]/20 pt-4">
+                <h3 className="text-lg font-semibold text-[#332B2B] mb-3">
+                  {t.admin.newTitle}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      English *
+                    </label>
+                    <input
+                      type="text"
+                      value={newTitleEn}
+                      onChange={(e) => setNewTitleEn(e.target.value)}
+                      className="w-full px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
+                      placeholder="e.g. Oak Cutting Board"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      Arabic
+                    </label>
+                    <input
+                      type="text"
+                      value={newTitleAr}
+                      onChange={(e) => setNewTitleAr(e.target.value)}
+                      className="w-full px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
+                      placeholder="مثال: لوح تقطيع من البلوط"
+                      dir="rtl"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Description - Bilingual */}
+              <div className="border-t border-[#8B7355]/20 pt-4">
+                <h3 className="text-lg font-semibold text-[#332B2B] mb-3">
                   {t.admin.newDescription}
-                </label>
-                <textarea
-                  value={newDescription}
-                  onChange={(e) => setNewDescription(e.target.value)}
-                  className="w-full min-h-[120px] px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] resize-y"
-                  placeholder="Add your product description (multiple lines supported)"
-                  rows={4}
-                />
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      English
+                    </label>
+                    <textarea
+                      value={newDescriptionEn}
+                      onChange={(e) => setNewDescriptionEn(e.target.value)}
+                      className="w-full min-h-[120px] px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] resize-y"
+                      placeholder="Add your product description (multiple lines supported)"
+                      rows={4}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      Arabic
+                    </label>
+                    <textarea
+                      value={newDescriptionAr}
+                      onChange={(e) => setNewDescriptionAr(e.target.value)}
+                      className="w-full min-h-[120px] px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] resize-y"
+                      placeholder="أضف وصف المنتج (يدعم عدة أسطر)"
+                      rows={4}
+                      dir="rtl"
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-[#332B2B] mb-1">
+
+              {/* Short Description - Bilingual */}
+              <div className="border-t border-[#8B7355]/20 pt-4">
+                <h3 className="text-lg font-semibold text-[#332B2B] mb-3">
                   {t.admin.newShortDescription}
-                </label>
-                <p className="text-xs text-[#5C4A37] mb-1">
+                </h3>
+                <p className="text-xs text-[#5C4A37] mb-2">
                   {t.admin.shortDescriptionHint}
                 </p>
-                <textarea
-                  value={newShortDescription}
-                  onChange={(e) => setNewShortDescription(e.target.value)}
-                  className="w-full min-h-[80px] px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] resize-y"
-                  placeholder={t.admin.shortDescriptionPlaceholder}
-                  rows={2}
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      English
+                    </label>
+                    <textarea
+                      value={newShortDescriptionEn}
+                      onChange={(e) => setNewShortDescriptionEn(e.target.value)}
+                      className="w-full min-h-[80px] px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] resize-y"
+                      placeholder={t.admin.shortDescriptionPlaceholder}
+                      rows={2}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      Arabic
+                    </label>
+                    <textarea
+                      value={newShortDescriptionAr}
+                      onChange={(e) => setNewShortDescriptionAr(e.target.value)}
+                      className="w-full min-h-[80px] px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] resize-y"
+                      placeholder="وصف قصير (يظهر على بطاقات المنتج)"
+                      rows={2}
+                      dir="rtl"
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-[#332B2B] mb-1">
+
+              {/* Badge - Bilingual */}
+              <div className="border-t border-[#8B7355]/20 pt-4">
+                <h3 className="text-lg font-semibold text-[#332B2B] mb-3">
                   {t.admin.newBadge}
-                </label>
-                <input
-                  type="text"
-                  value={newBadge}
-                  onChange={(e) => setNewBadge(e.target.value)}
-                  className="w-full px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
-                  placeholder="NEW ARRIVAL"
-                />
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      English
+                    </label>
+                    <input
+                      type="text"
+                      value={newBadgeEn}
+                      onChange={(e) => setNewBadgeEn(e.target.value)}
+                      className="w-full px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
+                      placeholder="NEW ARRIVAL"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      Arabic
+                    </label>
+                    <input
+                      type="text"
+                      value={newBadgeAr}
+                      onChange={(e) => setNewBadgeAr(e.target.value)}
+                      className="w-full px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
+                      placeholder="وصل حديثاً"
+                      dir="rtl"
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-[#332B2B] mb-1">
+
+              {/* Features - Bilingual */}
+              <div className="border-t border-[#8B7355]/20 pt-4">
+                <h3 className="text-lg font-semibold text-[#332B2B] mb-3">
                   {t.admin.newFeatures}
-                </label>
-                <textarea
-                  value={newFeatures}
-                  onChange={(e) => setNewFeatures(e.target.value)}
-                  className="w-full min-h-[120px] px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] resize-y"
-                  placeholder="Add features, one per line (e.g. Solid walnut hardwood)"
-                  rows={4}
-                />
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      English
+                    </label>
+                    <textarea
+                      value={newFeaturesEn}
+                      onChange={(e) => setNewFeaturesEn(e.target.value)}
+                      className="w-full min-h-[120px] px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] resize-y"
+                      placeholder="Add features, one per line (e.g. Solid walnut hardwood)"
+                      rows={4}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-1">
+                      Arabic
+                    </label>
+                    <textarea
+                      value={newFeaturesAr}
+                      onChange={(e) => setNewFeaturesAr(e.target.value)}
+                      className="w-full min-h-[120px] px-4 py-2 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] resize-y"
+                      placeholder="أضف المميزات، واحدة في كل سطر (مثال: خشب الجوز الصلب)"
+                      rows={4}
+                      dir="rtl"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-[#332B2B] mb-1">

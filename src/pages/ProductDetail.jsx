@@ -13,6 +13,15 @@ import {
   getVideoEmbedUrl,
   isDirectVideoUrl,
 } from "../utils/productMedia";
+import {
+  getProductTitle,
+  getProductDescription,
+  getProductBadge,
+  getProductFeatures,
+  getProductPrice,
+  getOriginalPrice,
+  getDiscountPercentage,
+} from "../utils/productText";
 
 const ProductDetail = () => {
   const { language } = useLanguage();
@@ -152,7 +161,9 @@ const ProductDetail = () => {
             <div className="flex-1">
               <p className="font-semibold text-lg">
                 {quantity}{" "}
-                {quantity === 1 ? product?.title : `${product?.title}(s)`}{" "}
+                {quantity === 1
+                  ? getProductTitle(product, language)
+                  : `${getProductTitle(product, language)}(s)`}{" "}
                 {t.productDetail.addedToCart}
               </p>
             </div>
@@ -191,7 +202,9 @@ const ProductDetail = () => {
               Shop
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-[#332B2B]">{product.title}</span>
+            <span className="text-[#332B2B]">
+              {getProductTitle(product, language)}
+            </span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -242,7 +255,7 @@ const ProductDetail = () => {
                     return (
                       <img
                         src={item.url}
-                        alt={product.title}
+                        alt={getProductTitle(product, language)}
                         className="w-full h-[500px] object-cover cursor-pointer"
                         onClick={() => setIsLightboxOpen(true)}
                       />
@@ -373,12 +386,22 @@ const ProductDetail = () => {
                 </span>
               </div>
 
-              <p className="text-3xl font-bold text-[#332B2B] mb-6">
-                {product.price}
-              </p>
+              <div className="mb-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-2xl text-[#8B7355] line-through">
+                    {getOriginalPrice(getProductPrice(product, language))}
+                  </span>
+                  <span className="bg-red-500 text-white text-sm font-bold px-3 py-1 rounded">
+                    {getDiscountPercentage()}% OFF
+                  </span>
+                </div>
+                <p className="text-3xl font-bold text-[#332B2B]">
+                  {getProductPrice(product, language)}
+                </p>
+              </div>
 
               <p className="text-lg text-[#5C4A37] leading-relaxed mb-8">
-                {product.description}
+                {getProductDescription(product, language)}
               </p>
 
               {/* Features */}
@@ -387,25 +410,27 @@ const ProductDetail = () => {
                   {t.productDetail.features}
                 </h3>
                 <ul className="space-y-2">
-                  {(product.features || []).map((feature, index) => (
-                    <li
-                      key={index}
-                      className="flex items-center text-[#5C4A37]"
-                    >
-                      <svg
-                        className="w-5 h-5 text-[#5C4A37] mr-2"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
+                  {getProductFeatures(product, language).map(
+                    (feature, index) => (
+                      <li
+                        key={index}
+                        className="flex items-center text-[#5C4A37]"
                       >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
+                        <svg
+                          className="w-5 h-5 text-[#5C4A37] mr-2"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        {feature}
+                      </li>
+                    )
+                  )}
                 </ul>
               </div>
 
@@ -531,7 +556,7 @@ const ProductDetail = () => {
                 return (
                   <img
                     src={item.url}
-                    alt={product.title}
+                    alt={getProductTitle(product, language)}
                     className="max-w-full max-h-full object-contain"
                   />
                 );

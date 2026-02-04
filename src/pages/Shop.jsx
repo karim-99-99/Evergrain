@@ -8,6 +8,15 @@ import { en } from "../translations/en";
 import { ar } from "../translations/ar";
 import { getDefaultProducts } from "../data/defaultProducts";
 import { getProductFirstImageUrl } from "../utils/productMedia";
+import {
+  getProductTitle,
+  getProductDescription,
+  getProductShortDescription,
+  getProductBadge,
+  getProductPrice,
+  getOriginalPrice,
+  getDiscountPercentage,
+} from "../utils/productText";
 
 const Shop = () => {
   const { language } = useLanguage();
@@ -37,13 +46,13 @@ const Shop = () => {
       ...Array.from(
         new Set(
           allProducts
-            .map((p) => p.badge)
+            .map((p) => getProductBadge(p, language))
             .filter((b) => b != null && String(b).trim() !== "")
         )
       ),
     ];
     return badges;
-  }, [allProducts, allCategoryLabel]);
+  }, [allProducts, allCategoryLabel, language]);
 
   // Read URL parameters on mount and when path changes
   useEffect(() => {
@@ -69,18 +78,18 @@ const Shop = () => {
 
   // Filter products based on category and search
   const filteredProducts = allProducts.filter((product) => {
+    const productBadge = getProductBadge(product, language);
     const matchesCategory =
       selectedCategory === allCategoryLabel ||
-      product.badge === selectedCategory;
+      productBadge === selectedCategory;
+    const productTitle = getProductTitle(product, language);
+    const productDesc = getProductDescription(product, language);
+    const productShortDesc = getProductShortDescription(product, language);
     const matchesSearch =
       !searchQuery ||
-      product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (product.description || "")
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      (product.shortDescription || "")
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
+      productTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      productDesc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      productShortDesc.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -154,14 +163,14 @@ const Shop = () => {
                 <div className="relative">
                   <div className="absolute top-4 left-4 z-10">
                     <span className="bg-[#5C4A37] text-white px-3 py-1 rounded text-xs font-semibold">
-                      {product.badge}
+                      {getProductBadge(product, language)}
                     </span>
                   </div>
                   <Link to={`/product/${product.id}`}>
                     {getProductFirstImageUrl(product) ? (
                       <img
                         src={getProductFirstImageUrl(product)}
-                        alt={product.title}
+                        alt={getProductTitle(product, language)}
                         className="aspect-square w-full object-cover cursor-pointer"
                       />
                     ) : (
@@ -176,16 +185,26 @@ const Shop = () => {
                 <div className="p-6">
                   <Link to={`/product/${product.id}`}>
                     <h3 className="text-xl font-bold text-[#332B2B] mb-2 hover:text-[#5C4A37] transition-colors cursor-pointer">
-                      {product.title}
+                      {getProductTitle(product, language)}
                     </h3>
                   </Link>
                   <p className="text-[#5C4A37] text-sm mb-4">
-                    {product.shortDescription || product.description}
+                    {getProductShortDescription(product, language)}
                   </p>
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-[#332B2B]">
-                      {product.price}
-                    </span>
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg text-[#8B7355] line-through">
+                          {getOriginalPrice(getProductPrice(product, language))}
+                        </span>
+                        <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                          {getDiscountPercentage()}% OFF
+                        </span>
+                      </div>
+                      <span className="text-2xl font-bold text-[#332B2B]">
+                        {getProductPrice(product, language)}
+                      </span>
+                    </div>
                     <Link to={`/product/${product.id}`}>
                       <button className="bg-[#5C4A37] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#4A3A2A] transition-colors duration-300">
                         {t.shop.viewDetails}
