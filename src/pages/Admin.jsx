@@ -262,7 +262,53 @@ const Admin = () => {
             <button
               type="button"
               onClick={() => {
-                const data = { removedIds, customProducts };
+                // Helper to convert image (string or imported module) to string URL
+                const imageToUrl = (img, fallbackId) => {
+                  if (typeof img === "string") return img;
+                  if (img?.src) return img.src;
+                  if (img?.default) return img.default;
+                  // Fallback to known path pattern
+                  return `/photo${fallbackId}.${
+                    fallbackId === 1 ? "png" : "jpg"
+                  }`;
+                };
+
+                // Convert default products (excluding removed) to exportable format
+                const defaultProductsToExport = defaultProducts
+                  .filter((p) => !removedIds.includes(p.id))
+                  .map((p) => {
+                    const imagePath = imageToUrl(p.image, p.id);
+                    const imagesArray = Array.isArray(p.images)
+                      ? p.images.map((img) => imageToUrl(img, p.id))
+                      : [imagePath];
+
+                    return {
+                      id: p.id,
+                      title: p.title,
+                      description: p.description || "",
+                      shortDescription: p.shortDescription || "",
+                      price: p.price,
+                      badge: p.badge,
+                      image: imagePath,
+                      images: imagesArray,
+                      features: p.features || [],
+                      media: imagesArray.map((url) => ({ type: "image", url })),
+                    };
+                  });
+
+                // Combine all products: default (non-removed) + custom
+                const allProductsToExport = [
+                  ...defaultProductsToExport,
+                  ...customProducts,
+                ];
+
+                // Export format: hide all default IDs (1-9) and export all products as customProducts
+                // This ensures all products with all categories are included in the export
+                const data = {
+                  removedIds: [1, 2, 3, 4, 5, 6, 7, 8, 9], // Hide all defaults
+                  customProducts: allProductsToExport, // All products (default + custom) with all categories
+                };
+
                 const blob = new Blob([JSON.stringify(data, null, 2)], {
                   type: "application/json",
                 });

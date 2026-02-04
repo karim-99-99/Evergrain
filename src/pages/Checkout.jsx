@@ -1,0 +1,283 @@
+import { useState } from "react";
+import { useCart } from "../context/CartContext";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import { Link } from "../utils/Router";
+import { useLanguage } from "../context/LanguageContext";
+import { en } from "../translations/en";
+import { ar } from "../translations/ar";
+
+const Checkout = () => {
+  const { cartItems, getCartTotal, clearCart } = useCart();
+  const { language } = useLanguage();
+  const t = language === "ar" ? ar : en;
+
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    location: "",
+  });
+  const [orderPlaced, setOrderPlaced] = useState(false);
+
+  const subtotal = getCartTotal() || 0;
+  const shipping = subtotal >= 100 ? 0 : 10;
+  const total = subtotal + shipping;
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const buildOrderEmailBody = () => {
+    const lines = [
+      "--- CUSTOMER DETAILS ---",
+      `Name: ${formData.name.trim()}`,
+      `Phone: ${formData.phone.trim()}`,
+      `Location / Address: ${formData.location.trim()}`,
+      "",
+      "--- ORDER ---",
+    ];
+    cartItems.forEach((item) => {
+      const price =
+        parseFloat(String(item.price || "0").replace(/[^0-9.]/g, "")) || 0;
+      const qty = item.quantity || 1;
+      const lineTotal = (price * qty).toFixed(2);
+      lines.push(`${item.title || "Product"} × ${qty} — $${lineTotal}`);
+    });
+    lines.push("", `Subtotal: $${subtotal.toFixed(2)}`);
+    lines.push(
+      `Shipping: ${shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}`
+    );
+    lines.push(`Total: $${total.toFixed(2)}`);
+    return lines.join("\n");
+  };
+
+  const handleConfirmOrder = (e) => {
+    e.preventDefault();
+    if (
+      !formData.name.trim() ||
+      !formData.phone.trim() ||
+      !formData.location.trim()
+    ) {
+      return;
+    }
+    const subject = encodeURIComponent("Evergrain - New Order");
+    const body = encodeURIComponent(buildOrderEmailBody());
+    const mailto = `mailto:kareemkhamis2030@gmail.com?subject=${subject}&body=${body}`;
+    window.open(mailto, "_blank", "noopener,noreferrer");
+    setOrderPlaced(true);
+    clearCart();
+  };
+
+  if (cartItems.length === 0 && !orderPlaced) {
+    return (
+      <div className="min-h-screen bg-[#F5F0E8]">
+        <Header />
+        <section className="pt-24 pb-12 min-h-[50vh] flex items-center justify-center">
+          <div className="container mx-auto px-4 text-center">
+            <p className="text-2xl text-[#5C4A37] mb-6">
+              {t.checkout.emptyCart}
+            </p>
+            <Link to="/cart">
+              <button className="bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors">
+                {t.checkout.backToCart}
+              </button>
+            </Link>
+          </div>
+        </section>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (orderPlaced) {
+    return (
+      <div className="min-h-screen bg-[#F5F0E8]">
+        <Header />
+        <section className="pt-24 pb-12 min-h-[60vh] flex items-center justify-center">
+          <div className="container mx-auto px-4 text-center max-w-lg">
+            <div className="bg-white rounded-lg p-8 shadow-lg">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg
+                  className="w-8 h-8 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-[#332B2B] mb-2">
+                {t.checkout.thankYou}
+              </h2>
+              <p className="text-[#5C4A37] mb-6">{t.checkout.orderConfirmed}</p>
+              <Link to="/shop">
+                <button className="bg-[#5C4A37] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors">
+                  {t.checkout.continueShopping}
+                </button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        <Footer />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#F5F0E8]">
+      <Header />
+
+      <section
+        className="pt-24 pb-12 relative overflow-hidden"
+        style={{
+          backgroundImage: 'url("/photo.jpg")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="absolute inset-0 bg-[#F5F0E8]/85" />
+        <div className="container mx-auto px-4 relative z-10">
+          <h1
+            className="text-5xl md:text-6xl font-bold text-[#332B2B]"
+            style={{ textShadow: "2px 2px 4px rgba(255,255,255,0.8)" }}
+          >
+            {t.checkout.title}
+          </h1>
+          <p className="text-lg text-[#5C4A37] mt-2">
+            {t.checkout.description}
+          </p>
+        </div>
+      </section>
+
+      <section className="py-12 bg-[#F5F0E8]">
+        <div className="container mx-auto px-4">
+          <form
+            onSubmit={handleConfirmOrder}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+          >
+            {/* Delivery details */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-lg p-8 shadow-lg">
+                <h2 className="text-2xl font-bold text-[#332B2B] mb-6">
+                  {t.checkout.deliveryDetails}
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-2">
+                      {t.checkout.name} *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
+                      placeholder={t.checkout.namePlaceholder}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-2">
+                      {t.checkout.phone} *
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B]"
+                      placeholder={t.checkout.phonePlaceholder}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-2">
+                      {t.checkout.location} *
+                    </label>
+                    <textarea
+                      name="location"
+                      value={formData.location}
+                      onChange={handleChange}
+                      required
+                      rows={3}
+                      className="w-full px-4 py-3 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] resize-none"
+                      placeholder={t.checkout.locationPlaceholder}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Order summary */}
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-lg p-6 shadow-lg sticky top-24">
+                <h3 className="text-xl font-bold text-[#332B2B] mb-4">
+                  {t.checkout.orderSummary}
+                </h3>
+                <div className="space-y-2 mb-4 max-h-48 overflow-y-auto">
+                  {cartItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex justify-between text-sm text-[#5C4A37]"
+                    >
+                      <span className="truncate flex-1 mr-2">
+                        {item.title} × {item.quantity}
+                      </span>
+                      <span className="font-medium text-[#332B2B]">
+                        $
+                        {(
+                          (parseFloat(
+                            String(item.price || "0").replace(/[^0-9.]/g, "")
+                          ) || 0) * (item.quantity || 1)
+                        ).toFixed(2)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <div className="border-t border-[#8B7355]/20 pt-4 space-y-2">
+                  <div className="flex justify-between text-[#5C4A37]">
+                    <span>{t.cart.subtotal}</span>
+                    <span>${subtotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-[#5C4A37]">
+                    <span>{t.cart.shipping}</span>
+                    <span>
+                      {shipping === 0
+                        ? t.checkout.free
+                        : `$${shipping.toFixed(2)}`}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-lg font-bold text-[#332B2B] pt-2 border-t border-[#8B7355]/20">
+                    <span>{t.cart.total}</span>
+                    <span>${total.toFixed(2)}</span>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full mt-6 bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors"
+                >
+                  {t.checkout.confirmOrder}
+                </button>
+                <Link
+                  to="/cart"
+                  className="block text-center text-[#5C4A37] hover:text-[#332B2B] mt-3 text-sm"
+                >
+                  {t.checkout.backToCart}
+                </Link>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default Checkout;
