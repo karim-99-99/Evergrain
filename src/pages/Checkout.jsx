@@ -18,14 +18,18 @@ const Checkout = () => {
 
   // Enrich cart items with full product data from ProductsContext
   const enrichedCartItems = useMemo(() => {
+    if (!products || !Array.isArray(products)) return [];
     return cartItems
       .map((cartItem) => {
-        const fullProduct = products.find((p) => p.id === cartItem.id);
-        return fullProduct
-          ? { ...fullProduct, quantity: cartItem.quantity }
-          : cartItem;
+        if (!cartItem || !cartItem.id) return null;
+        const fullProduct = products.find((p) => p && p.id === cartItem.id);
+        if (fullProduct) {
+          return { ...fullProduct, quantity: cartItem.quantity || 1 };
+        }
+        // If product not found, return minimal cart item
+        return { ...cartItem, quantity: cartItem.quantity || 1 };
       })
-      .filter((item) => item.id);
+      .filter((item) => item && item.id); // Filter out null/undefined items
   }, [cartItems, products]);
 
   const [formData, setFormData] = useState({

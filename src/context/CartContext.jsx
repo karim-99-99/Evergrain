@@ -87,13 +87,15 @@ export const CartProvider = ({ children }) => {
   const getCartTotal = () => {
     return cartItems.reduce(
       (total, item) =>
-        total + parseFloat(item.price.replace("$", "")) * item.quantity,
+        total +
+        (parseFloat(String(item.price || "0").replace(/[^0-9.]/g, "")) || 0) *
+          (item.quantity || 1),
       0
     );
   };
 
   const getCartCount = () => {
-    return cartItems.reduce((count, item) => count + item.quantity, 0);
+    return cartItems.reduce((count, item) => count + (item.quantity || 1), 0);
   };
 
   return (
