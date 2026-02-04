@@ -148,6 +148,8 @@ export const ar = {
     deliveryDetails: "بيانات التوصيل",
     name: "الاسم الكامل",
     namePlaceholder: "الاسم الكامل",
+    email: "البريد الإلكتروني",
+    emailPlaceholder: "بريدك@example.com",
     phone: "رقم الهاتف",
     phonePlaceholder: "رقم الهاتف",
     location: "عنوان التوصيل / الموقع",
@@ -160,6 +162,9 @@ export const ar = {
     orderConfirmed: "تم تأكيد طلبك. سنتواصل معك قريباً.",
     continueShopping: "متابعة التسوق",
     free: "مجاني",
+    sending: "جاري إرسال الطلب...",
+    emailError:
+      "فشل إرسال بريد الطلب. يرجى المحاولة مرة أخرى أو الاتصال بنا مباشرة.",
   },
   // Product Detail
   productDetail: {
@@ -232,6 +237,10 @@ export const ar = {
     closed: "مغلق",
     whatsApp: "واتساب",
     namePlaceholder: "اسمك",
+    thankYou: "شكراً لك! تم إرسال رسالتك بنجاح.",
+    sending: "جاري إرسال الرسالة...",
+    emailError:
+      "فشل إرسال الرسالة. يرجى المحاولة مرة أخرى أو الاتصال بنا مباشرة.",
     emailPlaceholder: "بريدك.الإلكتروني@مثال.com",
     subjectPlaceholder: "بم يتعلق هذا؟",
     messagePlaceholder: "أخبرنا المزيد عن استفسارك...",

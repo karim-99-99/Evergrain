@@ -148,6 +148,8 @@ export const en = {
     deliveryDetails: "Delivery details",
     name: "Full name",
     namePlaceholder: "Your full name",
+    email: "Email address",
+    emailPlaceholder: "your.email@example.com",
     phone: "Phone number",
     phonePlaceholder: "Your phone number",
     location: "Delivery address / location",
@@ -160,6 +162,9 @@ export const en = {
     orderConfirmed: "Your order has been confirmed. We'll contact you soon.",
     continueShopping: "Continue shopping",
     free: "Free",
+    sending: "Sending order...",
+    emailError:
+      "Failed to send order email. Please try again or contact us directly.",
   },
   // Product Detail
   productDetail: {
@@ -232,6 +237,10 @@ export const en = {
     closed: "Closed",
     whatsApp: "WhatsApp",
     namePlaceholder: "Your name",
+    thankYou: "Thank you! Your message has been sent successfully.",
+    sending: "Sending message...",
+    emailError:
+      "Failed to send message. Please try again or contact us directly.",
     emailPlaceholder: "your.email@example.com",
     subjectPlaceholder: "What is this regarding?",
     messagePlaceholder: "Tell us more about your inquiry...",

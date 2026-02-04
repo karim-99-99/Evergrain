@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import { useLanguage } from "../context/LanguageContext";
 import { en } from "../translations/en";
 import { ar } from "../translations/ar";
+import { sendContactEmail } from "../utils/emailService";
 
 const Contact = () => {
   const { language } = useLanguage();
@@ -15,6 +16,9 @@ const Contact = () => {
     subject: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -27,17 +31,36 @@ const Contact = () => {
   const PHONE_NUMBER = "+201036064417";
   const WHATSAPP_NUMBER = "201036064417"; // no + for wa.me link
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(
-      formData.subject || "Message from Evergrain"
-    );
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
-    );
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-    alert(t.contact.thankYou);
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    setIsSubmitting(true);
+    setSubmitError("");
+    setSubmitSuccess(false);
+
+    try {
+      await sendContactEmail({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        subject: formData.subject.trim() || "Message from Evergrain",
+        message: formData.message.trim(),
+      });
+
+      // Success
+      setSubmitSuccess(true);
+      setFormData({ name: "", email: "", subject: "", message: "" });
+
+      // Clear success message after 5 seconds
+      setTimeout(() => setSubmitSuccess(false), 5000);
+    } catch (error) {
+      console.error("Failed to send contact email:", error);
+      setSubmitError(
+        error.message ||
+          t.contact.emailError ||
+          "Failed to send message. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -162,11 +185,26 @@ const Contact = () => {
                   ></textarea>
                 </div>
 
+                {submitError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm text-red-600">{submitError}</p>
+                  </div>
+                )}
+                {submitSuccess && (
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-sm text-green-600">
+                      {t.contact.thankYou}
+                    </p>
+                  </div>
+                )}
                 <button
                   type="submit"
-                  className="w-full bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors duration-300"
+                  disabled={isSubmitting}
+                  className="w-full bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {t.contact.send}
+                  {isSubmitting
+                    ? t.contact.sending || "Sending..."
+                    : t.contact.send}
                 </button>
               </form>
             </div>
