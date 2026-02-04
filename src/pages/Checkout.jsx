@@ -7,6 +7,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { en } from "../translations/en";
 import { ar } from "../translations/ar";
 import { sendOrderEmail } from "../utils/emailService";
+import { getProductPrice } from "../utils/productText";
 
 const Checkout = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
@@ -23,9 +24,22 @@ const Checkout = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
-  const subtotal = getCartTotal() || 0;
-  const shipping = subtotal >= 100 ? 0 : 10;
-  const total = subtotal + shipping;
+  // Calculate subtotal from cart items with discounted prices
+  const calculateSubtotal = () => {
+    let subtotal = 0;
+    cartItems.forEach((item) => {
+      const priceStr = getProductPrice(item, language);
+      const priceNum = parseFloat(priceStr.replace(/[^0-9.]/g, "")) || 0;
+      subtotal += priceNum * (item.quantity || 1);
+    });
+    return subtotal;
+  };
+
+  const subtotal = calculateSubtotal();
+
+  // Total is just the subtotal (no shipping)
+  const shipping = 0;
+  const total = subtotal;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -275,19 +289,15 @@ const Checkout = () => {
                 <div className="border-t border-[#8B7355]/20 pt-4 space-y-2">
                   <div className="flex justify-between text-[#5C4A37]">
                     <span>{t.cart.subtotal}</span>
-                    <span>${subtotal.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between text-[#5C4A37]">
-                    <span>{t.cart.shipping}</span>
                     <span>
-                      {shipping === 0
-                        ? t.checkout.free
-                        : `$${shipping.toFixed(2)}`}
+                      {subtotal.toFixed(2)} {language === "ar" ? "جنيه" : "EG"}
                     </span>
                   </div>
                   <div className="flex justify-between text-lg font-bold text-[#332B2B] pt-2 border-t border-[#8B7355]/20">
                     <span>{t.cart.total}</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>
+                      {total.toFixed(2)} {language === "ar" ? "جنيه" : "EG"}
+                    </span>
                   </div>
                 </div>
                 {submitError && (

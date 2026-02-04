@@ -6,7 +6,12 @@ import { Link } from "../utils/Router";
 import { useLanguage } from "../context/LanguageContext";
 import { en } from "../translations/en";
 import { ar } from "../translations/ar";
-import { getProductTitle, getProductPrice } from "../utils/productText";
+import {
+  getProductTitle,
+  getProductPrice,
+  getOriginalPrice,
+  getDiscountPercentage,
+} from "../utils/productText";
 // Import all images
 import photo1 from "../wood/photo1.png";
 import photo2 from "../wood/photo2.jpg";
@@ -38,9 +43,31 @@ const Cart = () => {
   const [discountCode, setDiscountCode] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState(false);
 
-  const subtotal = getCartTotal() || 0;
-  const shipping = subtotal >= 100 ? 0 : 10;
-  const total = subtotal + shipping;
+  // Calculate totals - need to recalculate with discounted prices
+  const calculateCartTotals = () => {
+    let subtotalAfterDiscount = 0;
+    let subtotalBeforeDiscount = 0;
+
+    cartItems.forEach((item) => {
+      const priceStr = getProductPrice(item, language);
+      const priceNum = parseFloat(priceStr.replace(/[^0-9.]/g, "")) || 0;
+      const originalPriceStr = getOriginalPrice(priceStr);
+      const originalPriceNum =
+        parseFloat(originalPriceStr.replace(/[^0-9.]/g, "")) || 0;
+      const quantity = item.quantity || 1;
+
+      subtotalAfterDiscount += priceNum * quantity;
+      subtotalBeforeDiscount += originalPriceNum * quantity;
+    });
+
+    return { subtotalAfterDiscount, subtotalBeforeDiscount };
+  };
+
+  const { subtotalAfterDiscount, subtotalBeforeDiscount } =
+    calculateCartTotals();
+
+  // Total is just the subtotal after discount (no shipping)
+  const total = subtotalAfterDiscount;
 
   const handleApplyDiscount = () => {
     if (discountCode.trim()) {
@@ -152,9 +179,65 @@ const Cart = () => {
                         {/* Price and Quantity */}
                         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
                           <div className="text-right">
-                            <p className="text-2xl font-bold text-[#332B2B]">
-                              {getProductPrice(item, language)}
-                            </p>
+                            <div className="flex flex-col items-end gap-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-lg text-[#8B7355] line-through">
+                                  {(() => {
+                                    const originalPriceStr = getOriginalPrice(
+                                      getProductPrice(item, language)
+                                    );
+                                    const originalPriceNum =
+                                      parseFloat(
+                                        originalPriceStr.replace(/[^0-9.]/g, "")
+                                      ) || 0;
+                                    const totalOriginal =
+                                      originalPriceNum * (item.quantity || 1);
+                                    const currencyMatch =
+                                      originalPriceStr.match(
+                                        /(\$|جنيه|EG|ج\.م)/
+                                      );
+                                    const currency = currencyMatch
+                                      ? currencyMatch[0]
+                                      : originalPriceStr.includes("$")
+                                      ? "$"
+                                      : "جنيه";
+                                    if (currency === "$") {
+                                      return `$${totalOriginal.toFixed(2)}`;
+                                    }
+                                    return `${totalOriginal.toFixed(
+                                      2
+                                    )} ${currency}`;
+                                  })()}
+                                </span>
+                                <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
+                                  {getDiscountPercentage()}%
+                                </span>
+                              </div>
+                              <p className="text-2xl font-bold text-[#332B2B]">
+                                {(() => {
+                                  const priceStr = getProductPrice(
+                                    item,
+                                    language
+                                  );
+                                  const priceNum =
+                                    parseFloat(
+                                      priceStr.replace(/[^0-9.]/g, "")
+                                    ) || 0;
+                                  const total = priceNum * (item.quantity || 1);
+                                  const currencyMatch =
+                                    priceStr.match(/(\$|جنيه|EG|ج\.م)/);
+                                  const currency = currencyMatch
+                                    ? currencyMatch[0]
+                                    : priceStr.includes("$")
+                                    ? "$"
+                                    : "جنيه";
+                                  if (currency === "$") {
+                                    return `$${total.toFixed(2)}`;
+                                  }
+                                  return `${total.toFixed(2)} ${currency}`;
+                                })()}
+                              </p>
+                            </div>
                           </div>
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-2">
@@ -175,35 +258,6 @@ const Cart = () => {
                                 ))}
                               </select>
                             </div>
-                            <p className="text-xl font-bold text-[#332B2B]">
-                              {(() => {
-                                const priceStr = getProductPrice(
-                                  item,
-                                  language
-                                );
-                                const priceNum =
-                                  parseFloat(
-                                    priceStr.replace(/[^0-9.]/g, "")
-                                  ) || 0;
-                                const total = priceNum * (item.quantity || 1);
-                                // If price contains currency symbol, preserve it
-                                if (priceStr.includes("$")) {
-                                  return `$${total.toFixed(2)}`;
-                                } else if (
-                                  priceStr.includes("جنيه") ||
-                                  priceStr.includes("EG")
-                                ) {
-                                  return `${total.toFixed(2)} ${
-                                    priceStr.match(/(جنيه|EG|ج\.م)/)?.[0] ||
-                                    "جنيه"
-                                  }`;
-                                }
-                                return priceStr.replace(
-                                  /[\d.]+/,
-                                  total.toFixed(2)
-                                );
-                              })()}
-                            </p>
                             <button
                               onClick={() => removeFromCart(item.id)}
                               className="text-red-600 hover:text-red-800 transition-colors"
@@ -260,23 +314,142 @@ const Cart = () => {
                     <h3 className="text-lg font-bold text-[#332B2B] mb-4">
                       {t.cart.orderSummary}
                     </h3>
+
+                    {/* Items Breakdown */}
+                    <div className="mb-4 space-y-3 pb-4 border-b border-[#8B7355]/20">
+                      {cartItems.map((item) => {
+                        if (!item || !item.id) return null;
+
+                        const priceStr = getProductPrice(item, language);
+                        const priceNum =
+                          parseFloat(priceStr.replace(/[^0-9.]/g, "")) || 0;
+                        const originalPriceStr = getOriginalPrice(priceStr);
+                        const originalPriceNum =
+                          parseFloat(
+                            originalPriceStr.replace(/[^0-9.]/g, "")
+                          ) || 0;
+                        const quantity = item.quantity || 1;
+                        const currencyMatch =
+                          priceStr.match(/(\$|جنيه|EG|ج\.م)/);
+                        const currency = currencyMatch
+                          ? currencyMatch[0]
+                          : priceStr.includes("$")
+                          ? "$"
+                          : language === "ar"
+                          ? "جنيه"
+                          : "EG";
+
+                        const itemTotalBeforeDiscount =
+                          originalPriceNum * quantity;
+                        const itemTotalAfterDiscount = priceNum * quantity;
+
+                        const formatPrice = (num) => {
+                          if (currency === "$") {
+                            return `$${num.toFixed(2)}`;
+                          }
+                          return `${num.toFixed(2)} ${currency}`;
+                        };
+
+                        return (
+                          <div key={item.id} className="text-sm">
+                            <div className="font-semibold text-[#332B2B] mb-1">
+                              {getProductTitle(item, language)}
+                            </div>
+                            <div className="text-[#5C4A37] space-y-1">
+                              <div className="flex justify-between">
+                                <span>
+                                  {language === "ar" ? "الكمية:" : "Quantity:"}{" "}
+                                  {quantity}
+                                </span>
+                                <span className="text-xs text-[#8B7355]">
+                                  {language === "ar" ? "×" : "×"}{" "}
+                                  {formatPrice(originalPriceNum)}
+                                </span>
+                              </div>
+                              <div className="flex justify-between text-xs">
+                                <span className="text-[#8B7355] line-through">
+                                  {language === "ar"
+                                    ? "قبل الخصم:"
+                                    : "Before Discount:"}
+                                </span>
+                                <span className="text-[#8B7355] line-through">
+                                  {formatPrice(itemTotalBeforeDiscount)}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-green-600 font-medium">
+                                  {language === "ar"
+                                    ? "بعد الخصم:"
+                                    : "After Discount:"}
+                                </span>
+                                <span className="text-green-600 font-medium">
+                                  {formatPrice(itemTotalAfterDiscount)}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
                     <div className="space-y-3">
+                      {/* Subtotal Before Discount */}
                       <div className="flex justify-between text-[#5C4A37]">
                         <span>{t.cart.subtotal}</span>
-                        <span>${subtotal.toFixed(2)}</span>
+                        <div className="flex flex-col items-end">
+                          <span className="text-sm text-[#8B7355] line-through">
+                            {(() => {
+                              const currency =
+                                language === "ar" ? "جنيه" : "EG";
+                              return `${subtotalBeforeDiscount.toFixed(
+                                2
+                              )} ${currency}`;
+                            })()}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex justify-between text-[#5C4A37]">
-                        <span>{t.cart.shipping}:</span>
+                      {/* Discount */}
+                      <div className="flex justify-between text-red-600">
                         <span>
-                          {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+                          {language === "ar"
+                            ? `خصم ${getDiscountPercentage()}%:`
+                            : `${getDiscountPercentage()}% Discount:`}
+                        </span>
+                        <span>
+                          {(() => {
+                            const discountAmount =
+                              subtotalBeforeDiscount - subtotalAfterDiscount;
+                            const currency = language === "ar" ? "جنيه" : "EG";
+                            return `-${discountAmount.toFixed(2)} ${currency}`;
+                          })()}
                         </span>
                       </div>
+                      {/* Subtotal After Discount */}
+                      <div className="flex justify-between text-[#5C4A37] border-t border-[#8B7355]/20 pt-2">
+                        <span>
+                          {language === "ar"
+                            ? `${t.cart.subtotal} (بعد الخصم):`
+                            : `${t.cart.subtotal} (After Discount):`}
+                        </span>
+                        <span className="font-semibold">
+                          {(() => {
+                            const currency = language === "ar" ? "جنيه" : "EG";
+                            return `${subtotalAfterDiscount.toFixed(
+                              2
+                            )} ${currency}`;
+                          })()}
+                        </span>
+                      </div>
+                      {/* Total */}
                       <div className="border-t border-[#8B7355]/20 pt-3 flex justify-between">
                         <span className="text-lg font-bold text-[#332B2B]">
                           {t.cart.total}:
                         </span>
                         <span className="text-lg font-bold text-[#332B2B]">
-                          ${total.toFixed(2)}
+                          {(() => {
+                            const currency = language === "ar" ? "جنيه" : "EG";
+                            return `${total.toFixed(2)} ${currency}`;
+                          })()}
                         </span>
                       </div>
                     </div>
@@ -323,7 +496,9 @@ const Cart = () => {
                 </svg>
               </div>
               <p className="text-[#332B2B] font-medium">
-                Free Shipping on Orders Over $100
+                {language === "ar"
+                  ? "شحن مجاني للطلبات التي تزيد عن 3000 جنيه"
+                  : "Free Shipping on Orders Over 3000 EG"}
               </p>
             </div>
             <div className="flex flex-col items-center">

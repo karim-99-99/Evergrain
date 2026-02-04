@@ -274,9 +274,7 @@ const Admin = () => {
                 {t.admin.signIn}
               </button>
             </form>
-            <p className="mt-4 text-center text-sm text-[#5C4A37]">
-              Default: admin / admin
-            </p>
+          
           </div>
         </section>
         <Footer />
