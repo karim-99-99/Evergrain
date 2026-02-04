@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useCart } from "../context/CartContext";
 import { useProducts } from "../context/ProductsContext";
+import { getDefaultProducts } from "../data/defaultProducts";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link } from "../utils/Router";
@@ -39,19 +40,32 @@ const productImages = {
 
 const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart, getCartTotal } = useCart();
-  const { products } = useProducts();
+  const { removedIds, customProducts } = useProducts();
   const { language } = useLanguage();
   const t = language === "ar" ? ar : en;
   const [discountCode, setDiscountCode] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState(false);
 
+  // Get all products (default + custom) similar to other pages
+  const defaultProducts = useMemo(
+    () => getDefaultProducts(t, language),
+    [t, language]
+  );
+  const allProducts = useMemo(
+    () => [
+      ...defaultProducts.filter((p) => !removedIds.includes(p.id)),
+      ...customProducts,
+    ],
+    [defaultProducts, removedIds, customProducts]
+  );
+
   // Enrich cart items with full product data from ProductsContext
   const enrichedCartItems = useMemo(() => {
-    if (!products || !Array.isArray(products)) return [];
+    if (!allProducts || !Array.isArray(allProducts)) return [];
     return cartItems
       .map((cartItem) => {
         if (!cartItem || !cartItem.id) return null;
-        const fullProduct = products.find((p) => p && p.id === cartItem.id);
+        const fullProduct = allProducts.find((p) => p && p.id === cartItem.id);
         if (fullProduct) {
           return { ...fullProduct, quantity: cartItem.quantity || 1 };
         }
@@ -59,7 +73,7 @@ const Cart = () => {
         return { ...cartItem, quantity: cartItem.quantity || 1 };
       })
       .filter((item) => item && item.id); // Filter out null/undefined items
-  }, [cartItems, products]);
+  }, [cartItems, allProducts]);
 
   // Calculate totals - need to recalculate with discounted prices
   const calculateCartTotals = () => {
