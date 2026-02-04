@@ -1,41 +1,71 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
 
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
-    throw new Error('useCart must be used within a CartProvider');
+    throw new Error("useCart must be used within a CartProvider");
   }
   return context;
 };
 
+// Helper to save only essential cart data (id, quantity, price) to avoid localStorage quota issues
+const safeSaveToStorage = (cartItems) => {
+  try {
+    // Only save minimal data: id, quantity, and price (no images, descriptions, etc.)
+    const minimalCart = cartItems.map((item) => ({
+      id: item.id,
+      quantity: item.quantity || 1,
+      price: item.price || "0",
+    }));
+    localStorage.setItem("evergrain_cart", JSON.stringify(minimalCart));
+  } catch (error) {
+    // QuotaExceededError or other — silently fail, data stays in memory
+    console.warn("Failed to save cart to localStorage:", error);
+  }
+};
+
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    const savedCart = localStorage.getItem('evergrain_cart');
-    return savedCart ? JSON.parse(savedCart) : [];
+    try {
+      const savedCart = localStorage.getItem("evergrain_cart");
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch {
+      return [];
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem('evergrain_cart', JSON.stringify(cartItems));
+    safeSaveToStorage(cartItems);
   }, [cartItems]);
 
   const addToCart = (product) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id);
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find((item) => item.id === product.id);
       if (existingItem) {
-        return prevItems.map(item =>
+        return prevItems.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      return [...prevItems, { ...product, quantity: 1 }];
+      // Only save essential data: id, quantity, price
+      return [
+        ...prevItems,
+        {
+          id: product.id,
+          quantity: 1,
+          price: product.price || product.price_en || product.price_ar || "0",
+        },
+      ];
     });
   };
 
   const removeFromCart = (productId) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.id !== productId)
+    );
   };
 
   const updateQuantity = (productId, quantity) => {
@@ -43,8 +73,8 @@ export const CartProvider = ({ children }) => {
       removeFromCart(productId);
       return;
     }
-    setCartItems(prevItems =>
-      prevItems.map(item =>
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
         item.id === productId ? { ...item, quantity } : item
       )
     );
@@ -55,7 +85,11 @@ export const CartProvider = ({ children }) => {
   };
 
   const getCartTotal = () => {
-    return cartItems.reduce((total, item) => total + (parseFloat(item.price.replace('$', '')) * item.quantity), 0);
+    return cartItems.reduce(
+      (total, item) =>
+        total + parseFloat(item.price.replace("$", "")) * item.quantity,
+      0
+    );
   };
 
   const getCartCount = () => {
@@ -78,10 +112,3 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
-
-
-
-
-
-
-

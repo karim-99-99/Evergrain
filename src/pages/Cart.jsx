@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useCart } from "../context/CartContext";
+import { useProducts } from "../context/ProductsContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link } from "../utils/Router";
@@ -38,10 +39,23 @@ const productImages = {
 
 const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart, getCartTotal } = useCart();
+  const { products } = useProducts();
   const { language } = useLanguage();
   const t = language === "ar" ? ar : en;
   const [discountCode, setDiscountCode] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState(false);
+
+  // Enrich cart items with full product data from ProductsContext
+  const enrichedCartItems = useMemo(() => {
+    return cartItems
+      .map((cartItem) => {
+        const fullProduct = products.find((p) => p.id === cartItem.id);
+        return fullProduct
+          ? { ...fullProduct, quantity: cartItem.quantity }
+          : cartItem;
+      })
+      .filter((item) => item.id); // Filter out items that don't exist in products
+  }, [cartItems, products]);
 
   // Calculate totals - need to recalculate with discounted prices
   const calculateCartTotals = () => {
@@ -116,7 +130,7 @@ const Cart = () => {
       {/* Cart Content */}
       <section className="py-12 bg-[#F5F0E8]">
         <div className="container mx-auto px-4">
-          {cartItems.length === 0 ? (
+          {enrichedCartItems.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-2xl text-[#5C4A37] mb-8">{t.cart.empty}</p>
               <Link to="/shop">
@@ -317,7 +331,7 @@ const Cart = () => {
 
                     {/* Items Breakdown */}
                     <div className="mb-4 space-y-3 pb-4 border-b border-[#8B7355]/20">
-                      {cartItems.map((item) => {
+                      {enrichedCartItems.map((item) => {
                         if (!item || !item.id) return null;
 
                         const priceStr = getProductPrice(item, language);

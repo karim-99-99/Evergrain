@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useCart } from "../context/CartContext";
+import { useProducts } from "../context/ProductsContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link } from "../utils/Router";
@@ -7,12 +8,25 @@ import { useLanguage } from "../context/LanguageContext";
 import { en } from "../translations/en";
 import { ar } from "../translations/ar";
 import { sendOrderEmail } from "../utils/emailService";
-import { getProductPrice } from "../utils/productText";
+import { getProductPrice, getProductTitle } from "../utils/productText";
 
 const Checkout = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
+  const { products } = useProducts();
   const { language } = useLanguage();
   const t = language === "ar" ? ar : en;
+
+  // Enrich cart items with full product data from ProductsContext
+  const enrichedCartItems = useMemo(() => {
+    return cartItems
+      .map((cartItem) => {
+        const fullProduct = products.find((p) => p.id === cartItem.id);
+        return fullProduct
+          ? { ...fullProduct, quantity: cartItem.quantity }
+          : cartItem;
+      })
+      .filter((item) => item.id);
+  }, [cartItems, products]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -27,7 +41,7 @@ const Checkout = () => {
   // Calculate subtotal from cart items with discounted prices
   const calculateSubtotal = () => {
     let subtotal = 0;
-    cartItems.forEach((item) => {
+    enrichedCartItems.forEach((item) => {
       const priceStr = getProductPrice(item, language);
       const priceNum = parseFloat(priceStr.replace(/[^0-9.]/g, "")) || 0;
       subtotal += priceNum * (item.quantity || 1);
@@ -101,7 +115,7 @@ const Checkout = () => {
     }
   };
 
-  if (cartItems.length === 0 && !orderPlaced) {
+  if (enrichedCartItems.length === 0 && !orderPlaced) {
     return (
       <div className="min-h-screen bg-[#F5F0E8]">
         <Header />
@@ -267,24 +281,37 @@ const Checkout = () => {
                   {t.checkout.orderSummary}
                 </h3>
                 <div className="space-y-2 mb-4 max-h-48 overflow-y-auto">
-                  {cartItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex justify-between text-sm text-[#5C4A37]"
-                    >
-                      <span className="truncate flex-1 mr-2">
-                        {item.title} × {item.quantity}
-                      </span>
-                      <span className="font-medium text-[#332B2B]">
-                        $
-                        {(
-                          (parseFloat(
-                            String(item.price || "0").replace(/[^0-9.]/g, "")
-                          ) || 0) * (item.quantity || 1)
-                        ).toFixed(2)}
-                      </span>
-                    </div>
-                  ))}
+                  {enrichedCartItems.map((item) => {
+                    const priceStr = getProductPrice(item, language);
+                    const priceNum =
+                      parseFloat(priceStr.replace(/[^0-9.]/g, "")) || 0;
+                    const currencyMatch = priceStr.match(/(\$|جنيه|EG|ج\.م)/);
+                    const currency = currencyMatch
+                      ? currencyMatch[0]
+                      : language === "ar"
+                      ? "جنيه"
+                      : "EG";
+                    const total = priceNum * (item.quantity || 1);
+                    const formatPrice = (num) => {
+                      if (currency === "$") {
+                        return `$${num.toFixed(2)}`;
+                      }
+                      return `${num.toFixed(2)} ${currency}`;
+                    };
+                    return (
+                      <div
+                        key={item.id}
+                        className="flex justify-between text-sm text-[#5C4A37]"
+                      >
+                        <span className="truncate flex-1 mr-2">
+                          {getProductTitle(item, language)} × {item.quantity}
+                        </span>
+                        <span className="font-medium text-[#332B2B]">
+                          {formatPrice(total)}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
                 <div className="border-t border-[#8B7355]/20 pt-4 space-y-2">
                   <div className="flex justify-between text-[#5C4A37]">
