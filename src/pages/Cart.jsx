@@ -192,9 +192,6 @@ const Cart = () => {
                           <h3 className="text-xl font-bold text-[#332B2B] mb-2">
                             {getProductTitle(item, language) || "Product"}
                           </h3>
-                          <p className="text-sm text-[#5C4A37] mb-3">
-                            {item.description || ""}
-                          </p>
                           <div className="flex items-center gap-1 mb-3">
                             {[...Array(5)].map((_, i) => (
                               <svg

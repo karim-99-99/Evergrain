@@ -92,19 +92,20 @@ const Checkout = () => {
     setSubmitError("");
 
     try {
-      // Prepare order items
-      const orderItems = cartItems.map((item) => {
-        const price =
-          parseFloat(String(item.price || "0").replace(/[^0-9.]/g, "")) || 0;
+      // Prepare order items using enrichedCartItems to get full product data including title
+      const orderItems = enrichedCartItems.map((item) => {
+        if (!item || !item.id) return null;
+        const priceStr = getProductPrice(item, language);
+        const priceNum = parseFloat(priceStr.replace(/[^0-9.]/g, "")) || 0;
         const qty = item.quantity || 1;
-        const lineTotal = (price * qty).toFixed(2);
+        const lineTotal = (priceNum * qty).toFixed(2);
         return {
-          title: item.title || "Product",
+          title: getProductTitle(item, language) || "Product",
           quantity: qty,
-          price: item.price,
+          price: priceStr,
           lineTotal,
         };
-      });
+      }).filter(item => item !== null); // Filter out null items
 
       // Send email via EmailJS
       await sendOrderEmail({
