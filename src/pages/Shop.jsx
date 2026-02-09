@@ -40,12 +40,15 @@ const Shop = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Build category list from actual product badges so any category you add in Admin appears here
+  // Only include badges from custom products (id > 9), exclude default products to avoid old categories
   const categories = useMemo(() => {
+    // Filter to only custom products (id > 9) to avoid old default product badges
+    const customProductsOnly = allProducts.filter((p) => p.id > 9);
     const badges = [
       allCategoryLabel,
       ...Array.from(
         new Set(
-          allProducts
+          customProductsOnly
             .map((p) => getProductBadge(p, language))
             .filter((b) => b != null && String(b).trim() !== "")
         )
