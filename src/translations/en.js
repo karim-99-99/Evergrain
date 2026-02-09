@@ -341,5 +341,8 @@ export const en = {
       "Replace public/initial-products.json in your project with the downloaded file.",
     exportStep3:
       "Commit and push to GitHub — Vercel will then show your products.",
+    clearCache: "Clear Old Data",
+    clearCacheHint:
+      "If you see old products/categories, click this button to clear cached data. The site will reload and fetch fresh data from initial-products.json.",
   },
 };

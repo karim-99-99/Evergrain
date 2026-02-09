@@ -451,6 +451,19 @@ const Admin = () => {
             >
               {t.admin.downloadProductsJson}
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (confirm(t.admin.clearCacheHint || "Clear cached data?")) {
+                  localStorage.removeItem("evergrain_products");
+                  localStorage.removeItem("evergrain_cart");
+                  window.location.reload();
+                }
+              }}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors ml-2"
+            >
+              {t.admin.clearCache}
+            </button>
           </div>
 
           {/* Add / Edit Product Form */}

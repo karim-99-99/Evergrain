@@ -341,5 +341,8 @@ export const ar = {
       "استبدل الملف public/initial-products.json في مشروعك بالملف المحمّل.",
     exportStep3:
       "اعمل commit ثم push إلى GitHub — بعدها سيظهر كل شيء على Vercel.",
+    clearCache: "مسح البيانات القديمة",
+    clearCacheHint:
+      "إذا ظهرت منتجات أو فئات قديمة، اضغط هذا الزر لمسح البيانات المخزنة. سيتم إعادة تحميل الموقع وجلب البيانات الجديدة من initial-products.json.",
   },
 };

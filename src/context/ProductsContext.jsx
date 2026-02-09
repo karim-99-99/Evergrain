@@ -38,37 +38,73 @@ export const useProducts = () => {
 };
 
 export const ProductsProvider = ({ children }) => {
-  const [removedIds, setRemovedIds] = useState(() => loadSaved().removedIds);
-  const [customProducts, setCustomProducts] = useState(
-    () => loadSaved().customProducts
-  );
+  // Start with empty state - will be loaded from initial-products.json immediately
+  const [removedIds, setRemovedIds] = useState([]);
+  const [customProducts, setCustomProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // الملف في المستودع (public/initial-products.json) هو المصدر الدائم: عند كل تحميل نجلبه ونستخدمه إن وُجد
+  // الملف في المستودع (public/initial-products.json) هو المصدر الدائم: عند كل تحميل نجلبه ونستخدمه أولاً
   useEffect(() => {
     const base =
       typeof import.meta.env !== "undefined" && import.meta.env.BASE_URL
         ? import.meta.env.BASE_URL
         : "/";
-    fetch(`${base}initial-products.json`)
-      .then((r) => (r.ok ? r.json() : null))
+    
+    // Add cache busting to ensure fresh data - use timestamp to prevent caching
+    const cacheBuster = `?v=${Date.now()}&_=${Math.random()}`;
+    
+    fetch(`${base}initial-products.json${cacheBuster}`, {
+      cache: 'no-store', // Prevent browser caching
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    })
+      .then((r) => {
+        if (!r.ok) {
+          throw new Error(`HTTP error! status: ${r.status}`);
+        }
+        return r.json();
+      })
       .then((data) => {
-        if (!data) return;
-        const products = Array.isArray(data.customProducts)
-          ? data.customProducts
-          : [];
-        const ids = Array.isArray(data.removedIds) ? data.removedIds : [];
-        if (products.length > 0 || ids.length > 0) {
+        if (data) {
+          const products = Array.isArray(data.customProducts)
+            ? data.customProducts
+            : [];
+          const ids = Array.isArray(data.removedIds) ? data.removedIds : [];
+          
+          // Always use data from initial-products.json as source of truth
           setCustomProducts(products);
           setRemovedIds(ids);
           safeSaveToStorage({ removedIds: ids, customProducts: products });
+        } else {
+          // If initial-products.json is empty, try localStorage as fallback
+          const saved = loadSaved();
+          if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
+            setCustomProducts(saved.customProducts);
+            setRemovedIds(saved.removedIds);
+          }
         }
       })
-      .catch(() => {});
+      .catch((error) => {
+        console.warn('Failed to load initial-products.json, using localStorage:', error);
+        // On error, fallback to localStorage
+        const saved = loadSaved();
+        setCustomProducts(saved.customProducts);
+        setRemovedIds(saved.removedIds);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
+  // Save to localStorage when data changes (but don't load from it on initial mount)
   useEffect(() => {
-    safeSaveToStorage({ removedIds, customProducts });
-  }, [removedIds, customProducts]);
+    if (!isLoading) {
+      safeSaveToStorage({ removedIds, customProducts });
+    }
+  }, [removedIds, customProducts, isLoading]);
 
   const addProduct = (product) => {
     const maxId = Math.max(0, ...customProducts.map((p) => p.id), 9);
