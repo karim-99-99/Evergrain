@@ -285,8 +285,15 @@ const Home = () => {
           </div> */}
 
           {/* Product Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {products.map((product) => (
+          {products.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-2xl text-[#5C4A37]">
+                {language === "ar" ? "لا توجد منتجات متاحة حالياً" : "No products available at the moment"}
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              {products.map((product) => (
               <div
                 key={product.id}
                 className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
@@ -346,15 +353,18 @@ const Home = () => {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+          )}
 
-          <div className="text-center">
-            <Link to="/shop">
-              <button className="bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors duration-300">
-                {t.home.viewAll}
-              </button>
-            </Link>
-          </div>
+          {products.length > 0 && (
+            <div className="text-center">
+              <Link to="/shop">
+                <button className="bg-[#5C4A37] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#4A3A2A] transition-colors duration-300">
+                  {t.home.viewAll}
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
