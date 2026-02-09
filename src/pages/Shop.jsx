@@ -26,13 +26,14 @@ const Shop = () => {
     () => getDefaultProducts(t, language),
     [t, language]
   );
-  const allProducts = useMemo(
-    () => [
+  const allProducts = useMemo(() => {
+    const products = [
       ...defaultProducts.filter((p) => !removedIds.includes(p.id)),
       ...customProducts,
-    ],
-    [defaultProducts, removedIds, customProducts]
-  );
+    ];
+    console.log(`Shop: Total products = ${products.length} (default: ${defaultProducts.length}, custom: ${customProducts.length})`);
+    return products;
+  }, [defaultProducts, removedIds, customProducts]);
 
   const currentPath = useRouter();
   const allCategoryLabel = language === "ar" ? "الكل" : "ALL";

@@ -109,13 +109,14 @@ const Home = () => {
     () => getDefaultProducts(t, language),
     [t, language]
   );
-  const products = useMemo(
-    () => [
+  const products = useMemo(() => {
+    const productsList = [
       ...defaultProducts.filter((p) => !removedIds.includes(p.id)),
       ...customProducts,
-    ],
-    [defaultProducts, removedIds, customProducts]
-  );
+    ];
+    console.log(`Home: Total products = ${productsList.length} (default: ${defaultProducts.length}, custom: ${customProducts.length})`);
+    return productsList;
+  }, [defaultProducts, removedIds, customProducts]);
 
   return (
     <div className="min-h-screen bg-[#F5F0E8]">

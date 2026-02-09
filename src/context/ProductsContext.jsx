@@ -43,17 +43,18 @@ export const ProductsProvider = ({ children }) => {
   const [removedIds, setRemovedIds] = useState(saved.removedIds || []);
   const [customProducts, setCustomProducts] = useState(saved.customProducts || []);
 
-  // Update from initial-products.json in the background (non-blocking)
+  // Load from initial-products.json immediately - this is the source of truth
   useEffect(() => {
     const base =
       typeof import.meta.env !== "undefined" && import.meta.env.BASE_URL
         ? import.meta.env.BASE_URL
         : "/";
     
-    // Remove cache busting to allow browser caching for better performance
-    // Browser will cache the file and only fetch when it changes
-    fetch(`${base}initial-products.json`, {
-      cache: 'default', // Allow browser caching for better performance
+    // Add cache busting with timestamp to ensure fresh data on first load
+    const cacheBuster = `?v=${Date.now()}`;
+    
+    fetch(`${base}initial-products.json${cacheBuster}`, {
+      cache: 'no-cache', // Don't cache on first load to ensure fresh data
     })
       .then((r) => {
         if (!r.ok) {
@@ -68,16 +69,29 @@ export const ProductsProvider = ({ children }) => {
             : [];
           const ids = Array.isArray(data.removedIds) ? data.removedIds : [];
           
+          console.log(`Loaded ${products.length} products from initial-products.json`);
+          
           // Always update from server (initial-products.json is source of truth)
-          // But this happens in background, so UI is already showing localStorage data
+          // This ensures data is loaded even if localStorage is empty (like in Vercel)
           setCustomProducts(products);
           setRemovedIds(ids);
           safeSaveToStorage({ removedIds: ids, customProducts: products });
+        } else {
+          console.warn('initial-products.json is empty, using localStorage fallback');
+          // If data is empty, fallback to localStorage
+          if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
+            setCustomProducts(saved.customProducts);
+            setRemovedIds(saved.removedIds);
+          }
         }
       })
       .catch((error) => {
-        // Silently fail - we already have localStorage data displayed
-        console.warn('Failed to load initial-products.json, using localStorage:', error);
+        console.error('Failed to load initial-products.json:', error);
+        // On error, use localStorage if available
+        if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
+          setCustomProducts(saved.customProducts);
+          setRemovedIds(saved.removedIds);
+        }
       });
   }, []); // Only run once on mount
 
