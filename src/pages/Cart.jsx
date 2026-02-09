@@ -14,6 +14,7 @@ import {
   getOriginalPrice,
   getDiscountPercentage,
 } from "../utils/productText";
+import { getProductFirstImageUrl } from "../utils/productMedia";
 // Import all images
 import photo1 from "../wood/photo1.png";
 import photo2 from "../wood/photo2.jpg";
@@ -80,7 +81,8 @@ const Cart = () => {
     let subtotalAfterDiscount = 0;
     let subtotalBeforeDiscount = 0;
 
-    cartItems.forEach((item) => {
+    enrichedCartItems.forEach((item) => {
+      if (!item || !item.id) return;
       const priceStr = getProductPrice(item, language);
       const priceNum = parseFloat(priceStr.replace(/[^0-9.]/g, "")) || 0;
       const originalPriceStr = getOriginalPrice(priceStr);
@@ -161,7 +163,7 @@ const Cart = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Cart Items */}
               <div className="lg:col-span-2 space-y-6">
-                {cartItems.map((item) => {
+                {enrichedCartItems.map((item) => {
                   if (!item || !item.id) return null;
 
                   return (
@@ -173,9 +175,10 @@ const Cart = () => {
                       <div className="flex-shrink-0">
                         <img
                           src={
-                            (item.images && item.images[0]) ??
-                            item.image ??
-                            productImages[item.id] ??
+                            getProductFirstImageUrl(item) ||
+                            (item.images && item.images[0]) ||
+                            item.image ||
+                            productImages[item.id] ||
                             photo1
                           }
                           alt={getProductTitle(item, language) || "Product"}
