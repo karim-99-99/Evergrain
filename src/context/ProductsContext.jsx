@@ -38,28 +38,22 @@ export const useProducts = () => {
 };
 
 export const ProductsProvider = ({ children }) => {
-  // Start with empty state - will be loaded from initial-products.json immediately
-  const [removedIds, setRemovedIds] = useState([]);
-  const [customProducts, setCustomProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // Load from localStorage FIRST for instant display, then update from initial-products.json
+  const saved = loadSaved();
+  const [removedIds, setRemovedIds] = useState(saved.removedIds || []);
+  const [customProducts, setCustomProducts] = useState(saved.customProducts || []);
 
-  // الملف في المستودع (public/initial-products.json) هو المصدر الدائم: عند كل تحميل نجلبه ونستخدمه أولاً
+  // Update from initial-products.json in the background (non-blocking)
   useEffect(() => {
     const base =
       typeof import.meta.env !== "undefined" && import.meta.env.BASE_URL
         ? import.meta.env.BASE_URL
         : "/";
     
-    // Add cache busting to ensure fresh data - use timestamp to prevent caching
-    const cacheBuster = `?v=${Date.now()}&_=${Math.random()}`;
-    
-    fetch(`${base}initial-products.json${cacheBuster}`, {
-      cache: 'no-store', // Prevent browser caching
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
-      }
+    // Remove cache busting to allow browser caching for better performance
+    // Browser will cache the file and only fetch when it changes
+    fetch(`${base}initial-products.json`, {
+      cache: 'default', // Allow browser caching for better performance
     })
       .then((r) => {
         if (!r.ok) {
@@ -74,37 +68,23 @@ export const ProductsProvider = ({ children }) => {
             : [];
           const ids = Array.isArray(data.removedIds) ? data.removedIds : [];
           
-          // Always use data from initial-products.json as source of truth
+          // Always update from server (initial-products.json is source of truth)
+          // But this happens in background, so UI is already showing localStorage data
           setCustomProducts(products);
           setRemovedIds(ids);
           safeSaveToStorage({ removedIds: ids, customProducts: products });
-        } else {
-          // If initial-products.json is empty, try localStorage as fallback
-          const saved = loadSaved();
-          if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
-            setCustomProducts(saved.customProducts);
-            setRemovedIds(saved.removedIds);
-          }
         }
       })
       .catch((error) => {
+        // Silently fail - we already have localStorage data displayed
         console.warn('Failed to load initial-products.json, using localStorage:', error);
-        // On error, fallback to localStorage
-        const saved = loadSaved();
-        setCustomProducts(saved.customProducts);
-        setRemovedIds(saved.removedIds);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
-  }, []);
+  }, []); // Only run once on mount
 
-  // Save to localStorage when data changes (but don't load from it on initial mount)
+  // Save to localStorage when data changes
   useEffect(() => {
-    if (!isLoading) {
-      safeSaveToStorage({ removedIds, customProducts });
-    }
-  }, [removedIds, customProducts, isLoading]);
+    safeSaveToStorage({ removedIds, customProducts });
+  }, [removedIds, customProducts]);
 
   const addProduct = (product) => {
     const maxId = Math.max(0, ...customProducts.map((p) => p.id), 9);

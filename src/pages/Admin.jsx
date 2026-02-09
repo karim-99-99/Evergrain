@@ -430,10 +430,10 @@ const Admin = () => {
                   ...customProducts,
                 ];
 
-                // Export format: hide all default IDs (1-9) and export all products as customProducts
-                // This ensures all products with all categories are included in the export
+                // Export format: export all products as customProducts
+                // No need for removedIds since default products (1-9) have been removed from code
                 const data = {
-                  removedIds: [1, 2, 3, 4, 5, 6, 7, 8, 9], // Hide all defaults
+                  removedIds: [], // Empty since default products are removed from code
                   customProducts: allProductsToExport, // All products (default + custom) with all categories
                 };
 
