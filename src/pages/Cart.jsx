@@ -192,20 +192,6 @@ const Cart = () => {
                           <h3 className="text-xl font-bold text-[#332B2B] mb-2">
                             {getProductTitle(item, language) || "Product"}
                           </h3>
-                          <div className="flex items-center gap-1 mb-3">
-                            {[...Array(5)].map((_, i) => (
-                              <svg
-                                key={i}
-                                className="w-4 h-4 text-yellow-400 fill-current"
-                                viewBox="0 0 20 20"
-                              >
-                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                              </svg>
-                            ))}
-                            <span className="text-sm text-[#5C4A37] ml-2">
-                              (17)
-                            </span>
-                          </div>
                         </div>
 
                         {/* Price and Quantity */}
