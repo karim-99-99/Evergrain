@@ -78,28 +78,95 @@ const Admin = () => {
     setNewVideoUrlInput("");
   };
 
+  // Helper function to detect if text contains Arabic characters
+  const containsArabic = (text) => {
+    if (!text) return false;
+    const arabicRegex = /[\u0600-\u06FF]/;
+    return arabicRegex.test(text);
+  };
+
+  // Helper function to separate English and Arabic content
+  const separateLanguages = (enValue, arValue, legacyValue) => {
+    const value = enValue || arValue || legacyValue || "";
+    if (!value) return { en: "", ar: "" };
+    
+    // If Arabic field already has content, use it
+    if (arValue && arValue.trim()) {
+      return { en: enValue || legacyValue || "", ar: arValue };
+    }
+    
+    // If English field has content, check if it's Arabic
+    if (enValue || legacyValue) {
+      const text = enValue || legacyValue;
+      if (containsArabic(text)) {
+        // It's Arabic content in English field - move to Arabic
+        return { en: "", ar: text };
+      } else {
+        // It's English content
+        return { en: text, ar: arValue || "" };
+      }
+    }
+    
+    return { en: "", ar: "" };
+  };
+
   const startEdit = (product) => {
     if (product.id >= 1 && product.id <= 9) return; // default products not editable
     setEditingId(product.id);
+    
+    // Separate languages for each field
+    const title = separateLanguages(product.title_en, product.title_ar, product.title);
+    const description = separateLanguages(product.description_en, product.description_ar, product.description);
+    const shortDesc = separateLanguages(
+      product.shortDescription_en,
+      product.shortDescription_ar,
+      product.shortDescription
+    );
+    const badge = separateLanguages(product.badge_en, product.badge_ar, product.badge);
+    
     // English fields
-    setNewTitleEn(product.title_en || product.title || "");
-    setNewDescriptionEn(product.description_en || product.description || "");
-    setNewShortDescriptionEn(
-      product.shortDescription_en || product.shortDescription || ""
-    );
-    setNewBadgeEn(product.badge_en || product.badge || "NEW ARRIVAL");
-    setNewFeaturesEn(
-      (product.features_en || product.features || []).join("\n")
-    );
+    setNewTitleEn(title.en || "");
+    setNewDescriptionEn(description.en || "");
+    setNewShortDescriptionEn(shortDesc.en || "");
+    setNewBadgeEn(badge.en || "NEW ARRIVAL");
+    
     // Arabic fields
-    setNewTitleAr(product.title_ar || "");
-    setNewDescriptionAr(product.description_ar || "");
-    setNewShortDescriptionAr(product.shortDescription_ar || "");
-    setNewBadgeAr(product.badge_ar || "وصل حديثاً");
-    setNewFeaturesAr((product.features_ar || []).join("\n"));
+    setNewTitleAr(title.ar || "");
+    setNewDescriptionAr(description.ar || "");
+    setNewShortDescriptionAr(shortDesc.ar || "");
+    setNewBadgeAr(badge.ar || "وصل حديثاً");
+    
+    // Features - handle array
+    const featuresEn = product.features_en || [];
+    const featuresAr = product.features_ar || [];
+    const featuresLegacy = product.features || [];
+    
+    // Check if English features contain Arabic
+    const enFeatures = featuresEn.length > 0 ? featuresEn : featuresLegacy;
+    const hasArabicInEn = enFeatures.some(f => containsArabic(f));
+    
+    if (hasArabicInEn && featuresAr.length === 0) {
+      // English features contain Arabic - move to Arabic
+      setNewFeaturesEn("");
+      setNewFeaturesAr(enFeatures.join("\n"));
+    } else {
+      setNewFeaturesEn(enFeatures.join("\n"));
+      setNewFeaturesAr(featuresAr.join("\n"));
+    }
+    
     // Price fields
-    setNewPriceEn(product.price_en || product.price || "");
-    setNewPriceAr(product.price_ar || "");
+    const priceEn = product.price_en || product.price || "";
+    const priceAr = product.price_ar || "";
+    
+    // Check if English price contains Arabic (جنيه, etc.)
+    if (priceEn && containsArabic(priceEn) && !priceAr) {
+      setNewPriceEn("");
+      setNewPriceAr(priceEn);
+    } else {
+      setNewPriceEn(priceEn);
+      setNewPriceAr(priceAr);
+    }
+    
     setMediaItems(getProductMedia(product));
     setNewImageUrlInput("");
     setNewVideoUrlInput("");
