@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useCart } from "../context/CartContext";
 import { useProducts } from "../context/ProductsContext";
 import { getDefaultProducts } from "../data/defaultProducts";
+import { governorates, getShippingByGovernorate, SHIPPING_DEFAULT_EGP } from "../data/governorates";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link } from "../utils/Router";
@@ -50,6 +51,7 @@ const Checkout = () => {
     name: "",
     email: "",
     phone: "",
+    governorate: "",
     location: "",
   });
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -69,9 +71,11 @@ const Checkout = () => {
 
   const subtotal = calculateSubtotal();
 
-  // Total is just the subtotal (no shipping)
-  const shipping = 0;
-  const total = subtotal;
+  // Shipping: default 70 EGP before selecting, Cairo & Giza 70, others 80
+  const shipping = formData.governorate
+    ? getShippingByGovernorate(formData.governorate)
+    : SHIPPING_DEFAULT_EGP;
+  const total = subtotal + shipping;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -83,6 +87,7 @@ const Checkout = () => {
       !formData.name.trim() ||
       !formData.email.trim() ||
       !formData.phone.trim() ||
+      !formData.governorate.trim() ||
       !formData.location.trim()
     ) {
       return;
@@ -107,12 +112,16 @@ const Checkout = () => {
         };
       }).filter(item => item !== null); // Filter out null items
 
+      const governorateLabel =
+        governorates.find((g) => g.id === formData.governorate)?.[language === "ar" ? "ar" : "en"] || formData.governorate;
+      const fullLocation = `${governorateLabel} - ${formData.location.trim()}`;
+
       // Send email via EmailJS
       await sendOrderEmail({
         customerName: formData.name.trim(),
         customerEmail: formData.email.trim(),
         customerPhone: formData.phone.trim(),
-        customerLocation: formData.location.trim(),
+        customerLocation: fullLocation,
         items: orderItems,
         subtotal,
         shipping,
@@ -277,6 +286,25 @@ const Checkout = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-[#332B2B] mb-2">
+                      {t.checkout.governorate} *
+                    </label>
+                    <select
+                      name="governorate"
+                      value={formData.governorate}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-[#8B7355] rounded-lg focus:outline-none focus:border-[#5C4A37] text-[#332B2B] bg-white"
+                    >
+                      <option value="">{t.checkout.governoratePlaceholder}</option>
+                      {governorates.map((gov) => (
+                        <option key={gov.id} value={gov.id}>
+                          {language === "ar" ? gov.ar : gov.en}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[#332B2B] mb-2">
                       {t.checkout.location} *
                     </label>
                     <textarea
@@ -337,6 +365,12 @@ const Checkout = () => {
                     <span>{t.cart.subtotal}</span>
                     <span>
                       {subtotal.toFixed(2)} {language === "ar" ? "جنيه" : "EG"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-[#5C4A37]">
+                    <span>{t.checkout.shippingCost}</span>
+                    <span>
+                      {shipping.toFixed(2)} {language === "ar" ? "جنيه" : "EG"}
                     </span>
                   </div>
                   <div className="flex justify-between text-lg font-bold text-[#332B2B] pt-2 border-t border-[#8B7355]/20">

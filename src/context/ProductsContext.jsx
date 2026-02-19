@@ -43,18 +43,20 @@ export const ProductsProvider = ({ children }) => {
   const [removedIds, setRemovedIds] = useState(saved.removedIds || []);
   const [customProducts, setCustomProducts] = useState(saved.customProducts || []);
 
-  // Load from initial-products.json immediately - this is the source of truth
+  // Load from Django API (if VITE_API_URL set) or initial-products.json
   useEffect(() => {
     const base =
       typeof import.meta.env !== "undefined" && import.meta.env.BASE_URL
         ? import.meta.env.BASE_URL
         : "/";
-    
-    // Add cache busting with timestamp to ensure fresh data on first load
-    const cacheBuster = `?v=${Date.now()}`;
-    
-    fetch(`${base}initial-products.json${cacheBuster}`, {
-      cache: 'no-cache', // Don't cache on first load to ensure fresh data
+    const apiBase = (typeof import.meta.env !== "undefined" && import.meta.env.VITE_API_URL) || "";
+    const url = apiBase
+      ? `${apiBase.replace(/\/$/, "")}/api/initial-products.json`
+      : `${base}initial-products.json`;
+    const cacheBuster = apiBase ? `?v=${Date.now()}` : `?v=${Date.now()}`;
+
+    fetch(`${url}${cacheBuster}`, {
+      cache: "no-cache",
     })
       .then((r) => {
         if (!r.ok) {
@@ -69,7 +71,7 @@ export const ProductsProvider = ({ children }) => {
             : [];
           const ids = Array.isArray(data.removedIds) ? data.removedIds : [];
           
-          console.log(`Loaded ${products.length} products from initial-products.json`);
+          console.log(`Loaded ${products.length} products from ${apiBase ? "API" : "initial-products.json"}`);
           
           // Always update from server (initial-products.json is source of truth)
           // This ensures data is loaded even if localStorage is empty (like in Vercel)
@@ -86,7 +88,7 @@ export const ProductsProvider = ({ children }) => {
         }
       })
       .catch((error) => {
-        console.error('Failed to load initial-products.json:', error);
+        console.error("Failed to load products:", error);
         // On error, use localStorage if available
         if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
           setCustomProducts(saved.customProducts);

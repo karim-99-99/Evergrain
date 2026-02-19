@@ -37,12 +37,12 @@ export const sendOrderEmail = async (orderData) => {
     );
   }
 
-  // Build order items list
+  // Build order items list (EGP for Egypt)
   const orderItemsList = orderData.items
-    .map((item) => `${item.title} × ${item.quantity} — $${item.lineTotal}`)
+    .map((item) => `${item.title} × ${item.quantity} — ${item.lineTotal} ج.م`)
     .join("\n");
 
-  // Build email body
+  // Build email body (EGP for Egypt)
   const emailBody = `--- CUSTOMER DETAILS ---
 Name: ${orderData.customerName}
 Email: ${orderData.customerEmail || "Not provided"}
@@ -52,11 +52,11 @@ Location / Address: ${orderData.customerLocation}
 --- ORDER ---
 ${orderItemsList}
 
-Subtotal: $${orderData.subtotal.toFixed(2)}
+Subtotal: ${orderData.subtotal.toFixed(2)} ج.م
 Shipping: ${
-    orderData.shipping === 0 ? "Free" : `$${orderData.shipping.toFixed(2)}`
+    orderData.shipping === 0 ? "Free" : `${orderData.shipping.toFixed(2)} ج.م`
   }
-Total: $${orderData.total.toFixed(2)}`;
+Total: ${orderData.total.toFixed(2)} ج.م`;
 
   const templateParams = {
     to_email: "kareemkhamis2030@gmail.com",
@@ -66,7 +66,7 @@ Total: $${orderData.total.toFixed(2)}`;
     customer_email: orderData.customerEmail || "Not provided",
     customer_phone: orderData.customerPhone,
     customer_location: orderData.customerLocation,
-    order_total: `$${orderData.total.toFixed(2)}`,
+    order_total: `${orderData.total.toFixed(2)} ج.م`,
   };
 
   return emailjs.send(
