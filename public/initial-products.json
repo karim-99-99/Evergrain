@@ -38,12 +38,36 @@
       ],
       "price_en": "600 EG",
       "price_ar": "600 جنية",
-      "price": "600 EG"
+      "price": "600 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/13bhwJIkaJ8kFe6TqICjK9w-fgagl1dgv/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1EK5_dZeMdwoHVoHQKcKZILwtI74L24pS/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1Q6RpOkxzskzxEPImOCLfjmx6SKwuVPmP/view?usp=drive_link"
+        },
+        {
+          "type": "video",
+          "url": "https://drive.google.com/file/d/1kamwaUnhW4IonU4bgKcPHRPDA-H4DXfL/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/13bhwJIkaJ8kFe6TqICjK9w-fgagl1dgv/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/13bhwJIkaJ8kFe6TqICjK9w-fgagl1dgv/view?usp=drive_link",
+        "https://drive.google.com/file/d/1EK5_dZeMdwoHVoHQKcKZILwtI74L24pS/view?usp=drive_link",
+        "https://drive.google.com/file/d/1Q6RpOkxzskzxEPImOCLfjmx6SKwuVPmP/view?usp=drive_link"
+      ]
     },
     {
       "id": 11,
       "title_en": "Eight-Point Star Wooden Serving Tray",
-      "title_ar": "طبق بجمة ثمانية",
+      "title_ar": "طبق نجمة ثمانية",
       "description_en": "Inspired by timeless geometric elegance, this eight-point star wooden serving tray brings heritage design into modern homes. Crafted from premium natural wood, it offers a refined way to present dates, sweets, nuts, and appetizers with cultural richness and luxurious appeal.\nA statement piece that elevates every gathering and table setting.",
       "description_ar": "طبق تقديم خشبي بتصميم مستوحى من النجمة الثمانية، يعكس أصالة الفن الهندسي بلمسة عصرية فاخرة. مصنوع من خشب طبيعي عالي الجودة، مثالي لتقديم التمور، الحلويات، والمكسرات بأسلوب راقٍ يزيّن طاولة الضيافة.\n\nقطعة مميزة تجمع بين التراث والفخامة في كل مناسبة.",
       "shortDescription_en": "Eight-point star wooden serving tray designed for elegant presentation.",
@@ -93,7 +117,22 @@
       ],
       "price_en": "500 EG",
       "price_ar": "500 جنية",
-      "price": "500 EG"
+      "price": "500 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1eburZJStZMI5Qyhnk8teLZDHVrcgHy4Z/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1BbQG_ckwjmzulgM3tfkGtmh0vLdLBsbQ/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1eburZJStZMI5Qyhnk8teLZDHVrcgHy4Z/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/1eburZJStZMI5Qyhnk8teLZDHVrcgHy4Z/view?usp=drive_link",
+        "https://drive.google.com/file/d/1BbQG_ckwjmzulgM3tfkGtmh0vLdLBsbQ/view?usp=drive_link"
+      ]
     },
     {
       "id": 12,
@@ -132,7 +171,36 @@
       ],
       "price_en": "430 EG",
       "price_ar": "430 جنية",
-      "price": "430 EG"
+      "price": "430 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1emTkmue47QNJD8fdPYgSvyXM4gy5BzIO/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1-wA1ou0eXgHEOW56i4vu6N-3ONV9AIvd/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1TxZrC7ZTt5egTT5m3m049LRHfxjBdwYL/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1GVSznMYh2AEgqSDoxDaqrMVc1n1ZjIR5/view?usp=drive_link"
+        },
+        {
+          "type": "video",
+          "url": "https://drive.google.com/file/d/1xQzR_mOjvHI2bqnLOUPg_pJUrIeQ_z5m/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1emTkmue47QNJD8fdPYgSvyXM4gy5BzIO/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/1emTkmue47QNJD8fdPYgSvyXM4gy5BzIO/view?usp=drive_link",
+        "https://drive.google.com/file/d/1-wA1ou0eXgHEOW56i4vu6N-3ONV9AIvd/view?usp=drive_link",
+        "https://drive.google.com/file/d/1TxZrC7ZTt5egTT5m3m049LRHfxjBdwYL/view?usp=drive_link",
+        "https://drive.google.com/file/d/1GVSznMYh2AEgqSDoxDaqrMVc1n1ZjIR5/view?usp=drive_link"
+      ]
     },
     {
       "id": 13,
@@ -171,7 +239,31 @@
       ],
       "price_en": "330 EG",
       "price_ar": "330 جنية",
-      "price": "330 EG"
+      "price": "330 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1rT5jMLYeaHbssFJoIt6ZSpspb2yoZofa/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1u9vlp_pX3DsEIqnfrfhDVwJeiDv1-Rmq/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1eP6RzhXjrzv_IKV4xL9BWwD6ik_VjqKW/view?usp=drive_link"
+        },
+        {
+          "type": "video",
+          "url": "https://drive.google.com/file/d/1kMzBXIO4drGI2iJradnWGuK60qtlekUH/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1rT5jMLYeaHbssFJoIt6ZSpspb2yoZofa/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/1rT5jMLYeaHbssFJoIt6ZSpspb2yoZofa/view?usp=drive_link",
+        "https://drive.google.com/file/d/1u9vlp_pX3DsEIqnfrfhDVwJeiDv1-Rmq/view?usp=drive_link",
+        "https://drive.google.com/file/d/1eP6RzhXjrzv_IKV4xL9BWwD6ik_VjqKW/view?usp=drive_link"
+      ]
     },
     {
       "id": 14,
@@ -213,7 +305,31 @@
       ],
       "price_en": "400 EG",
       "price_ar": "400 جنية",
-      "price": "400 EG"
+      "price": "400 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1AJiVD_T9imbyrXDjUm-vEijZ4xYHfN08/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1o6ywvqpxzx1xLVgOV8HChJhSHG3bzoqv/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1w4S8T-vOvu3LyMtLLYAUSU6R__uv9STs/view?usp=drive_link"
+        },
+        {
+          "type": "video",
+          "url": "https://drive.google.com/file/d/1npI07CvFV0ykkDNEsjCpnrnfpRkAFsdu/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1AJiVD_T9imbyrXDjUm-vEijZ4xYHfN08/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/1AJiVD_T9imbyrXDjUm-vEijZ4xYHfN08/view?usp=drive_link",
+        "https://drive.google.com/file/d/1o6ywvqpxzx1xLVgOV8HChJhSHG3bzoqv/view?usp=drive_link",
+        "https://drive.google.com/file/d/1w4S8T-vOvu3LyMtLLYAUSU6R__uv9STs/view?usp=drive_link"
+      ]
     },
     {
       "id": 15,
@@ -255,7 +371,36 @@
       ],
       "price_en": "500 EG",
       "price_ar": "500 جنية",
-      "price": "500 EG"
+      "price": "500 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1ATnW-l69Ah-wmfrq2zhHvYr5qvfW84U1/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1JkupkXThtV_vPA0Kp3jRsflqD8yFBpBC/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1rWZ-l-_ABQU67Zm3ajqlura1-lA0bR_f/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1vDYb0lIhnMLl8UlKc67e2pfKbft450lO/view?usp=drive_link"
+        },
+        {
+          "type": "video",
+          "url": "https://drive.google.com/file/d/1Vy13sRlqaf4vxiIN1Vq9Fer0hrsr_6BQ/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1ATnW-l69Ah-wmfrq2zhHvYr5qvfW84U1/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/1ATnW-l69Ah-wmfrq2zhHvYr5qvfW84U1/view?usp=drive_link",
+        "https://drive.google.com/file/d/1JkupkXThtV_vPA0Kp3jRsflqD8yFBpBC/view?usp=drive_link",
+        "https://drive.google.com/file/d/1rWZ-l-_ABQU67Zm3ajqlura1-lA0bR_f/view?usp=drive_link",
+        "https://drive.google.com/file/d/1vDYb0lIhnMLl8UlKc67e2pfKbft450lO/view?usp=drive_link"
+      ]
     },
     {
       "id": 16,
@@ -296,7 +441,41 @@
       ],
       "price_en": "550 EG",
       "price_ar": "550 جنية",
-      "price": "550 EG"
+      "price": "550 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1kW5tEejBSgLRi4R6hbRQVHhYe-_foC07/view?usp=sharing"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1PVc5EFDV6iKX5tgbm2oTgzi2pzURhCuI/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1DjwzddrxAReEXX9wpNkSS5YKDshEAm1z/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1zUxcG5SFimiWGOtHStAk5BXGoWQ1BmXF/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1KlkhzJPHjopitZ4GMTOIlhdrpN97yVMX/view?usp=drive_link"
+        },
+        {
+          "type": "video",
+          "url": "https://drive.google.com/file/d/1nU3J92pP6VLDwJNZ5BiTHQcB-429vxjB/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1kW5tEejBSgLRi4R6hbRQVHhYe-_foC07/view?usp=sharing",
+      "images": [
+        "https://drive.google.com/file/d/1kW5tEejBSgLRi4R6hbRQVHhYe-_foC07/view?usp=sharing",
+        "https://drive.google.com/file/d/1PVc5EFDV6iKX5tgbm2oTgzi2pzURhCuI/view?usp=drive_link",
+        "https://drive.google.com/file/d/1DjwzddrxAReEXX9wpNkSS5YKDshEAm1z/view?usp=drive_link",
+        "https://drive.google.com/file/d/1zUxcG5SFimiWGOtHStAk5BXGoWQ1BmXF/view?usp=drive_link",
+        "https://drive.google.com/file/d/1KlkhzJPHjopitZ4GMTOIlhdrpN97yVMX/view?usp=drive_link"
+      ]
     },
     {
       "id": 17,
@@ -338,7 +517,31 @@
       ],
       "price_en": "290EG",
       "price_ar": "290 جنية",
-      "price": "290EG"
+      "price": "290EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1rkXTScugboRiqAzI5qLQLo5_VsGByXvg/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1j2icBv7yISFBo5ZuHvGDvz7B1FV6AjAJ/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1jsdrQEx35TqPQIazTl4Rd2dDQcGi6T07/view?usp=drive_link"
+        },
+        {
+          "type": "video",
+          "url": "https://drive.google.com/file/d/11r9JrCkTYO-r54mgiwZFZJCSx6pvs-z_/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1rkXTScugboRiqAzI5qLQLo5_VsGByXvg/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/1rkXTScugboRiqAzI5qLQLo5_VsGByXvg/view?usp=drive_link",
+        "https://drive.google.com/file/d/1j2icBv7yISFBo5ZuHvGDvz7B1FV6AjAJ/view?usp=drive_link",
+        "https://drive.google.com/file/d/1jsdrQEx35TqPQIazTl4Rd2dDQcGi6T07/view?usp=drive_link"
+      ]
     },
     {
       "id": 18,
@@ -395,7 +598,41 @@
       ],
       "price_en": "400 EG",
       "price_ar": "400 جنية",
-      "price": "400 EG"
+      "price": "400 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1R4hhgwiZOUcuy9Zj1xZ0dwm7DHPbHJUH/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1pXB_sHlJOSLSFSd1He1-3PKBDsp1deq_/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1_Xzp80w2-LsUquQhvTsyR8koxWLaWYLL/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1bfWs8tNvuCXkQWcdd-QA6JZrcoIV_Wnl/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1u1Wo14180J-AVt6irPOVJNeAOzowJpEp/view?usp=drive_link"
+        },
+        {
+          "type": "video",
+          "url": "https://drive.google.com/file/d/1hh_yka0_FVWPP_IXPyQk7Nt_b8Hbu8Zy/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1R4hhgwiZOUcuy9Zj1xZ0dwm7DHPbHJUH/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/1R4hhgwiZOUcuy9Zj1xZ0dwm7DHPbHJUH/view?usp=drive_link",
+        "https://drive.google.com/file/d/1pXB_sHlJOSLSFSd1He1-3PKBDsp1deq_/view?usp=drive_link",
+        "https://drive.google.com/file/d/1_Xzp80w2-LsUquQhvTsyR8koxWLaWYLL/view?usp=drive_link",
+        "https://drive.google.com/file/d/1bfWs8tNvuCXkQWcdd-QA6JZrcoIV_Wnl/view?usp=drive_link",
+        "https://drive.google.com/file/d/1u1Wo14180J-AVt6irPOVJNeAOzowJpEp/view?usp=drive_link"
+      ]
     },
     {
       "id": 19,
@@ -452,7 +689,36 @@
       ],
       "price_en": "350 EG",
       "price_ar": "350 جنية",
-      "price": "350 EG"
+      "price": "350 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1MK8fV1Pn9TQx0Gw4PWN_KiNiKUKXy99Y/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1xX5BuWFap1QQHQvXCwLyMpzH_bi3Jbry/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1mBwoIMLhubkvNCPfdiVNOkWkAnLHp6ez/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1v1qt8-05uFh953Qpl4MQZHSJOwq9ztQc/view?usp=drive_link"
+        },
+        {
+          "type": "video",
+          "url": "https://drive.google.com/file/d/1HslgO4nMksLM62cYJah2A1OPoay5KmEu/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1MK8fV1Pn9TQx0Gw4PWN_KiNiKUKXy99Y/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/1MK8fV1Pn9TQx0Gw4PWN_KiNiKUKXy99Y/view?usp=drive_link",
+        "https://drive.google.com/file/d/1xX5BuWFap1QQHQvXCwLyMpzH_bi3Jbry/view?usp=drive_link",
+        "https://drive.google.com/file/d/1mBwoIMLhubkvNCPfdiVNOkWkAnLHp6ez/view?usp=drive_link",
+        "https://drive.google.com/file/d/1v1qt8-05uFh953Qpl4MQZHSJOwq9ztQc/view?usp=drive_link"
+      ]
     },
     {
       "id": 20,
