@@ -37,11 +37,16 @@ export const useProducts = () => {
   return context;
 };
 
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 2000;
+
 export const ProductsProvider = ({ children }) => {
   // Load from localStorage FIRST for instant display, then update from initial-products.json
   const saved = loadSaved();
   const [removedIds, setRemovedIds] = useState(saved.removedIds || []);
   const [customProducts, setCustomProducts] = useState(saved.customProducts || []);
+  // Show loading only when we have no cached data (e.g. first mobile visit)
+  const [isLoading, setIsLoading] = useState(saved.customProducts?.length === 0);
 
   // Load from Django API (if VITE_API_URL set) or initial-products.json
   useEffect(() => {
@@ -53,49 +58,48 @@ export const ProductsProvider = ({ children }) => {
     const url = apiBase
       ? `${apiBase.replace(/\/$/, "")}/api/initial-products.json`
       : `${base}initial-products.json`;
-    const cacheBuster = apiBase ? `?v=${Date.now()}` : `?v=${Date.now()}`;
 
-    fetch(`${url}${cacheBuster}`, {
-      cache: "no-cache",
-    })
-      .then((r) => {
-        if (!r.ok) {
-          throw new Error(`HTTP error! status: ${r.status}`);
-        }
-        return r.json();
-      })
-      .then((data) => {
-        if (data) {
-          const products = Array.isArray(data.customProducts)
-            ? data.customProducts
-            : [];
-          const ids = Array.isArray(data.removedIds) ? data.removedIds : [];
-          
-          console.log(`Loaded ${products.length} products from ${apiBase ? "API" : "initial-products.json"}`);
-          
-          // Always update from server (initial-products.json is source of truth)
-          // This ensures data is loaded even if localStorage is empty (like in Vercel)
-          setCustomProducts(products);
-          setRemovedIds(ids);
-          safeSaveToStorage({ removedIds: ids, customProducts: products });
-        } else {
-          console.warn('initial-products.json is empty, using localStorage fallback');
-          // If data is empty, fallback to localStorage
-          if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
-            setCustomProducts(saved.customProducts);
-            setRemovedIds(saved.removedIds);
+    const doFetch = (attempt = 0) => {
+      const cacheBuster = `?v=${Date.now()}`;
+      fetch(`${url}${cacheBuster}`, { cache: "no-cache" })
+        .then((r) => {
+          if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
+          return r.json();
+        })
+        .then((data) => {
+          if (data) {
+            const products = Array.isArray(data.customProducts)
+              ? data.customProducts
+              : [];
+            const ids = Array.isArray(data.removedIds) ? data.removedIds : [];
+            console.log(`Loaded ${products.length} products from ${apiBase ? "API" : "initial-products.json"}`);
+            setCustomProducts(products);
+            setRemovedIds(ids);
+            safeSaveToStorage({ removedIds: ids, customProducts: products });
+          } else {
+            console.warn("initial-products.json is empty, using localStorage fallback");
+            if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
+              setCustomProducts(saved.customProducts);
+              setRemovedIds(saved.removedIds);
+            }
           }
-        }
-      })
-      .catch((error) => {
-        console.error("Failed to load products:", error);
-        // On error, use localStorage if available
-        if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
-          setCustomProducts(saved.customProducts);
-          setRemovedIds(saved.removedIds);
-        }
-      });
-  }, []); // Only run once on mount
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error(`Failed to load products (attempt ${attempt + 1}/${MAX_RETRIES}):`, error);
+          if (attempt < MAX_RETRIES - 1) {
+            setTimeout(() => doFetch(attempt + 1), RETRY_DELAY_MS);
+          } else {
+            if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
+              setCustomProducts(saved.customProducts);
+              setRemovedIds(saved.removedIds);
+            }
+            setIsLoading(false);
+          }
+        });
+    };
+    doFetch();
+  }, []);
 
   // Save to localStorage when data changes
   useEffect(() => {
@@ -185,6 +189,7 @@ export const ProductsProvider = ({ children }) => {
       value={{
         removedIds,
         customProducts,
+        isLoading,
         addProduct,
         removeProduct,
         updateProduct,

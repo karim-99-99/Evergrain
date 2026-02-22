@@ -83,6 +83,8 @@ export const ar = {
     viewDetails: "عرض التفاصيل",
     searchResults: "نتائج البحث عن:",
     clear: "مسح",
+    loadingProducts: "جاري تحميل المنتجات...",
+    noProducts: "لا توجد منتجات متاحة حالياً",
   },
   // Products
   products: {

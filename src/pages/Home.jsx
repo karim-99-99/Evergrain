@@ -104,7 +104,7 @@ const VideoCard = ({ video }) => {
 const Home = () => {
   const { language } = useLanguage();
   const t = language === "ar" ? ar : en;
-  const { removedIds, customProducts } = useProducts();
+  const { removedIds, customProducts, isLoading } = useProducts();
   const defaultProducts = useMemo(
     () => getDefaultProducts(t, language),
     [t, language]
@@ -286,11 +286,17 @@ const Home = () => {
           </div> */}
 
           {/* Product Grid */}
-          {products.length === 0 ? (
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <div
+                className="w-12 h-12 border-4 border-[#5C4A37] border-t-transparent rounded-full animate-spin"
+                aria-hidden="true"
+              />
+              <p className="text-xl text-[#5C4A37]">{t.shop.loadingProducts}</p>
+            </div>
+          ) : products.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-2xl text-[#5C4A37]">
-                {language === "ar" ? "لا توجد منتجات متاحة حالياً" : "No products available at the moment"}
-              </p>
+              <p className="text-2xl text-[#5C4A37]">{t.shop.noProducts}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">

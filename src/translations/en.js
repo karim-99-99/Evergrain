@@ -83,6 +83,8 @@ export const en = {
     viewDetails: "View Details",
     searchResults: "Search results for:",
     clear: "Clear",
+    loadingProducts: "Loading products...",
+    noProducts: "No products available at the moment",
   },
   // Products
   products: {
