@@ -239,6 +239,8 @@ const ProductDetail = () => {
                               controls
                               className="w-full h-full object-contain"
                               playsInline
+                              preload="metadata"
+                              crossOrigin="anonymous"
                             />
                           ) : (
                             <a
@@ -540,6 +542,8 @@ const ProductDetail = () => {
                           controls
                           className="max-w-full max-h-[90vh]"
                           playsInline
+                          preload="metadata"
+                          crossOrigin="anonymous"
                         />
                       ) : (
                         <a
