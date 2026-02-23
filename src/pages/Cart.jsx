@@ -183,6 +183,7 @@ const Cart = () => {
                           }
                           alt={getProductTitle(item, language) || "Product"}
                           className="w-32 h-32 object-cover rounded-lg"
+                          referrerPolicy="no-referrer"
                         />
                       </div>
 

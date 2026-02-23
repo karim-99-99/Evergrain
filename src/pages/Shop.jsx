@@ -189,6 +189,8 @@ const Shop = () => {
                         src={getProductFirstImageUrl(product)}
                         alt={getProductTitle(product, language)}
                         className="aspect-square w-full object-cover cursor-pointer"
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
                       />
                     ) : (
                       <div className="aspect-square w-full bg-[#F5F0E8] flex items-center justify-center text-[#8B7355] text-sm">

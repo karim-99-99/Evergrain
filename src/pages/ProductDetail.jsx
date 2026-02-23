@@ -231,6 +231,7 @@ const ProductDetail = () => {
                               className="w-full h-full max-w-full"
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                               allowFullScreen
+                              referrerPolicy="no-referrer"
                             />
                           ) : isDirect ? (
                             <video
@@ -258,6 +259,7 @@ const ProductDetail = () => {
                         alt={getProductTitle(product, language)}
                         className="w-full h-[500px] object-cover cursor-pointer"
                         onClick={() => setIsLightboxOpen(true)}
+                        referrerPolicy="no-referrer"
                       />
                     );
                   })()
@@ -338,6 +340,7 @@ const ProductDetail = () => {
                               ? "opacity-100"
                               : "opacity-80 hover:opacity-100"
                           }`}
+                          referrerPolicy="no-referrer"
                         />
                       ) : (
                         <div className="w-full h-32 bg-[#332B2B] flex items-center justify-center pointer-events-none">
@@ -529,6 +532,7 @@ const ProductDetail = () => {
                           className="w-full max-w-4xl aspect-video"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
+                          referrerPolicy="no-referrer"
                         />
                       ) : isDirect ? (
                         <video
@@ -555,6 +559,7 @@ const ProductDetail = () => {
                     src={item.url}
                     alt={getProductTitle(product, language)}
                     className="max-w-full max-h-full object-contain"
+                    referrerPolicy="no-referrer"
                   />
                 );
               })()}
