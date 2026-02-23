@@ -23,28 +23,18 @@ export function isGoogleDriveUrl(url) {
 }
 
 /**
- * Same-origin proxy URL for Google Drive files.
- * Fixes Safari blocking - proxy runs on your domain, no cross-origin.
- * Requires GOOGLE_DRIVE_API_KEY in Vercel Environment Variables.
- */
-function getDriveProxyUrl(fileId) {
-  const base = typeof import.meta.env?.BASE_URL === "string" ? import.meta.env.BASE_URL : "/";
-  return `${base.replace(/\/$/, "")}/api/drive-proxy?id=${encodeURIComponent(fileId)}`;
-}
-
-/**
  * Convert Google Drive view links to displayable URLs.
- * Production: uses proxy (works in Safari). Dev: fallback to direct URLs.
+ * Images: thumbnail (works in Chrome, Firefox)
+ * Videos: iframe preview (works in Chrome, Firefox)
+ * Safari may block - consider hosting images/videos elsewhere for full compatibility.
  */
 export function toDisplayableDriveUrl(url, type) {
   const fileId = extractGoogleDriveFileId(url);
   if (!fileId) return url;
-  const isDev = import.meta.env?.DEV;
-  if (isDev) {
-    if (type === "video") return `https://drive.google.com/file/d/${fileId}/view`;
-    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+  if (type === "video") {
+    return `https://drive.google.com/file/d/${fileId}/view`;
   }
-  return getDriveProxyUrl(fileId);
+  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
 }
 
 /**
@@ -82,8 +72,7 @@ export function getProductFirstImageUrl(product) {
 }
 
 /**
- * Get embed URL for videos (YouTube, Vimeo).
- * Google Drive videos use proxy → direct stream in video tag, not iframe.
+ * Get embed URL for videos (YouTube, Vimeo, Google Drive).
  */
 export function getVideoEmbedUrl(url) {
   if (!url || typeof url !== "string") return null;
@@ -92,6 +81,8 @@ export function getVideoEmbedUrl(url) {
   if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=0`;
   const vimeoMatch = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+  const driveId = extractGoogleDriveFileId(u);
+  if (driveId) return `https://drive.google.com/file/d/${driveId}/preview`;
   return null;
 }
 
@@ -102,7 +93,6 @@ export function isDirectVideoUrl(url) {
   if (!url || typeof url !== "string") return false;
   return (
     /\.(mp4|webm|ogg)(\?|$)/i.test(url) ||
-    url.startsWith("data:video/") ||
-    /\/api\/drive-proxy\?id=/.test(url)
+    url.startsWith("data:video/")
   );
 }
