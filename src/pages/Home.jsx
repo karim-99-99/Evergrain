@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import { Link } from "../utils/Router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -33,19 +33,18 @@ import video4 from "../wood/video4.mp4";
 // Video Card Component
 const VideoCard = ({ video }) => {
   const videoRef = useRef(null);
+  const containerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const handleMouseEnter = () => {
+  const play = () => {
     if (videoRef.current) {
-      videoRef.current.volume = 0.7; // Set volume to 70%
-      videoRef.current
-        .play()
-        .catch((err) => console.log("Video play error:", err));
+      videoRef.current.volume = 0.7;
+      videoRef.current.play().catch((err) => console.log("Video play error:", err));
       setIsPlaying(true);
     }
   };
 
-  const handleMouseLeave = () => {
+  const pause = () => {
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
@@ -53,11 +52,44 @@ const VideoCard = ({ video }) => {
     }
   };
 
+  const handleMouseEnter = () => play();
+  const handleMouseLeave = () => pause();
+
+  const handleClick = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        play();
+      } else {
+        pause();
+      }
+    }
+  };
+
+  // Pause when video leaves viewport (e.g. user scrolls away)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting && videoRef.current && !videoRef.current.paused) {
+            pause();
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       className="relative rounded-lg overflow-hidden shadow-2xl group cursor-pointer"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
     >
       <video
         ref={videoRef}
@@ -300,7 +332,7 @@ const Home = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              {products.map((product) => (
+              {products.slice(0, 4).map((product) => (
               <div
                 key={product.id}
                 className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"

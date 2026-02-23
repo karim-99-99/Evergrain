@@ -28,12 +28,12 @@ export const en = {
       "We believe in the power of enduring craftsmanship. Each Evergrain piece is carefully made by skilled artisans who take pride in every detail, from the selection of premium hardwoods to the final hand-finished touch.",
     craftsmanshipMotion: "Our Craftsmanship in Motion",
     // Features
-    solidWalnut: "Solid American walnut hardwood",
+    solidWalnut: "Original teak hardwood",
     endGrain: "End grain construction",
     handFinished: "2-inch thick & hand finished",
     // Product Features
     features: {
-      solidWalnut: "Solid American walnut hardwood",
+      solidWalnut: "Original teak hardwood",
       edgeGrain: "Edge grain construction",
       twoInchThick: "2-inch thick",
       handFinished: "Hand-finished",

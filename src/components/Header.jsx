@@ -78,20 +78,20 @@ const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#F5F0E8]/95 backdrop-blur-sm border-b border-[#8B7355]/20">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+      <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
+        <div className="flex items-center justify-between min-w-0">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 md:gap-3">
+          <Link to="/" className="flex items-center gap-1 sm:gap-2 md:gap-3 min-w-0 shrink-0">
             <img
               src="/logo.png"
               alt="Evergrain Logo"
-              className="h-8 md:h-10 w-auto object-contain"
+              className="h-6 sm:h-8 md:h-10 w-auto object-contain shrink-0"
               style={{
                 mixBlendMode: "multiply",
                 filter: "contrast(1.1) brightness(0.95)",
               }}
             />
-            <span className="text-lg md:text-2xl font-bold text-[#332B2B] tracking-wide">
+            <span className="text-sm sm:text-lg md:text-2xl font-bold text-[#332B2B] tracking-wide truncate">
               EVERGRAIN
             </span>
           </Link>
@@ -127,11 +127,11 @@ const Header = () => {
           </nav>
 
           {/* Icons */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             {/* Language Switcher */}
             <button
               onClick={toggleLanguage}
-              className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 px-3 py-1 rounded border border-[#8B7355]/30 hover:border-[#5C4A37] text-sm font-medium"
+              className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 px-2 py-0.5 sm:px-3 sm:py-1 rounded border border-[#8B7355]/30 hover:border-[#5C4A37] text-xs sm:text-sm font-medium"
             >
               {language === "ar" ? "EN" : "عربي"}
             </button>
@@ -141,7 +141,7 @@ const Header = () => {
                 className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -210,7 +210,7 @@ const Header = () => {
                 aria-label={t.admin.signIn}
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -232,7 +232,7 @@ const Header = () => {
                 aria-label={t.admin.signOut}
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -251,7 +251,7 @@ const Header = () => {
               className="text-[#332B2B] hover:text-[#8B7355] transition-colors duration-300 relative"
             >
               <svg
-                className="w-6 h-6"
+                className="w-5 h-5 sm:w-6 sm:h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -264,7 +264,7 @@ const Header = () => {
                 />
               </svg>
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-[#5C4A37] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 bg-[#5C4A37] text-white text-[10px] sm:text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
@@ -276,7 +276,7 @@ const Header = () => {
               className="md:hidden text-[#332B2B]"
             >
               <svg
-                className="w-6 h-6"
+                className="w-5 h-5 sm:w-6 sm:h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

@@ -28,12 +28,12 @@ export const ar = {
       "نؤمن بقوة الحرفية الدائمة. كل قطعة من إيفرجراين مصنوعة بعناية من قبل حرفيين مهرة يفخرون بكل تفصيل، من اختيار الأخشاب الصلبة المميزة إلى اللمسة اليدوية النهائية.",
     craftsmanshipMotion: "حرفيتنا في الحركة",
     // Features
-    solidWalnut: "خشب الجوز الأمريكي الصلب",
+    solidWalnut: "خشب السرسوع الاصلي",
     endGrain: "بناء الحبوب النهائية",
     handFinished: "سمك 2 بوصة ومصقول يدوياً",
     // Product Features
     features: {
-      solidWalnut: "خشب الجوز الأمريكي الصلب",
+      solidWalnut: "خشب السرسوع الاصلي",
       edgeGrain: "بناء حبوب الحافة",
       twoInchThick: "سمك 2 بوصة",
       handFinished: "مصقول يدوياً",
