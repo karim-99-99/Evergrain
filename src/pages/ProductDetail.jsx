@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useCart } from "../context/CartContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -44,6 +44,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const touchStartX = useRef(0);
   const { addToCart } = useCart();
   const currentPath = useRouter();
 
@@ -102,6 +103,18 @@ const ProductDetail = () => {
     if (product && mediaCount > 0) {
       setSelectedMediaIndex((prev) => (prev - 1 + mediaCount) % mediaCount);
     }
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (mediaCount <= 1) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    const threshold = 50;
+    if (diff > threshold) handleNextMedia();
+    else if (diff < -threshold) handlePrevMedia();
   };
 
   // Keyboard navigation for lightbox
@@ -216,7 +229,11 @@ const ProductDetail = () => {
             {/* Product media (images + videos in order) */}
             <div>
               {/* Main media */}
-              <div className="mb-4 bg-white rounded-lg overflow-hidden shadow-lg relative group">
+              <div
+                className="mb-4 bg-white rounded-lg overflow-hidden shadow-lg relative group"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
                 {media.length > 0 ? (
                   (() => {
                     const item = media[selectedMediaIndex];
@@ -280,11 +297,11 @@ const ProductDetail = () => {
                         e.stopPropagation();
                         handlePrevMedia();
                       }}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      aria-label="Previous"
+                      className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 sm:p-3 rounded-full transition-opacity duration-300 z-10"
+                      aria-label="Previous image"
                     >
                       <svg
-                        className="w-6 h-6"
+                        className="w-5 h-5 sm:w-6 sm:h-6"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -302,11 +319,11 @@ const ProductDetail = () => {
                         e.stopPropagation();
                         handleNextMedia();
                       }}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      aria-label="Next"
+                      className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 sm:p-3 rounded-full transition-opacity duration-300 z-10"
+                      aria-label="Next image"
                     >
                       <svg
-                        className="w-6 h-6"
+                        className="w-5 h-5 sm:w-6 sm:h-6"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -520,6 +537,8 @@ const ProductDetail = () => {
           <div
             className="relative max-w-7xl w-full h-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             {media.length > 0 &&
               (() => {
