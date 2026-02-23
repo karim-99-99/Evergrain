@@ -775,7 +775,27 @@
       ],
       "price_en": "350 EG",
       "price_ar": "350 جنية",
-      "price": "350 EG"
+      "price": "350 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1q8jO9PXmxPoy49dKh0yMY7Q5LjCjlNlb/view?usp=sharing"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/11u6xRQk_9qT0t9_XiGqYHdq_2VERmwwK/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1MJi3LePB0vTYS6V1myc8MG0Ztmd_k5cU/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1q8jO9PXmxPoy49dKh0yMY7Q5LjCjlNlb/view?usp=sharing",
+      "images": [
+        "https://drive.google.com/file/d/1q8jO9PXmxPoy49dKh0yMY7Q5LjCjlNlb/view?usp=sharing",
+        "https://drive.google.com/file/d/11u6xRQk_9qT0t9_XiGqYHdq_2VERmwwK/view?usp=drive_link",
+        "https://drive.google.com/file/d/1MJi3LePB0vTYS6V1myc8MG0Ztmd_k5cU/view?usp=drive_link"
+      ]
     },
     {
       "id": 21,
@@ -814,7 +834,27 @@
       ],
       "price_en": "290EG",
       "price_ar": "290 جنية",
-      "price": "290EG"
+      "price": "290EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1Uy-h4j9FChY175MfAjovsJwfqjp82z6b/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1bHiucjb8Kinawgx6BENujbSlYUsGcbeO/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1hRaFlAgoDqGU3N2b0CAPJriRDE0mavKL/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1Uy-h4j9FChY175MfAjovsJwfqjp82z6b/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/1Uy-h4j9FChY175MfAjovsJwfqjp82z6b/view?usp=drive_link",
+        "https://drive.google.com/file/d/1bHiucjb8Kinawgx6BENujbSlYUsGcbeO/view?usp=drive_link",
+        "https://drive.google.com/file/d/1hRaFlAgoDqGU3N2b0CAPJriRDE0mavKL/view?usp=drive_link"
+      ]
     },
     {
       "id": 22,
@@ -856,7 +896,17 @@
       ],
       "price_en": "650 EG",
       "price_ar": "650 جنيى",
-      "price": "650 EG"
+      "price": "650 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1agEqCf_H72qZjNT4BLWjGIIJehifF26M/view?usp=sharing"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1agEqCf_H72qZjNT4BLWjGIIJehifF26M/view?usp=sharing",
+      "images": [
+        "https://drive.google.com/file/d/1agEqCf_H72qZjNT4BLWjGIIJehifF26M/view?usp=sharing"
+      ]
     },
     {
       "id": 23,
@@ -898,7 +948,17 @@
       ],
       "price_en": "500 EG",
       "price_ar": "500 جنية",
-      "price": "500 EG"
+      "price": "500 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1DzfMIgynsMhCbKJYdBcgMik1bfq3fsnK/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/1DzfMIgynsMhCbKJYdBcgMik1bfq3fsnK/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/1DzfMIgynsMhCbKJYdBcgMik1bfq3fsnK/view?usp=drive_link"
+      ]
     },
     {
       "id": 24,
@@ -940,7 +1000,17 @@
       ],
       "price_en": "900 EG",
       "price_ar": "900 جنية",
-      "price": "900 EG"
+      "price": "900 EG",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/19X9afFdamZt2JPz2-FZwz6CHctQ5CMG6/view?usp=drive_link"
+        }
+      ],
+      "image": "https://drive.google.com/file/d/19X9afFdamZt2JPz2-FZwz6CHctQ5CMG6/view?usp=drive_link",
+      "images": [
+        "https://drive.google.com/file/d/19X9afFdamZt2JPz2-FZwz6CHctQ5CMG6/view?usp=drive_link"
+      ]
     }
   ]
 }
