@@ -13,10 +13,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Missing id parameter" });
   }
 
-  const apiKey = process.env.GOOGLE_DRIVE_API_KEY;
+  const apiKey = process.env.GOOGLE_DRIVE_API_KEY || process.env.VITE_GOOGLE_DRIVE_API_KEY;
   if (!apiKey) {
     return res.status(503).json({
-      error: "Proxy not configured. Add GOOGLE_DRIVE_API_KEY to Vercel Environment Variables.",
+      error: "Proxy not configured. Add GOOGLE_DRIVE_API_KEY or VITE_GOOGLE_DRIVE_API_KEY in Vercel → Settings → Environment Variables.",
     });
   }
 
