@@ -65,13 +65,18 @@ const ProductDetail = () => {
             found.features && found.features.length > 0 ? found.features : [],
         }
       : null;
-    if (foundProduct && (!product || product.id !== foundProduct.id)) {
-      setSelectedMediaIndex(0);
-    }
     setProduct(foundProduct);
   }, [currentPath, allProducts, product]);
 
   const media = useMemo(() => getProductMedia(product), [product]);
+
+  // Start with first image (same as Shop page) so Safari users see something - videos may not load
+  useEffect(() => {
+    if (media.length > 0) {
+      const firstImageIdx = media.findIndex((m) => m.type === "image");
+      setSelectedMediaIndex(firstImageIdx >= 0 ? firstImageIdx : 0);
+    }
+  }, [product?.id, media]);
 
   const handleAddToCart = () => {
     if (product) {
