@@ -22,30 +22,29 @@ export function isGoogleDriveUrl(url) {
   return !!extractGoogleDriveFileId(url);
 }
 
-const GOOGLE_DRIVE_API_KEY =
-  typeof import.meta.env !== "undefined" && import.meta.env.VITE_GOOGLE_DRIVE_API_KEY
-    ? import.meta.env.VITE_GOOGLE_DRIVE_API_KEY
-    : "";
+/**
+ * Same-origin proxy URL for Google Drive files.
+ * Fixes Safari blocking - proxy runs on your domain, no cross-origin.
+ * Requires GOOGLE_DRIVE_API_KEY in Vercel Environment Variables.
+ */
+function getDriveProxyUrl(fileId) {
+  const base = typeof import.meta.env?.BASE_URL === "string" ? import.meta.env.BASE_URL : "/";
+  return `${base.replace(/\/$/, "")}/api/drive-proxy?id=${encodeURIComponent(fileId)}`;
+}
 
 /**
  * Convert Google Drive view links to displayable URLs.
- * Images: use thumbnail endpoint
- * Videos: if API key set → direct stream (video tag); else → view URL (iframe preview)
- * File must be shared as "Anyone with the link" to display.
+ * Production: uses proxy (works in Safari). Dev: fallback to direct URLs.
  */
 export function toDisplayableDriveUrl(url, type) {
   const fileId = extractGoogleDriveFileId(url);
   if (!fileId) return url;
-  if (type === "video") {
-    // With API key: direct stream URL for native video tag (reliable, no iframe issues)
-    if (GOOGLE_DRIVE_API_KEY) {
-      return `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${GOOGLE_DRIVE_API_KEY}`;
-    }
-    // Without API key: view URL for getVideoEmbedUrl (iframe preview)
-    return `https://drive.google.com/file/d/${fileId}/view`;
+  const isDev = import.meta.env?.DEV;
+  if (isDev) {
+    if (type === "video") return `https://drive.google.com/file/d/${fileId}/view`;
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
   }
-  // Images: thumbnail with large size for product display
-  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+  return getDriveProxyUrl(fileId);
 }
 
 /**
@@ -83,22 +82,16 @@ export function getProductFirstImageUrl(product) {
 }
 
 /**
- * Get embed URL for videos (YouTube, Vimeo, Google Drive).
- * Google Drive: returns preview iframe URL when no API key; API key uses direct stream instead.
+ * Get embed URL for videos (YouTube, Vimeo).
+ * Google Drive videos use proxy → direct stream in video tag, not iframe.
  */
 export function getVideoEmbedUrl(url) {
   if (!url || typeof url !== "string") return null;
   const u = url.trim();
-  // YouTube: watch or youtu.be
   const ytMatch = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s?]+)/);
   if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=0`;
   const vimeoMatch = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
-  // Google Drive: iframe preview (only when not using API key - API key uses video tag)
-  if (!GOOGLE_DRIVE_API_KEY) {
-    const driveId = extractGoogleDriveFileId(u);
-    if (driveId) return `https://drive.google.com/file/d/${driveId}/preview`;
-  }
   return null;
 }
 
@@ -110,6 +103,6 @@ export function isDirectVideoUrl(url) {
   return (
     /\.(mp4|webm|ogg)(\?|$)/i.test(url) ||
     url.startsWith("data:video/") ||
-    /googleapis\.com\/drive\/v3\/files\/[^/]+\?alt=media/.test(url)
+    /\/api\/drive-proxy\?id=/.test(url)
   );
 }
