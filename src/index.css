@@ -34,6 +34,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
   }
   .video-embed-wide-trick-inner {
     width: 100vmax;
@@ -46,5 +47,13 @@
   .video-embed-wide-trick-inner iframe {
     width: 100% !important;
     height: 100% !important;
+  }
+  /* Full-bleed video on mobile: full width of screen, no black bars */
+  .video-full-bleed-mobile {
+    background-color: #F5F0E8 !important;
+  }
+  .video-full-bleed-mobile .video-embed-wide-trick,
+  .video-full-bleed-mobile .video-embed-wide-trick-inner {
+    background: transparent;
   }
 }

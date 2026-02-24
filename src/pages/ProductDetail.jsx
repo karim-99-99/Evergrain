@@ -255,10 +255,14 @@ const ProductDetail = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Product media (images + videos in order) */}
-            <div>
+            <div className="md:min-w-0 -mx-4 md:mx-0 w-[calc(100%+2rem)] md:w-auto max-w-[100vw] md:max-w-none">
               {/* One image at a time – arrows and thumbnails change which one is shown */}
               <div
-                className="mb-4 bg-white rounded-lg shadow-lg relative group overflow-hidden"
+                className={`mb-4 rounded-lg shadow-lg relative group overflow-hidden ${
+                  media[safeMediaIndex]?.type === "video"
+                    ? "bg-[#F5F0E8] md:bg-white"
+                    : "bg-white"
+                }`}
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
@@ -272,7 +276,7 @@ const ProductDetail = () => {
                       return (
                         <div
                           ref={videoContainerRef}
-                          className="relative w-full h-[500px] bg-black flex items-center justify-center cursor-pointer"
+                          className="relative w-full h-[500px] bg-[#F5F0E8] flex items-center justify-center cursor-pointer video-full-bleed-mobile"
                           onClick={(e) => {
                             if (e.target.closest("[data-video-fullscreen-btn]"))
                               return;
