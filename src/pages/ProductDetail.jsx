@@ -117,23 +117,21 @@ const ProductDetail = () => {
     else if (diff < -threshold) handlePrevMedia();
   };
 
-  // Keyboard navigation for lightbox
+  // Keyboard navigation (product page + lightbox)
   useEffect(() => {
-    if (!isLightboxOpen) return;
-
     const handleKeyDown = (e) => {
-      if (e.key === "ArrowRight") {
+      if (e.key === "ArrowRight" && mediaCount > 1) {
         handleNextMedia();
-      } else if (e.key === "ArrowLeft") {
+      } else if (e.key === "ArrowLeft" && mediaCount > 1) {
         handlePrevMedia();
-      } else if (e.key === "Escape") {
+      } else if (e.key === "Escape" && isLightboxOpen) {
         setIsLightboxOpen(false);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isLightboxOpen, product]);
+  }, [isLightboxOpen, product, mediaCount]);
 
   if (!product) {
     return (
@@ -228,9 +226,9 @@ const ProductDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Product media (images + videos in order) */}
             <div>
-              {/* Main media */}
+              {/* One image at a time – arrows and thumbnails change which one is shown */}
               <div
-                className="mb-4 bg-white rounded-lg overflow-hidden shadow-lg relative group"
+                className="mb-4 bg-white rounded-lg shadow-lg relative group overflow-hidden"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
@@ -278,8 +276,8 @@ const ProductDetail = () => {
                     return (
                       <img
                         src={item.url}
-                        alt={getProductTitle(product, language)}
-                        className="w-full h-[500px] object-cover cursor-pointer"
+                        alt={`${getProductTitle(product, language)} ${selectedMediaIndex + 1}`}
+                        className="w-full h-[500px] object-cover cursor-pointer block"
                         onClick={() => setIsLightboxOpen(true)}
                         referrerPolicy="no-referrer"
                       />
@@ -340,34 +338,31 @@ const ProductDetail = () => {
                 )}
               </div>
 
-              {/* Thumbnails */}
+              {/* Thumbnails - all images visible, click to select */}
               {media.length > 0 && (
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                   {media.map((item, index) => (
-                    <div
+                    <button
+                      type="button"
                       key={index}
                       onClick={() => setSelectedMediaIndex(index)}
-                      className={`relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                      className={`relative aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer ${
                         selectedMediaIndex === index
-                          ? "ring-4 ring-[#5C4A37] ring-offset-2 scale-105"
-                          : "ring-2 ring-transparent hover:ring-[#8B7355]/50"
+                          ? "ring-4 ring-[#5C4A37] ring-offset-2"
+                          : "ring-2 ring-transparent hover:ring-[#8B7355]/50 opacity-90 hover:opacity-100"
                       }`}
                     >
                       {item.type === "image" ? (
                         <img
                           src={item.url}
                           alt={`${product.title} ${index + 1}`}
-                          className={`w-full h-32 object-cover transition-opacity duration-300 pointer-events-none ${
-                            selectedMediaIndex === index
-                              ? "opacity-100"
-                              : "opacity-80 hover:opacity-100"
-                          }`}
+                          className="w-full h-full object-cover pointer-events-none"
                           referrerPolicy="no-referrer"
                         />
                       ) : (
-                        <div className="w-full h-32 bg-[#332B2B] flex items-center justify-center pointer-events-none">
+                        <div className="w-full h-full bg-[#332B2B] flex items-center justify-center pointer-events-none">
                           <svg
-                            className="w-12 h-12 text-white/80"
+                            className="w-10 h-10 text-white/80"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -378,7 +373,7 @@ const ProductDetail = () => {
                       {selectedMediaIndex === index && (
                         <div className="absolute inset-0 bg-[#5C4A37]/10 pointer-events-none" />
                       )}
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}
