@@ -47,7 +47,6 @@ const ProductDetail = () => {
   const touchStartX = useRef(0);
   const videoContainerRef = useRef(null);
   const [isVideoFullscreen, setIsVideoFullscreen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const { addToCart } = useCart();
   const currentPath = useRouter();
 
@@ -146,14 +145,6 @@ const ProductDetail = () => {
     document.addEventListener("fullscreenchange", onFullscreenChange);
     return () =>
       document.removeEventListener("fullscreenchange", onFullscreenChange);
-  }, []);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 768px)");
-    const set = () => setIsMobile(mq.matches);
-    set();
-    mq.addEventListener("change", set);
-    return () => mq.removeEventListener("change", set);
   }, []);
 
   // Keyboard navigation (product page + lightbox)
@@ -278,9 +269,6 @@ const ProductDetail = () => {
                     if (item.type === "video") {
                       const embedUrl = getVideoEmbedUrl(item.url);
                       const isDirect = isDirectVideoUrl(item.url);
-                      const isEmbed = !!embedUrl && !isDirect;
-                      const showTapOverlay =
-                        isMobile && isEmbed && !isVideoFullscreen;
                       return (
                         <div
                           ref={videoContainerRef}
@@ -288,35 +276,18 @@ const ProductDetail = () => {
                           onClick={(e) => {
                             if (e.target.closest("[data-video-fullscreen-btn]"))
                               return;
-                            if (showTapOverlay) {
-                              e.preventDefault();
-                              toggleVideoFullscreen();
-                              return;
-                            }
                             setIsLightboxOpen(true);
                           }}
                         >
                           {embedUrl ? (
-                            <>
-                              <iframe
-                                src={embedUrl}
-                                title="Product video"
-                                className={`w-full h-full max-w-full ${
-                                  showTapOverlay
-                                    ? "pointer-events-none"
-                                    : "pointer-events-auto"
-                                }`}
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                referrerPolicy="no-referrer"
-                              />
-                              {showTapOverlay && (
-                                <div
-                                  className="absolute inset-0 z-10 flex items-center justify-center bg-black/20"
-                                  aria-hidden
-                                />
-                              )}
-                            </>
+                            <iframe
+                              src={embedUrl}
+                              title="Product video"
+                              className="w-full h-full max-w-full pointer-events-auto"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              referrerPolicy="no-referrer"
+                            />
                           ) : isDirect ? (
                             <video
                               src={item.url}
@@ -649,43 +620,20 @@ const ProductDetail = () => {
                 if (item.type === "video") {
                   const embedUrl = getVideoEmbedUrl(item.url);
                   const isDirect = isDirectVideoUrl(item.url);
-                  const isEmbed = !!embedUrl && !isDirect;
-                  const showTapOverlay =
-                    isMobile && isEmbed && !isVideoFullscreen;
                   return (
                     <div
                       ref={videoContainerRef}
                       className="relative w-full h-full max-h-[90vh] flex items-center justify-center"
-                      onClick={(e) => {
-                        if (e.target.closest("[data-video-fullscreen-btn]"))
-                          return;
-                        if (showTapOverlay) {
-                          e.preventDefault();
-                          toggleVideoFullscreen();
-                        }
-                      }}
                     >
                       {embedUrl ? (
-                        <>
-                          <iframe
-                            src={embedUrl}
-                            title="Product video"
-                            className={`w-full max-w-4xl aspect-video ${
-                              showTapOverlay
-                                ? "pointer-events-none"
-                                : "pointer-events-auto"
-                            }`}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            referrerPolicy="no-referrer"
-                          />
-                          {showTapOverlay && (
-                            <div
-                              className="absolute inset-0 z-10 flex items-center justify-center bg-black/20"
-                              aria-hidden
-                            />
-                          )}
-                        </>
+                        <iframe
+                          src={embedUrl}
+                          title="Product video"
+                          className="w-full max-w-4xl aspect-video pointer-events-auto"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          referrerPolicy="no-referrer"
+                        />
                       ) : isDirect ? (
                         <video
                           src={item.url}
