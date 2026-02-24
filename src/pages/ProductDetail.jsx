@@ -45,6 +45,8 @@ const ProductDetail = () => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const touchStartX = useRef(0);
+  const videoContainerRef = useRef(null);
+  const [isVideoFullscreen, setIsVideoFullscreen] = useState(false);
   const { addToCart } = useCart();
   const currentPath = useRouter();
 
@@ -125,6 +127,25 @@ const ProductDetail = () => {
     if (diff > threshold) handleNextMedia();
     else if (diff < -threshold) handlePrevMedia();
   };
+
+  const toggleVideoFullscreen = () => {
+    const el = videoContainerRef.current;
+    if (!el) return;
+    if (!document.fullscreenElement) {
+      el.requestFullscreen?.()?.then(() => setIsVideoFullscreen(true));
+    } else {
+      document.exitFullscreen?.()?.then(() => setIsVideoFullscreen(false));
+    }
+  };
+
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      setIsVideoFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", onFullscreenChange);
+  }, []);
 
   // Keyboard navigation (product page + lightbox)
   useEffect(() => {
@@ -250,14 +271,19 @@ const ProductDetail = () => {
                       const isDirect = isDirectVideoUrl(item.url);
                       return (
                         <div
-                          className="w-full h-[500px] bg-black flex items-center justify-center cursor-pointer"
-                          onClick={() => setIsLightboxOpen(true)}
+                          ref={videoContainerRef}
+                          className="relative w-full h-[500px] bg-black flex items-center justify-center cursor-pointer"
+                          onClick={(e) => {
+                            if (e.target.closest("[data-video-fullscreen-btn]"))
+                              return;
+                            setIsLightboxOpen(true);
+                          }}
                         >
                           {embedUrl ? (
                             <iframe
                               src={embedUrl}
                               title="Product video"
-                              className="w-full h-full max-w-full"
+                              className="w-full h-full max-w-full pointer-events-auto"
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                               allowFullScreen
                               referrerPolicy="no-referrer"
@@ -280,6 +306,26 @@ const ProductDetail = () => {
                               {item.url}
                             </a>
                           )}
+                          <button
+                            type="button"
+                            data-video-fullscreen-btn
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleVideoFullscreen();
+                            }}
+                            className="absolute bottom-4 right-4 z-20 bg-black/60 hover:bg-black/80 text-white p-2.5 rounded-full touch-manipulation md:bottom-6 md:right-6"
+                            aria-label={language === "ar" ? "ملء الشاشة" : "Fullscreen"}
+                          >
+                            {isVideoFullscreen ? (
+                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            ) : (
+                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                              </svg>
+                            )}
+                          </button>
                         </div>
                       );
                     }
@@ -553,12 +599,15 @@ const ProductDetail = () => {
                   const embedUrl = getVideoEmbedUrl(item.url);
                   const isDirect = isDirectVideoUrl(item.url);
                   return (
-                    <div className="w-full h-full max-h-[90vh] flex items-center justify-center">
+                    <div
+                      ref={videoContainerRef}
+                      className="relative w-full h-full max-h-[90vh] flex items-center justify-center"
+                    >
                       {embedUrl ? (
                         <iframe
                           src={embedUrl}
                           title="Product video"
-                          className="w-full max-w-4xl aspect-video"
+                          className="w-full max-w-4xl aspect-video pointer-events-auto"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
                           referrerPolicy="no-referrer"
@@ -581,6 +630,26 @@ const ProductDetail = () => {
                           {item.url}
                         </a>
                       )}
+                      <button
+                        type="button"
+                        data-video-fullscreen-btn
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleVideoFullscreen();
+                        }}
+                        className="absolute bottom-4 right-4 z-20 bg-black/60 hover:bg-black/80 text-white p-3 rounded-full touch-manipulation"
+                        aria-label={language === "ar" ? "ملء الشاشة" : "Fullscreen"}
+                      >
+                        {isVideoFullscreen ? (
+                          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        ) : (
+                          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                          </svg>
+                        )}
+                      </button>
                     </div>
                   );
                 }
