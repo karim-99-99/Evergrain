@@ -184,6 +184,7 @@ export const en = {
     addToCart: "Add to Cart",
     continueShopping: "Continue Shopping",
     addedToCart: "added to cart",
+    openVideoInNewTab: "Play video (opens in new tab)",
   },
   // About Page
   about: {
