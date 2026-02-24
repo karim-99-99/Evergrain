@@ -12,7 +12,6 @@ import {
   getProductMedia,
   getVideoEmbedUrl,
   isDirectVideoUrl,
-  isGoogleDriveUrl,
 } from "../utils/productMedia";
 import {
   getProductTitle,
@@ -45,7 +44,6 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const touchStartX = useRef(0);
   const { addToCart } = useCart();
   const currentPath = useRouter();
@@ -89,15 +87,6 @@ const ProductDetail = () => {
       setSelectedMediaIndex(firstImageIdx >= 0 ? firstImageIdx : 0);
     }
   }, [currentPath, media]);
-
-  // Detect mobile/touch for video fallback (iframe controls don't work well on mobile)
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 768px)");
-    const check = () => setIsMobile(mq.matches);
-    check();
-    mq.addEventListener("change", check);
-    return () => mq.removeEventListener("change", check);
-  }, []);
 
   const handleAddToCart = () => {
     if (product) {
@@ -259,37 +248,12 @@ const ProductDetail = () => {
                     if (item.type === "video") {
                       const embedUrl = getVideoEmbedUrl(item.url);
                       const isDirect = isDirectVideoUrl(item.url);
-                      const useMobileVideoLink =
-                        isMobile && embedUrl && isGoogleDriveUrl(item.url);
                       return (
                         <div
                           className="w-full h-[500px] bg-black flex items-center justify-center cursor-pointer"
-                          onClick={() =>
-                            !useMobileVideoLink && setIsLightboxOpen(true)
-                          }
+                          onClick={() => setIsLightboxOpen(true)}
                         >
-                          {useMobileVideoLink ? (
-                            <a
-                              href={item.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex flex-col items-center justify-center gap-4 w-full h-full text-white no-underline"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <span className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
-                                <svg
-                                  className="w-10 h-10 ml-1"
-                                  fill="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path d="M8 5v14l11-7z" />
-                                </svg>
-                              </span>
-                              <span className="text-lg font-medium px-4 text-center">
-                                {t.productDetail.openVideoInNewTab}
-                              </span>
-                            </a>
-                          ) : embedUrl ? (
+                          {embedUrl ? (
                             <iframe
                               src={embedUrl}
                               title="Product video"
@@ -588,32 +552,9 @@ const ProductDetail = () => {
                 if (item.type === "video") {
                   const embedUrl = getVideoEmbedUrl(item.url);
                   const isDirect = isDirectVideoUrl(item.url);
-                  const useMobileVideoLink =
-                    isMobile && embedUrl && isGoogleDriveUrl(item.url);
                   return (
                     <div className="w-full h-full max-h-[90vh] flex items-center justify-center">
-                      {useMobileVideoLink ? (
-                        <a
-                          href={item.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex flex-col items-center justify-center gap-4 w-full h-full min-h-[50vh] text-white no-underline"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <span className="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center">
-                            <svg
-                              className="w-14 h-14 ml-1"
-                              fill="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                          </span>
-                          <span className="text-xl font-medium px-6 text-center">
-                            {t.productDetail.openVideoInNewTab}
-                          </span>
-                        </a>
-                      ) : embedUrl ? (
+                      {embedUrl ? (
                         <iframe
                           src={embedUrl}
                           title="Product video"

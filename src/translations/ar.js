@@ -184,7 +184,6 @@ export const ar = {
     addToCart: "أضف إلى السلة",
     continueShopping: "متابعة التسوق",
     addedToCart: "تمت الإضافة إلى السلة",
-    openVideoInNewTab: "شغّل الفيديو (يفتح في تاب جديد)",
   },
   // About Page
   about: {
