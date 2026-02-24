@@ -52,7 +52,6 @@ const ProductDetail = () => {
     // Get product ID from URL
     const productId = parseInt(currentPath.split("/product/")[1], 10);
     const found = allProducts.find((p) => p.id === productId);
-    // Normalize for detail view: ensure images and features
     const foundProduct = found
       ? {
           ...found,
@@ -67,17 +66,27 @@ const ProductDetail = () => {
         }
       : null;
     setProduct(foundProduct);
-  }, [currentPath, allProducts, product]);
+  }, [currentPath, allProducts]);
 
   const media = useMemo(() => getProductMedia(product), [product]);
 
-  // Start with first image (same as Shop page) so Safari users see something - videos may not load
+  // Keep selected index in bounds when media changes
+  const safeMediaIndex = Math.min(
+    Math.max(0, selectedMediaIndex),
+    Math.max(0, media.length - 1)
+  );
+
+  // Reset to first image only when navigating to a different product (by URL), not when product reference changes
+  const lastProductIdRef = useRef(null);
   useEffect(() => {
-    if (media.length > 0) {
+    if (media.length === 0) return;
+    const productId = parseInt(currentPath.split("/product/")[1], 10);
+    if (lastProductIdRef.current !== productId) {
+      lastProductIdRef.current = productId;
       const firstImageIdx = media.findIndex((m) => m.type === "image");
       setSelectedMediaIndex(firstImageIdx >= 0 ? firstImageIdx : 0);
     }
-  }, [product?.id, media]);
+  }, [currentPath, media]);
 
   const handleAddToCart = () => {
     if (product) {
@@ -234,7 +243,7 @@ const ProductDetail = () => {
               >
                 {media.length > 0 ? (
                   (() => {
-                    const item = media[selectedMediaIndex];
+                    const item = media[safeMediaIndex];
                     if (!item) return null;
                     if (item.type === "video") {
                       const embedUrl = getVideoEmbedUrl(item.url);
@@ -276,7 +285,7 @@ const ProductDetail = () => {
                     return (
                       <img
                         src={item.url}
-                        alt={`${getProductTitle(product, language)} ${selectedMediaIndex + 1}`}
+                        alt={`${getProductTitle(product, language)} ${safeMediaIndex + 1}`}
                         className="w-full h-[500px] object-cover cursor-pointer block"
                         onClick={() => setIsLightboxOpen(true)}
                         referrerPolicy="no-referrer"
@@ -537,7 +546,7 @@ const ProductDetail = () => {
           >
             {media.length > 0 &&
               (() => {
-                const item = media[selectedMediaIndex];
+                const item = media[safeMediaIndex];
                 if (!item) return null;
                 if (item.type === "video") {
                   const embedUrl = getVideoEmbedUrl(item.url);
