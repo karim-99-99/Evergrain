@@ -26,3 +26,25 @@
 .animate-slide-down {
   animation: slide-down 0.3s ease-out;
 }
+
+/* On narrow viewports, make video embed think it has a wide width so player controls auto-hide */
+@media (max-width: 768px) {
+  .video-embed-wide-trick {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .video-embed-wide-trick-inner {
+    width: 100vmax;
+    height: 100%;
+    min-height: 500px;
+    flex-shrink: 0;
+    transform: scaleX(calc(100vw / 100vmax));
+    transform-origin: center center;
+  }
+  .video-embed-wide-trick-inner iframe {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}

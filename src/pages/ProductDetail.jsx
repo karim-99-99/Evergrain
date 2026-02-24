@@ -280,14 +280,18 @@ const ProductDetail = () => {
                           }}
                         >
                           {embedUrl ? (
-                            <iframe
-                              src={embedUrl}
-                              title="Product video"
-                              className="w-full h-full max-w-full pointer-events-auto"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                              referrerPolicy="no-referrer"
-                            />
+                            <div className="video-embed-wide-trick w-full h-full min-h-[500px]">
+                              <div className="video-embed-wide-trick-inner w-full h-full">
+                                <iframe
+                                  src={embedUrl}
+                                  title="Product video"
+                                  className="w-full h-full max-w-full pointer-events-auto"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                  referrerPolicy="no-referrer"
+                                />
+                              </div>
+                            </div>
                           ) : isDirect ? (
                             <video
                               src={item.url}
@@ -626,14 +630,18 @@ const ProductDetail = () => {
                       className="relative w-full h-full max-h-[90vh] flex items-center justify-center"
                     >
                       {embedUrl ? (
-                        <iframe
-                          src={embedUrl}
-                          title="Product video"
-                          className="w-full max-w-4xl aspect-video pointer-events-auto"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          referrerPolicy="no-referrer"
-                        />
+                        <div className="video-embed-wide-trick w-full h-full max-h-[90vh] min-h-[50vh]">
+                          <div className="video-embed-wide-trick-inner w-full h-full">
+                            <iframe
+                              src={embedUrl}
+                              title="Product video"
+                              className="w-full h-full pointer-events-auto"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              referrerPolicy="no-referrer"
+                            />
+                          </div>
+                        </div>
                       ) : isDirect ? (
                         <video
                           src={item.url}
