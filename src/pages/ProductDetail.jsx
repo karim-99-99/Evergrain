@@ -47,6 +47,7 @@ const ProductDetail = () => {
   const touchStartX = useRef(0);
   const videoContainerRef = useRef(null);
   const [isVideoFullscreen, setIsVideoFullscreen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const { addToCart } = useCart();
   const currentPath = useRouter();
 
@@ -145,6 +146,14 @@ const ProductDetail = () => {
     document.addEventListener("fullscreenchange", onFullscreenChange);
     return () =>
       document.removeEventListener("fullscreenchange", onFullscreenChange);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const set = () => setIsMobile(mq.matches);
+    set();
+    mq.addEventListener("change", set);
+    return () => mq.removeEventListener("change", set);
   }, []);
 
   // Keyboard navigation (product page + lightbox)
@@ -269,6 +278,9 @@ const ProductDetail = () => {
                     if (item.type === "video") {
                       const embedUrl = getVideoEmbedUrl(item.url);
                       const isDirect = isDirectVideoUrl(item.url);
+                      const isEmbed = !!embedUrl && !isDirect;
+                      const showTapOverlay =
+                        isMobile && isEmbed && !isVideoFullscreen;
                       return (
                         <div
                           ref={videoContainerRef}
@@ -276,18 +288,35 @@ const ProductDetail = () => {
                           onClick={(e) => {
                             if (e.target.closest("[data-video-fullscreen-btn]"))
                               return;
+                            if (showTapOverlay) {
+                              e.preventDefault();
+                              toggleVideoFullscreen();
+                              return;
+                            }
                             setIsLightboxOpen(true);
                           }}
                         >
                           {embedUrl ? (
-                            <iframe
-                              src={embedUrl}
-                              title="Product video"
-                              className="w-full h-full max-w-full pointer-events-auto"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                              referrerPolicy="no-referrer"
-                            />
+                            <>
+                              <iframe
+                                src={embedUrl}
+                                title="Product video"
+                                className={`w-full h-full max-w-full ${
+                                  showTapOverlay
+                                    ? "pointer-events-none"
+                                    : "pointer-events-auto"
+                                }`}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                referrerPolicy="no-referrer"
+                              />
+                              {showTapOverlay && (
+                                <div
+                                  className="absolute inset-0 z-10 flex items-center justify-center bg-black/20"
+                                  aria-hidden
+                                />
+                              )}
+                            </>
                           ) : isDirect ? (
                             <video
                               src={item.url}
@@ -314,15 +343,37 @@ const ProductDetail = () => {
                               toggleVideoFullscreen();
                             }}
                             className="absolute bottom-4 right-4 z-20 bg-black/60 hover:bg-black/80 text-white p-2.5 rounded-full touch-manipulation md:bottom-6 md:right-6"
-                            aria-label={language === "ar" ? "ملء الشاشة" : "Fullscreen"}
+                            aria-label={
+                              language === "ar" ? "ملء الشاشة" : "Fullscreen"
+                            }
                           >
                             {isVideoFullscreen ? (
-                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              <svg
+                                className="w-6 h-6"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
                               </svg>
                             ) : (
-                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                              <svg
+                                className="w-6 h-6"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                                />
                               </svg>
                             )}
                           </button>
@@ -598,20 +649,43 @@ const ProductDetail = () => {
                 if (item.type === "video") {
                   const embedUrl = getVideoEmbedUrl(item.url);
                   const isDirect = isDirectVideoUrl(item.url);
+                  const isEmbed = !!embedUrl && !isDirect;
+                  const showTapOverlay =
+                    isMobile && isEmbed && !isVideoFullscreen;
                   return (
                     <div
                       ref={videoContainerRef}
                       className="relative w-full h-full max-h-[90vh] flex items-center justify-center"
+                      onClick={(e) => {
+                        if (e.target.closest("[data-video-fullscreen-btn]"))
+                          return;
+                        if (showTapOverlay) {
+                          e.preventDefault();
+                          toggleVideoFullscreen();
+                        }
+                      }}
                     >
                       {embedUrl ? (
-                        <iframe
-                          src={embedUrl}
-                          title="Product video"
-                          className="w-full max-w-4xl aspect-video pointer-events-auto"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          referrerPolicy="no-referrer"
-                        />
+                        <>
+                          <iframe
+                            src={embedUrl}
+                            title="Product video"
+                            className={`w-full max-w-4xl aspect-video ${
+                              showTapOverlay
+                                ? "pointer-events-none"
+                                : "pointer-events-auto"
+                            }`}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            referrerPolicy="no-referrer"
+                          />
+                          {showTapOverlay && (
+                            <div
+                              className="absolute inset-0 z-10 flex items-center justify-center bg-black/20"
+                              aria-hidden
+                            />
+                          )}
+                        </>
                       ) : isDirect ? (
                         <video
                           src={item.url}
