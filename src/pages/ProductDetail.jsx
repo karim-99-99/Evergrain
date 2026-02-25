@@ -70,7 +70,8 @@ const ProductDetail = () => {
     setProduct(foundProduct);
   }, [currentPath, allProducts]);
 
-  const media = useMemo(() => getProductMedia(product), [product]);
+  const media = useMemo(() => getProductMedia(product, "large"), [product]);
+  const mediaThumbnails = useMemo(() => getProductMedia(product, "small"), [product]);
 
   // Keep selected index in bounds when media changes
   const safeMediaIndex = Math.min(
@@ -293,6 +294,7 @@ const ProductDetail = () => {
                                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                   allowFullScreen
                                   referrerPolicy="no-referrer"
+                                  loading="lazy"
                                 />
                               </div>
                             </div>
@@ -360,12 +362,13 @@ const ProductDetail = () => {
                       );
                     }
                     return (
-                      <img
+                        <img
                         src={item.url}
                         alt={`${getProductTitle(product, language)} ${safeMediaIndex + 1}`}
                         className="w-full h-[500px] object-cover cursor-pointer block"
                         onClick={() => setIsLightboxOpen(true)}
                         referrerPolicy="no-referrer"
+                        decoding="async"
                       />
                     );
                   })()
@@ -440,10 +443,12 @@ const ProductDetail = () => {
                     >
                       {item.type === "image" ? (
                         <img
-                          src={item.url}
+                          src={mediaThumbnails[index]?.url ?? item.url}
                           alt={`${product.title} ${index + 1}`}
                           className="w-full h-full object-cover pointer-events-none"
                           referrerPolicy="no-referrer"
+                          loading="lazy"
+                          decoding="async"
                         />
                       ) : (
                         <div className="w-full h-full bg-[#332B2B] flex items-center justify-center pointer-events-none">
@@ -643,6 +648,7 @@ const ProductDetail = () => {
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                               allowFullScreen
                               referrerPolicy="no-referrer"
+                              loading="lazy"
                             />
                           </div>
                         </div>
@@ -760,9 +766,11 @@ const ProductDetail = () => {
                 >
                   {item.type === "image" ? (
                     <img
-                      src={item.url}
+                      src={mediaThumbnails[index]?.url ?? item.url}
                       alt=""
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                   ) : (
                     <div className="w-full h-full bg-[#332B2B] flex items-center justify-center">

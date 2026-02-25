@@ -175,7 +175,7 @@ const Cart = () => {
                       <div className="flex-shrink-0">
                         <img
                           src={
-                            getProductFirstImageUrl(item) ||
+                            getProductFirstImageUrl(item, "small") ||
                             (item.images && item.images[0]) ||
                             item.image ||
                             productImages[item.id] ||
@@ -184,6 +184,8 @@ const Cart = () => {
                           alt={getProductTitle(item, language) || "Product"}
                           className="w-32 h-32 object-cover rounded-lg"
                           referrerPolicy="no-referrer"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
 

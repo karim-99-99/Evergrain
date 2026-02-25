@@ -22,28 +22,29 @@ export function isGoogleDriveUrl(url) {
   return !!extractGoogleDriveFileId(url);
 }
 
+/** Image size for Drive thumbnails: small = fast load for cards, large = quality for detail */
+const DRIVE_IMAGE_SIZES = { small: "w400", medium: "w800", large: "w1200" };
+
 /**
  * Convert Google Drive view links to displayable URLs.
- * Images: thumbnail (works in Chrome, Firefox)
+ * Images: thumbnail (works in Chrome, Firefox). Use size 'small' for cards/thumbnails to load faster.
  * Videos: iframe preview (works in Chrome, Firefox)
- * Safari may block - consider hosting images/videos elsewhere for full compatibility.
  */
-export function toDisplayableDriveUrl(url, type) {
+export function toDisplayableDriveUrl(url, type, size = "large") {
   const fileId = extractGoogleDriveFileId(url);
   if (!fileId) return url;
   if (type === "video") {
     return `https://drive.google.com/file/d/${fileId}/view`;
   }
-  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+  const sz = DRIVE_IMAGE_SIZES[size] || DRIVE_IMAGE_SIZES.large;
+  return `https://drive.google.com/thumbnail?id=${fileId}&sz=${sz}`;
 }
 
 /**
  * Normalize product to an ordered list of media items (images and videos).
- * Converts Google Drive view links to displayable URLs.
- * @param {{ media?: { type: 'image'|'video', url: string }[], images?: string[], image?: string }} product
- * @returns {{ type: 'image'|'video', url: string }[]}
+ * imageSize: 'small' for thumbnails (faster), 'large' for main detail view.
  */
-export function getProductMedia(product) {
+export function getProductMedia(product, imageSize = "large") {
   if (!product) return [];
   const rawMedia = Array.isArray(product.media) && product.media.length > 0
     ? product.media.map((m) => ({
@@ -58,15 +59,15 @@ export function getProductMedia(product) {
     .filter((m) => m.url)
     .map((m) => ({
       ...m,
-      url: toDisplayableDriveUrl(m.url, m.type),
+      url: toDisplayableDriveUrl(m.url, m.type, m.type === "image" ? imageSize : "large"),
     }));
 }
 
 /**
- * Get first image URL from product (for cards/thumbnails).
+ * Get first image URL from product. Use size 'small' for cards (faster), 'large' for detail.
  */
-export function getProductFirstImageUrl(product) {
-  const media = getProductMedia(product);
+export function getProductFirstImageUrl(product, size = "small") {
+  const media = getProductMedia(product, size);
   const firstImage = media.find((m) => m.type === "image");
   return firstImage ? firstImage.url : media[0]?.url || "";
 }

@@ -347,11 +347,12 @@ const Home = () => {
                   <Link to={`/product/${product.id}`}>
                     {getProductFirstImageUrl(product) ? (
                       <img
-                        src={getProductFirstImageUrl(product)}
+                        src={getProductFirstImageUrl(product, "small")}
                         alt={getProductTitle(product, language)}
                         className="aspect-square w-full object-cover cursor-pointer"
                         referrerPolicy="no-referrer"
                         loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <div className="aspect-square w-full bg-[#F5F0E8] flex items-center justify-center text-[#8B7355] text-sm">
