@@ -9,6 +9,7 @@ import { en } from "../translations/en";
 import { ar } from "../translations/ar";
 import { getDefaultProducts } from "../data/defaultProducts";
 import { getProductMedia } from "../utils/productMedia";
+import { getProductTitle } from "../utils/productText";
 
 const Admin = () => {
   const { language } = useLanguage();
@@ -50,6 +51,11 @@ const Admin = () => {
     ...defaultProducts.filter((p) => !removedIds.includes(p.id)),
     ...customProducts,
   ];
+
+  const getThumbUrl = (p) => {
+    const firstImage = getProductMedia(p, "small").find((m) => m.type === "image");
+    return firstImage?.url || "";
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -862,18 +868,14 @@ const Admin = () => {
                       </td>
                       <td className="p-4">
                         <div className="relative inline-block">
-                          {(product.images && product.images[0]) ||
-                          product.image ? (
+                          {getThumbUrl(product) ? (
                             <img
-                              src={
-                                typeof (
-                                  product.images?.[0] ?? product.image
-                                ) === "string"
-                                  ? product.images?.[0] ?? product.image
-                                  : product.images?.[0] ?? product.image
-                              }
-                              alt={product.title}
+                              src={getThumbUrl(product)}
+                              alt={getProductTitle(product, language)}
                               className="w-14 h-14 object-cover rounded"
+                              referrerPolicy="no-referrer"
+                              loading="lazy"
+                              decoding="async"
                             />
                           ) : (
                             <span className="text-[#8B7355] text-sm">—</span>

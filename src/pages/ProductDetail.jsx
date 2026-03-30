@@ -444,7 +444,7 @@ const ProductDetail = () => {
                       {item.type === "image" ? (
                         <img
                           src={mediaThumbnails[index]?.url ?? item.url}
-                          alt={`${product.title} ${index + 1}`}
+                          alt={`${getProductTitle(product, language)} ${index + 1}`}
                           className="w-full h-full object-cover pointer-events-none"
                           referrerPolicy="no-referrer"
                           loading="lazy"
@@ -474,12 +474,12 @@ const ProductDetail = () => {
             <div>
               <div className="mb-4">
                 <span className="bg-[#5C4A37] text-white px-3 py-1 rounded text-xs font-semibold">
-                  {product.badge}
+                  {getProductBadge(product, language)}
                 </span>
               </div>
 
               <h1 className="text-4xl md:text-5xl font-bold text-[#332B2B] mb-4">
-                {product.title}
+                {getProductTitle(product, language)}
               </h1>
 
               <div className="flex items-center gap-1 mb-4">
