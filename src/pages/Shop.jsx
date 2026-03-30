@@ -21,7 +21,8 @@ import {
 const Shop = () => {
   const { language } = useLanguage();
   const t = language === "ar" ? ar : en;
-  const { removedIds, customProducts, isLoading } = useProducts();
+  const { removedIds, customProducts, isLoading, hiddenCategoryKeys, hiddenProductIds } =
+    useProducts();
   const defaultProducts = useMemo(
     () => getDefaultProducts(t, language),
     [t, language]
@@ -37,26 +38,29 @@ const Shop = () => {
 
   const currentPath = useRouter();
   const allCategoryLabel = language === "ar" ? "الكل" : "ALL";
-  const [selectedCategory, setSelectedCategory] = useState(allCategoryLabel);
+  const ALL_KEY = "__all__";
+  const [selectedCategoryKey, setSelectedCategoryKey] = useState(ALL_KEY);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Build category list from actual product badges so any category you add in Admin appears here
   // Only include badges from custom products (id > 9), exclude default products to avoid old categories
+  const getCategoryKey = (product) =>
+    String(product?.badge_en || product?.badge || "").trim();
+
   const categories = useMemo(() => {
-    // Filter to only custom products (id > 9) to avoid old default product badges
     const customProductsOnly = allProducts.filter((p) => p.id > 9);
-    const badges = [
-      allCategoryLabel,
-      ...Array.from(
-        new Set(
-          customProductsOnly
-            .map((p) => getProductBadge(p, language))
-            .filter((b) => b != null && String(b).trim() !== "")
-        )
-      ),
-    ];
-    return badges;
-  }, [allProducts, allCategoryLabel, language]);
+    const map = new Map();
+    for (const p of customProductsOnly) {
+      if (hiddenProductIds.includes(p.id)) continue;
+      const key = getCategoryKey(p);
+      if (!key) continue;
+      if (hiddenCategoryKeys.includes(key)) continue;
+      if (!map.has(key)) {
+        map.set(key, { key, label: getProductBadge(p, language) });
+      }
+    }
+    return [{ key: ALL_KEY, label: allCategoryLabel }, ...Array.from(map.values())];
+  }, [allProducts, allCategoryLabel, language, hiddenCategoryKeys, hiddenProductIds]);
 
   // Read URL parameters on mount and when path changes
   useEffect(() => {
@@ -65,27 +69,33 @@ const Shop = () => {
     const searchParam = urlParams.get("search");
 
     if (categoryParam) {
-      setSelectedCategory(categoryParam);
+      const decoded = categoryParam;
+      const entry =
+        categories.find((c) => c.key === decoded) ||
+        categories.find((c) => c.label === decoded);
+      setSelectedCategoryKey(entry?.key || ALL_KEY);
       setSearchQuery("");
     } else if (searchParam) {
       setSearchQuery(searchParam);
-      setSelectedCategory(allCategoryLabel);
+      setSelectedCategoryKey(ALL_KEY);
     }
-  }, [currentPath, allCategoryLabel]);
+  }, [currentPath, allCategoryLabel, categories]);
 
   // If current selection is no longer in the list (e.g. category was removed), switch to ALL
   useEffect(() => {
-    if (categories.length > 0 && !categories.includes(selectedCategory)) {
-      setSelectedCategory(allCategoryLabel);
+    if (categories.length > 0 && !categories.some((c) => c.key === selectedCategoryKey)) {
+      setSelectedCategoryKey(ALL_KEY);
     }
-  }, [categories, selectedCategory, allCategoryLabel]);
+  }, [categories, selectedCategoryKey]);
 
   // Filter products based on category and search
   const filteredProducts = allProducts.filter((product) => {
-    const productBadge = getProductBadge(product, language);
+    if (hiddenProductIds.includes(product.id)) return false;
+    const catKey = getCategoryKey(product);
+    if (catKey && hiddenCategoryKeys.includes(catKey)) return false;
     const matchesCategory =
-      selectedCategory === allCategoryLabel ||
-      productBadge === selectedCategory;
+      selectedCategoryKey === ALL_KEY ||
+      catKey === selectedCategoryKey;
     const productTitle = getProductTitle(product, language);
     const productDesc = getProductDescription(product, language);
     const productShortDesc = getProductShortDescription(product, language);
@@ -139,15 +149,15 @@ const Shop = () => {
           <div className="flex gap-4 flex-wrap">
             {categories.map((category) => (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
+                key={category.key}
+                onClick={() => setSelectedCategoryKey(category.key)}
                 className={`px-6 py-2 rounded-lg font-medium transition-colors duration-300 ${
-                  selectedCategory === category
+                  selectedCategoryKey === category.key
                     ? "bg-[#5C4A37] text-white"
                     : "bg-white text-[#5C4A37] border-2 border-[#5C4A37] hover:bg-[#5C4A37] hover:text-white"
                 }`}
               >
-                {category}
+                {category.label}
               </button>
             ))}
           </div>

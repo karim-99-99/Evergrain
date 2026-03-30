@@ -14,16 +14,33 @@ const safeSaveToStorage = (payload) => {
 const loadSaved = () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { removedIds: [], customProducts: [] };
+    if (!raw)
+      return {
+        removedIds: [],
+        customProducts: [],
+        hiddenCategoryKeys: [],
+        hiddenProductIds: [],
+      };
     const data = JSON.parse(raw);
     return {
       removedIds: Array.isArray(data.removedIds) ? data.removedIds : [],
       customProducts: Array.isArray(data.customProducts)
         ? data.customProducts
         : [],
+      hiddenCategoryKeys: Array.isArray(data.hiddenCategoryKeys)
+        ? data.hiddenCategoryKeys
+        : [],
+      hiddenProductIds: Array.isArray(data.hiddenProductIds)
+        ? data.hiddenProductIds
+        : [],
     };
   } catch {
-    return { removedIds: [], customProducts: [] };
+    return {
+      removedIds: [],
+      customProducts: [],
+      hiddenCategoryKeys: [],
+      hiddenProductIds: [],
+    };
   }
 };
 
@@ -45,6 +62,12 @@ export const ProductsProvider = ({ children }) => {
   const saved = loadSaved();
   const [removedIds, setRemovedIds] = useState(saved.removedIds || []);
   const [customProducts, setCustomProducts] = useState(saved.customProducts || []);
+  const [hiddenCategoryKeys, setHiddenCategoryKeys] = useState(
+    saved.hiddenCategoryKeys || []
+  );
+  const [hiddenProductIds, setHiddenProductIds] = useState(
+    saved.hiddenProductIds || []
+  );
   // Show loading only when we have no cached data (e.g. first mobile visit)
   const [isLoading, setIsLoading] = useState(saved.customProducts?.length === 0);
 
@@ -72,15 +95,30 @@ export const ProductsProvider = ({ children }) => {
               ? data.customProducts
               : [];
             const ids = Array.isArray(data.removedIds) ? data.removedIds : [];
+            const hiddenCats = Array.isArray(data.hiddenCategoryKeys)
+              ? data.hiddenCategoryKeys
+              : [];
+            const hiddenProds = Array.isArray(data.hiddenProductIds)
+              ? data.hiddenProductIds
+              : [];
             console.log(`Loaded ${products.length} products from ${apiBase ? "API" : "initial-products.json"}`);
             setCustomProducts(products);
             setRemovedIds(ids);
-            safeSaveToStorage({ removedIds: ids, customProducts: products });
+            setHiddenCategoryKeys(hiddenCats);
+            setHiddenProductIds(hiddenProds);
+            safeSaveToStorage({
+              removedIds: ids,
+              customProducts: products,
+              hiddenCategoryKeys: hiddenCats,
+              hiddenProductIds: hiddenProds,
+            });
           } else {
             console.warn("initial-products.json is empty, using localStorage fallback");
             if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
               setCustomProducts(saved.customProducts);
               setRemovedIds(saved.removedIds);
+              setHiddenCategoryKeys(saved.hiddenCategoryKeys || []);
+              setHiddenProductIds(saved.hiddenProductIds || []);
             }
           }
           setIsLoading(false);
@@ -93,6 +131,8 @@ export const ProductsProvider = ({ children }) => {
             if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
               setCustomProducts(saved.customProducts);
               setRemovedIds(saved.removedIds);
+              setHiddenCategoryKeys(saved.hiddenCategoryKeys || []);
+              setHiddenProductIds(saved.hiddenProductIds || []);
             }
             setIsLoading(false);
           }
@@ -103,8 +143,29 @@ export const ProductsProvider = ({ children }) => {
 
   // Save to localStorage when data changes
   useEffect(() => {
-    safeSaveToStorage({ removedIds, customProducts });
-  }, [removedIds, customProducts]);
+    safeSaveToStorage({
+      removedIds,
+      customProducts,
+      hiddenCategoryKeys,
+      hiddenProductIds,
+    });
+  }, [removedIds, customProducts, hiddenCategoryKeys, hiddenProductIds]);
+
+  const toggleHiddenCategory = (categoryKey) => {
+    const key = String(categoryKey || "").trim();
+    if (!key) return;
+    setHiddenCategoryKeys((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  };
+
+  const toggleHiddenProduct = (productId) => {
+    const id = Number(productId);
+    if (!Number.isFinite(id)) return;
+    setHiddenProductIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
 
   const addProduct = (product) => {
     const maxId = Math.max(0, ...customProducts.map((p) => p.id), 9);
@@ -190,9 +251,13 @@ export const ProductsProvider = ({ children }) => {
         removedIds,
         customProducts,
         isLoading,
+        hiddenCategoryKeys,
+        hiddenProductIds,
         addProduct,
         removeProduct,
         updateProduct,
+        toggleHiddenCategory,
+        toggleHiddenProduct,
       }}
     >
       {children}

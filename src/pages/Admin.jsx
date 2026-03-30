@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "../utils/Router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -10,6 +10,7 @@ import { ar } from "../translations/ar";
 import { getDefaultProducts } from "../data/defaultProducts";
 import { getProductMedia } from "../utils/productMedia";
 import { getProductTitle } from "../utils/productText";
+import { getProductBadge } from "../utils/productText";
 
 const Admin = () => {
   const { language } = useLanguage();
@@ -21,6 +22,10 @@ const Admin = () => {
     addProduct,
     removeProduct,
     updateProduct,
+    hiddenCategoryKeys,
+    hiddenProductIds,
+    toggleHiddenCategory,
+    toggleHiddenProduct,
   } = useProducts();
 
   const [editingId, setEditingId] = useState(null); // product id when editing
@@ -52,10 +57,26 @@ const Admin = () => {
     ...customProducts,
   ];
 
+  const getCategoryKey = (p) => String(p?.badge_en || p?.badge || "").trim();
+
   const getThumbUrl = (p) => {
     const firstImage = getProductMedia(p, "small").find((m) => m.type === "image");
     return firstImage?.url || "";
   };
+
+  const categories = useMemo(() => {
+    const map = new Map();
+    for (const p of allProducts) {
+      const key = getCategoryKey(p);
+      if (!key) continue;
+      if (!map.has(key)) {
+        map.set(key, { key, label: getProductBadge(p, language) });
+      }
+    }
+    return Array.from(map.values()).sort((a, b) =>
+      String(a.label).localeCompare(String(b.label))
+    );
+  }, [allProducts, language]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -840,6 +861,57 @@ const Admin = () => {
             </form>
           </div>
 
+          {/* Visibility: categories & products */}
+          <div className="bg-white rounded-lg shadow-lg border border-[#8B7355]/20 p-6 mb-10">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <h2 className="text-xl font-bold text-[#332B2B]">
+                {t.admin.visibilityTitle || "Visibility"}
+              </h2>
+              <p className="text-sm text-[#5C4A37]">
+                {t.admin.visibilityHint ||
+                  "Hide/show categories (and their items) and individual products."}
+              </p>
+            </div>
+
+            {categories.length === 0 ? (
+              <p className="mt-4 text-[#8B7355] text-sm">—</p>
+            ) : (
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                {categories.map((cat) => {
+                  const isHidden = hiddenCategoryKeys.includes(cat.key);
+                  return (
+                    <div
+                      key={cat.key}
+                      className="flex items-center justify-between gap-3 p-3 rounded-lg bg-[#F5F0E8]/50 border border-[#8B7355]/20"
+                    >
+                      <div className="min-w-0">
+                        <p className="font-semibold text-[#332B2B] truncate">
+                          {cat.label}
+                        </p>
+                        <p className="text-xs text-[#5C4A37] truncate">
+                          {cat.key}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => toggleHiddenCategory(cat.key)}
+                        className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
+                          isHidden
+                            ? "bg-[#5C4A37] text-white hover:bg-[#4A3A2A]"
+                            : "bg-white text-[#5C4A37] border-2 border-[#5C4A37] hover:bg-[#5C4A37] hover:text-white"
+                        }`}
+                      >
+                        {isHidden
+                          ? t.admin.showCategory || "Show"
+                          : t.admin.hideCategory || "Hide"}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
           {/* Product List */}
           <div className="bg-white rounded-lg shadow-lg border border-[#8B7355]/20 overflow-hidden">
             <h2 className="text-xl font-bold text-[#332B2B] p-4 border-b border-[#8B7355]/20">
@@ -854,6 +926,7 @@ const Admin = () => {
                     <th className="p-4">Title</th>
                     <th className="p-4">Price</th>
                     <th className="p-4">Badge</th>
+                    <th className="p-4">Visible</th>
                     <th className="p-4">Action</th>
                   </tr>
                 </thead>
@@ -895,6 +968,21 @@ const Admin = () => {
                         <span className="bg-[#5C4A37]/10 text-[#5C4A37] px-2 py-1 rounded text-xs font-medium">
                           {product.badge}
                         </span>
+                      </td>
+                      <td className="p-4">
+                        <button
+                          type="button"
+                          onClick={() => toggleHiddenProduct(product.id)}
+                          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
+                            hiddenProductIds.includes(product.id)
+                              ? "bg-[#5C4A37] text-white hover:bg-[#4A3A2A]"
+                              : "bg-white text-[#5C4A37] border-2 border-[#5C4A37] hover:bg-[#5C4A37] hover:text-white"
+                          }`}
+                        >
+                          {hiddenProductIds.includes(product.id)
+                            ? t.admin.showProduct || "Show"
+                            : t.admin.hideProduct || "Hide"}
+                        </button>
                       </td>
                       <td className="p-4 flex flex-wrap gap-2">
                         {product.id > 9 && (

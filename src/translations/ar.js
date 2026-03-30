@@ -349,5 +349,11 @@ export const ar = {
     clearCache: "مسح البيانات القديمة",
     clearCacheHint:
       "إذا ظهرت منتجات أو فئات قديمة، اضغط هذا الزر لمسح البيانات المخزنة. سيتم إعادة تحميل الموقع وجلب البيانات الجديدة من initial-products.json.",
+    visibilityTitle: "إظهار / إخفاء",
+    visibilityHint: "إخفاء/إظهار الفئات (ومنتجاتها) وكذلك المنتجات الفردية.",
+    hideCategory: "إخفاء",
+    showCategory: "إظهار",
+    hideProduct: "إخفاء",
+    showProduct: "إظهار",
   },
 };

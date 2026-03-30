@@ -349,5 +349,11 @@ export const en = {
     clearCache: "Clear Old Data",
     clearCacheHint:
       "If you see old products/categories, click this button to clear cached data. The site will reload and fetch fresh data from initial-products.json.",
+    visibilityTitle: "Visibility",
+    visibilityHint: "Hide/show categories (and their items) and individual products.",
+    hideCategory: "Hide",
+    showCategory: "Show",
+    hideProduct: "Hide",
+    showProduct: "Show",
   },
 };

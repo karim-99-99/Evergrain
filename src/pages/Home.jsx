@@ -136,7 +136,8 @@ const VideoCard = ({ video }) => {
 const Home = () => {
   const { language } = useLanguage();
   const t = language === "ar" ? ar : en;
-  const { removedIds, customProducts, isLoading } = useProducts();
+  const { removedIds, customProducts, isLoading, hiddenCategoryKeys, hiddenProductIds } =
+    useProducts();
   const defaultProducts = useMemo(
     () => getDefaultProducts(t, language),
     [t, language]
@@ -146,9 +147,16 @@ const Home = () => {
       ...defaultProducts.filter((p) => !removedIds.includes(p.id)),
       ...customProducts,
     ];
+    const getCategoryKey = (p) => String(p?.badge_en || p?.badge || "").trim();
+    const visible = productsList.filter((p) => {
+      if (hiddenProductIds.includes(p.id)) return false;
+      const k = getCategoryKey(p);
+      if (k && hiddenCategoryKeys.includes(k)) return false;
+      return true;
+    });
     console.log(`Home: Total products = ${productsList.length} (default: ${defaultProducts.length}, custom: ${customProducts.length})`);
-    return productsList;
-  }, [defaultProducts, removedIds, customProducts]);
+    return visible;
+  }, [defaultProducts, removedIds, customProducts, hiddenCategoryKeys, hiddenProductIds]);
 
   return (
     <div className="min-h-screen bg-[#F5F0E8]">

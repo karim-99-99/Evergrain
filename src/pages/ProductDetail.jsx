@@ -26,7 +26,8 @@ import {
 const ProductDetail = () => {
   const { language } = useLanguage();
   const t = language === "ar" ? ar : en;
-  const { removedIds, customProducts } = useProducts();
+  const { removedIds, customProducts, hiddenCategoryKeys, hiddenProductIds } =
+    useProducts();
   const defaultProducts = useMemo(
     () => getDefaultProducts(t, language),
     [t, language]
@@ -38,6 +39,16 @@ const ProductDetail = () => {
     ],
     [defaultProducts, removedIds, customProducts]
   );
+
+  const visibleProducts = useMemo(() => {
+    const getCategoryKey = (p) => String(p?.badge_en || p?.badge || "").trim();
+    return allProducts.filter((p) => {
+      if (hiddenProductIds.includes(p.id)) return false;
+      const key = getCategoryKey(p);
+      if (key && hiddenCategoryKeys.includes(key)) return false;
+      return true;
+    });
+  }, [allProducts, hiddenCategoryKeys, hiddenProductIds]);
 
   const [product, setProduct] = useState(null);
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
@@ -53,7 +64,7 @@ const ProductDetail = () => {
   useEffect(() => {
     // Get product ID from URL
     const productId = parseInt(currentPath.split("/product/")[1], 10);
-    const found = allProducts.find((p) => p.id === productId);
+    const found = visibleProducts.find((p) => p.id === productId);
     const foundProduct = found
       ? {
           ...found,
@@ -68,7 +79,7 @@ const ProductDetail = () => {
         }
       : null;
     setProduct(foundProduct);
-  }, [currentPath, allProducts]);
+  }, [currentPath, visibleProducts]);
 
   const media = useMemo(() => getProductMedia(product, "large"), [product]);
   const mediaThumbnails = useMemo(() => getProductMedia(product, "small"), [product]);
