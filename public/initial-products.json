@@ -42,26 +42,26 @@
       "media": [
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=13bhwJIkaJ8kFe6TqICjK9w-fgagl1dgv&sz=w1200"
+          "url": "https://drive.google.com/file/d/16FIa5pzcCPf7-vZlfJNTDs1Pngp6vyCI/view?usp=drive_link"
         },
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1EK5_dZeMdwoHVoHQKcKZILwtI74L24pS&sz=w1200"
-        },
-        {
-          "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1Q6RpOkxzskzxEPImOCLfjmx6SKwuVPmP&sz=w1200"
+          "url": "https://drive.google.com/file/d/13bhwJIkaJ8kFe6TqICjK9w-fgagl1dgv/view?usp=drive_link"
         },
         {
           "type": "video",
-          "url": "https://drive.google.com/file/d/1kamwaUnhW4IonU4bgKcPHRPDA-H4DXfL/view"
+          "url": "https://drive.google.com/file/d/1kamwaUnhW4IonU4bgKcPHRPDA-H4DXfL/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1EK5_dZeMdwoHVoHQKcKZILwtI74L24pS/view?usp=drive_link"
         }
       ],
-      "image": "https://drive.google.com/thumbnail?id=13bhwJIkaJ8kFe6TqICjK9w-fgagl1dgv&sz=w1200",
+      "image": "https://drive.google.com/file/d/16FIa5pzcCPf7-vZlfJNTDs1Pngp6vyCI/view?usp=drive_link",
       "images": [
-        "https://drive.google.com/thumbnail?id=13bhwJIkaJ8kFe6TqICjK9w-fgagl1dgv&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1EK5_dZeMdwoHVoHQKcKZILwtI74L24pS&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1Q6RpOkxzskzxEPImOCLfjmx6SKwuVPmP&sz=w1200"
+        "https://drive.google.com/file/d/16FIa5pzcCPf7-vZlfJNTDs1Pngp6vyCI/view?usp=drive_link",
+        "https://drive.google.com/file/d/13bhwJIkaJ8kFe6TqICjK9w-fgagl1dgv/view?usp=drive_link",
+        "https://drive.google.com/file/d/1EK5_dZeMdwoHVoHQKcKZILwtI74L24pS/view?usp=drive_link"
       ]
     },
     {
@@ -175,31 +175,26 @@
       "media": [
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1emTkmue47QNJD8fdPYgSvyXM4gy5BzIO&sz=w1200"
+          "url": "https://drive.google.com/file/d/1rjmX78Q-R_eADvQ08XCj092zCeGSm9DH/view?usp=drive_link"
         },
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1-wA1ou0eXgHEOW56i4vu6N-3ONV9AIvd&sz=w1200"
+          "url": "https://drive.google.com/file/d/1fd4-2IHHeu3PWtQ2udOR6u87Cb2Qe6ye/view?usp=drive_link"
         },
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1TxZrC7ZTt5egTT5m3m049LRHfxjBdwYL&sz=w1200"
-        },
-        {
-          "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1GVSznMYh2AEgqSDoxDaqrMVc1n1ZjIR5&sz=w1200"
+          "url": "https://drive.google.com/file/d/1UaRFJ6uJYmxTW42SL7X--oLy26bVj0tI/view?usp=drive_link"
         },
         {
           "type": "video",
-          "url": "https://drive.google.com/file/d/1xQzR_mOjvHI2bqnLOUPg_pJUrIeQ_z5m/view"
+          "url": "https://drive.google.com/file/d/1xQzR_mOjvHI2bqnLOUPg_pJUrIeQ_z5m/view?usp=drive_link"
         }
       ],
-      "image": "https://drive.google.com/thumbnail?id=1emTkmue47QNJD8fdPYgSvyXM4gy5BzIO&sz=w1200",
+      "image": "https://drive.google.com/file/d/1rjmX78Q-R_eADvQ08XCj092zCeGSm9DH/view?usp=drive_link",
       "images": [
-        "https://drive.google.com/thumbnail?id=1emTkmue47QNJD8fdPYgSvyXM4gy5BzIO&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1-wA1ou0eXgHEOW56i4vu6N-3ONV9AIvd&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1TxZrC7ZTt5egTT5m3m049LRHfxjBdwYL&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1GVSznMYh2AEgqSDoxDaqrMVc1n1ZjIR5&sz=w1200"
+        "https://drive.google.com/file/d/1rjmX78Q-R_eADvQ08XCj092zCeGSm9DH/view?usp=drive_link",
+        "https://drive.google.com/file/d/1fd4-2IHHeu3PWtQ2udOR6u87Cb2Qe6ye/view?usp=drive_link",
+        "https://drive.google.com/file/d/1UaRFJ6uJYmxTW42SL7X--oLy26bVj0tI/view?usp=drive_link"
       ]
     },
     {
@@ -243,26 +238,21 @@
       "media": [
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1rT5jMLYeaHbssFJoIt6ZSpspb2yoZofa&sz=w1200"
+          "url": "https://drive.google.com/file/d/1rBeVW8x3VNk2bsHoU6TRzZ8W9DsGlrI5/view?usp=drive_link"
         },
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1u9vlp_pX3DsEIqnfrfhDVwJeiDv1-Rmq&sz=w1200"
-        },
-        {
-          "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1eP6RzhXjrzv_IKV4xL9BWwD6ik_VjqKW&sz=w1200"
+          "url": "https://drive.google.com/file/d/1u9vlp_pX3DsEIqnfrfhDVwJeiDv1-Rmq/view?usp=drive_link"
         },
         {
           "type": "video",
-          "url": "https://drive.google.com/file/d/1kMzBXIO4drGI2iJradnWGuK60qtlekUH/view"
+          "url": "https://drive.google.com/file/d/1kMzBXIO4drGI2iJradnWGuK60qtlekUH/view?usp=drive_link"
         }
       ],
-      "image": "https://drive.google.com/thumbnail?id=1rT5jMLYeaHbssFJoIt6ZSpspb2yoZofa&sz=w1200",
+      "image": "https://drive.google.com/file/d/1rBeVW8x3VNk2bsHoU6TRzZ8W9DsGlrI5/view?usp=drive_link",
       "images": [
-        "https://drive.google.com/thumbnail?id=1rT5jMLYeaHbssFJoIt6ZSpspb2yoZofa&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1u9vlp_pX3DsEIqnfrfhDVwJeiDv1-Rmq&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1eP6RzhXjrzv_IKV4xL9BWwD6ik_VjqKW&sz=w1200"
+        "https://drive.google.com/file/d/1rBeVW8x3VNk2bsHoU6TRzZ8W9DsGlrI5/view?usp=drive_link",
+        "https://drive.google.com/file/d/1u9vlp_pX3DsEIqnfrfhDVwJeiDv1-Rmq/view?usp=drive_link"
       ]
     },
     {
@@ -309,26 +299,26 @@
       "media": [
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1AJiVD_T9imbyrXDjUm-vEijZ4xYHfN08&sz=w1200"
+          "url": "https://drive.google.com/file/d/1VA1OQC7de_F64bRgr22o6gbN0dgNjCNh/view?usp=drive_link"
         },
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1o6ywvqpxzx1xLVgOV8HChJhSHG3bzoqv&sz=w1200"
-        },
-        {
-          "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1w4S8T-vOvu3LyMtLLYAUSU6R__uv9STs&sz=w1200"
+          "url": "https://drive.google.com/file/d/1MMwk1g6PlOYOByBqvM8LqzoQBDrQ-Fqd/view?usp=drive_link"
         },
         {
           "type": "video",
-          "url": "https://drive.google.com/file/d/1npI07CvFV0ykkDNEsjCpnrnfpRkAFsdu/view"
+          "url": "https://drive.google.com/file/d/1npI07CvFV0ykkDNEsjCpnrnfpRkAFsdu/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1w4S8T-vOvu3LyMtLLYAUSU6R__uv9STs/view?usp=drive_link"
         }
       ],
-      "image": "https://drive.google.com/thumbnail?id=1AJiVD_T9imbyrXDjUm-vEijZ4xYHfN08&sz=w1200",
+      "image": "https://drive.google.com/file/d/1VA1OQC7de_F64bRgr22o6gbN0dgNjCNh/view?usp=drive_link",
       "images": [
-        "https://drive.google.com/thumbnail?id=1AJiVD_T9imbyrXDjUm-vEijZ4xYHfN08&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1o6ywvqpxzx1xLVgOV8HChJhSHG3bzoqv&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1w4S8T-vOvu3LyMtLLYAUSU6R__uv9STs&sz=w1200"
+        "https://drive.google.com/file/d/1VA1OQC7de_F64bRgr22o6gbN0dgNjCNh/view?usp=drive_link",
+        "https://drive.google.com/file/d/1MMwk1g6PlOYOByBqvM8LqzoQBDrQ-Fqd/view?usp=drive_link",
+        "https://drive.google.com/file/d/1w4S8T-vOvu3LyMtLLYAUSU6R__uv9STs/view?usp=drive_link"
       ]
     },
     {
@@ -375,31 +365,26 @@
       "media": [
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1ATnW-l69Ah-wmfrq2zhHvYr5qvfW84U1&sz=w1200"
+          "url": "https://drive.google.com/file/d/1Jt7ahbDpRBeAvVdKwEHf7fVJ52lAzaMe/view?usp=drive_link"
         },
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1JkupkXThtV_vPA0Kp3jRsflqD8yFBpBC&sz=w1200"
+          "url": "https://drive.google.com/file/d/14oQ3-m0xPifVjsYTzHWs2KN0U1wVAre9/view?usp=drive_link"
         },
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1rWZ-l-_ABQU67Zm3ajqlura1-lA0bR_f&sz=w1200"
-        },
-        {
-          "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1vDYb0lIhnMLl8UlKc67e2pfKbft450lO&sz=w1200"
+          "url": "https://drive.google.com/file/d/1JkupkXThtV_vPA0Kp3jRsflqD8yFBpBC/view?usp=drive_link"
         },
         {
           "type": "video",
-          "url": "https://drive.google.com/file/d/1Vy13sRlqaf4vxiIN1Vq9Fer0hrsr_6BQ/view"
+          "url": "https://drive.google.com/file/d/1JkupkXThtV_vPA0Kp3jRsflqD8yFBpBC/view?usp=drive_link"
         }
       ],
-      "image": "https://drive.google.com/thumbnail?id=1ATnW-l69Ah-wmfrq2zhHvYr5qvfW84U1&sz=w1200",
+      "image": "https://drive.google.com/file/d/1Jt7ahbDpRBeAvVdKwEHf7fVJ52lAzaMe/view?usp=drive_link",
       "images": [
-        "https://drive.google.com/thumbnail?id=1ATnW-l69Ah-wmfrq2zhHvYr5qvfW84U1&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1JkupkXThtV_vPA0Kp3jRsflqD8yFBpBC&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1rWZ-l-_ABQU67Zm3ajqlura1-lA0bR_f&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1vDYb0lIhnMLl8UlKc67e2pfKbft450lO&sz=w1200"
+        "https://drive.google.com/file/d/1Jt7ahbDpRBeAvVdKwEHf7fVJ52lAzaMe/view?usp=drive_link",
+        "https://drive.google.com/file/d/14oQ3-m0xPifVjsYTzHWs2KN0U1wVAre9/view?usp=drive_link",
+        "https://drive.google.com/file/d/1JkupkXThtV_vPA0Kp3jRsflqD8yFBpBC/view?usp=drive_link"
       ]
     },
     {
@@ -445,36 +430,26 @@
       "media": [
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1kW5tEejBSgLRi4R6hbRQVHhYe-_foC07&sz=w1200"
+          "url": "https://drive.google.com/file/d/1zvTImq0xil1ANUnWmLo8RigKjTF553e2/view?usp=drive_link"
         },
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1PVc5EFDV6iKX5tgbm2oTgzi2pzURhCuI&sz=w1200"
-        },
-        {
-          "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1DjwzddrxAReEXX9wpNkSS5YKDshEAm1z&sz=w1200"
-        },
-        {
-          "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1zUxcG5SFimiWGOtHStAk5BXGoWQ1BmXF&sz=w1200"
-        },
-        {
-          "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1KlkhzJPHjopitZ4GMTOIlhdrpN97yVMX&sz=w1200"
+          "url": "https://drive.google.com/file/d/18DDZV-xzj6QkRGBpBSB7MVtKx5Z3n9MW/view?usp=drive_link"
         },
         {
           "type": "video",
-          "url": "https://drive.google.com/file/d/1nU3J92pP6VLDwJNZ5BiTHQcB-429vxjB/view"
+          "url": "https://drive.google.com/file/d/1nU3J92pP6VLDwJNZ5BiTHQcB-429vxjB/view?usp=drive_link"
+        },
+        {
+          "type": "image",
+          "url": "https://drive.google.com/file/d/1DjwzddrxAReEXX9wpNkSS5YKDshEAm1z/view?usp=drive_link"
         }
       ],
-      "image": "https://drive.google.com/thumbnail?id=1kW5tEejBSgLRi4R6hbRQVHhYe-_foC07&sz=w1200",
+      "image": "https://drive.google.com/file/d/1zvTImq0xil1ANUnWmLo8RigKjTF553e2/view?usp=drive_link",
       "images": [
-        "https://drive.google.com/thumbnail?id=1kW5tEejBSgLRi4R6hbRQVHhYe-_foC07&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1PVc5EFDV6iKX5tgbm2oTgzi2pzURhCuI&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1DjwzddrxAReEXX9wpNkSS5YKDshEAm1z&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1zUxcG5SFimiWGOtHStAk5BXGoWQ1BmXF&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1KlkhzJPHjopitZ4GMTOIlhdrpN97yVMX&sz=w1200"
+        "https://drive.google.com/file/d/1zvTImq0xil1ANUnWmLo8RigKjTF553e2/view?usp=drive_link",
+        "https://drive.google.com/file/d/18DDZV-xzj6QkRGBpBSB7MVtKx5Z3n9MW/view?usp=drive_link",
+        "https://drive.google.com/file/d/1DjwzddrxAReEXX9wpNkSS5YKDshEAm1z/view?usp=drive_link"
       ]
     },
     {
@@ -521,26 +496,16 @@
       "media": [
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1rkXTScugboRiqAzI5qLQLo5_VsGByXvg&sz=w1200"
-        },
-        {
-          "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1j2icBv7yISFBo5ZuHvGDvz7B1FV6AjAJ&sz=w1200"
-        },
-        {
-          "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1jsdrQEx35TqPQIazTl4Rd2dDQcGi6T07&sz=w1200"
+          "url": "https://drive.google.com/file/d/14QxKq-Nbm5TV0DlZ1fq6GYLxWPxz5ZkR/view?usp=drive_link"
         },
         {
           "type": "video",
-          "url": "https://drive.google.com/file/d/11r9JrCkTYO-r54mgiwZFZJCSx6pvs-z_/view"
+          "url": "https://drive.google.com/file/d/11r9JrCkTYO-r54mgiwZFZJCSx6pvs-z_/view?usp=drive_link"
         }
       ],
-      "image": "https://drive.google.com/thumbnail?id=1rkXTScugboRiqAzI5qLQLo5_VsGByXvg&sz=w1200",
+      "image": "https://drive.google.com/file/d/14QxKq-Nbm5TV0DlZ1fq6GYLxWPxz5ZkR/view?usp=drive_link",
       "images": [
-        "https://drive.google.com/thumbnail?id=1rkXTScugboRiqAzI5qLQLo5_VsGByXvg&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1j2icBv7yISFBo5ZuHvGDvz7B1FV6AjAJ&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1jsdrQEx35TqPQIazTl4Rd2dDQcGi6T07&sz=w1200"
+        "https://drive.google.com/file/d/14QxKq-Nbm5TV0DlZ1fq6GYLxWPxz5ZkR/view?usp=drive_link"
       ]
     },
     {
@@ -973,8 +938,8 @@
       "description_ar": "ارتقِ بأسلوب تقديمك مع طقم أطباق التقديم الخشبية البيضاوية المكون من ثلاث قطع بتصميم أنيق وبسيط يبرز جمال المائدة بطريقة راقية. يتيح لك الطقم تقديم أنواع متعددة من المقبلات، الحلويات، التمور أو المكسرات بشكل منظم ومتناغم، مما يجعله مثاليًا للجلسات العائلية والضيافة الراقية.\nتصميمه الطويل والناعم يمنح الطاولة مظهرًا مرتبًا وفاخرًا ويحول التقديم اليومي إلى تجربة ضيافة مميزة.",
       "shortDescription_en": "Set of 3 oval wooden serving plates for elegant and organized hosting.",
       "shortDescription_ar": "طقم أطباق تقديم خشبية بيضاوية من 3 قطع لتقديم أنيق ومنظم في كل مناسبة.",
-      "badge_en": "RAMADAN",
-      "badge_ar": "رمضان",
+      "badge_en": "NEW ARRIVAL",
+      "badge_ar": "وصل حديثاً",
       "features_en": [
         "Set of 3 serving dishes in matching sizes",
         "Elegant oval design enhances presentation",
@@ -994,7 +959,7 @@
       "title": "Oval Wooden Serving Plates Set – 3 Pieces",
       "description": "Elevate your serving style with this set of three oval wooden serving plates, elegantly designed to enhance table presentation with simplicity and sophistication. The set allows you to serve different appetizers, sweets, dates, or nuts in a neat and harmonious arrangement, perfect for family gatherings and stylish hosting.\nIts sleek elongated design adds a refined touch to any table, turning everyday serving into a premium hosting experience.",
       "shortDescription": "Set of 3 oval wooden serving plates for elegant and organized hosting.",
-      "badge": "RAMADAN",
+      "badge": "NEW ARRIVAL",
       "features": [
         "Set of 3 serving dishes in matching sizes",
         "Elegant oval design enhances presentation",
@@ -1269,69 +1234,17 @@
       "media": [
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1SII4__tspTSKlhmFfknxV9HUVh2xnhn3&sz=w1200"
+          "url": "https://drive.google.com/file/d/1IRln4-33Dq7Yk2RU6nNiioHKEaBftLzw/view?usp=drive_link"
         },
         {
           "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=1rlUHJgspWjkPLqFhsFC5-qC3LRVYa6Cb&sz=w1200"
+          "url": "https://drive.google.com/file/d/1ztiqZaG6UlMn1IZZy3KpoNtfLCDWrQZ3/view?usp=drive_link"
         }
       ],
-      "image": "https://drive.google.com/thumbnail?id=1SII4__tspTSKlhmFfknxV9HUVh2xnhn3&sz=w1200",
+      "image": "https://drive.google.com/file/d/1IRln4-33Dq7Yk2RU6nNiioHKEaBftLzw/view?usp=drive_link",
       "images": [
-        "https://drive.google.com/thumbnail?id=1SII4__tspTSKlhmFfknxV9HUVh2xnhn3&sz=w1200",
-        "https://drive.google.com/thumbnail?id=1rlUHJgspWjkPLqFhsFC5-qC3LRVYa6Cb&sz=w1200"
-      ]
-    },
-    {
-      "id": 30,
-      "title_en": "Rectangular Wooden cutter",
-      "title_ar": "قطاعه مستطيلة",
-      "description_en": "Crafted for homes that appreciate refined simplicity, this premium rectangular wooden board is designed to serve both function and style. Perfect for presenting cheeses, fruits, appetizers, or desserts, it elevates everyday meals into a sophisticated experience. Its clean silhouette and natural wood finish make it an essential piece for modern kitchens and elegant hosting.",
-      "description_ar": "صُمم هذا اللوح الخشبي المستطيل الفاخر للمنازل التي تقدّر البساطة الراقية. مثالي لتقديم الجبن والفواكه والمقبلات والحلويات، حيث يحوّل الوجبات اليومية إلى تجربة أنيقة. بفضل تصميمه النظيف وتشطيبه الخشبي الطبيعي، يعد قطعة أساسية للمطابخ العصرية والاستضافة الراقية.",
-      "shortDescription_en": "Luxury rectangular wooden serving and cutting board designed for elegant presentation and everyday sophistication.",
-      "shortDescription_ar": "لوح تقطيع وتقديم خشبي مستطيل فاخر، يجمع بين العملية والأناقة للاستخدام اليومي والتقديم الراقي.",
-      "badge_en": "NEW ARRIVAL",
-      "badge_ar": "وصل حديثاً",
-      "features_en": [
-        "Premium solid natural wood",
-        "Minimalist elegant rectangular design",
-        "Dual use: cutting and serving",
-        "Ideal for cheeses, fruits, appetizers, and desserts",
-        "Strong, durable, and easy to maintain",
-        "Perfect for everyday use and hosting"
-      ],
-      "features_ar": [
-        "خشب طبيعي متين بتشطيب فاخر",
-        "تصميم مستطيل بسيط وأنيق",
-        "استخدام مزدوج للتقطيع والتقديم",
-        "مثالي للجبن والفواكه والمقبلات والحلويات",
-        "قوي وسهل العناية والتنظيف",
-        "مناسب للاستخدام اليومي والاستضافة"
-      ],
-      "title": "Rectangular Wooden cutter",
-      "description": "Crafted for homes that appreciate refined simplicity, this premium rectangular wooden board is designed to serve both function and style. Perfect for presenting cheeses, fruits, appetizers, or desserts, it elevates everyday meals into a sophisticated experience. Its clean silhouette and natural wood finish make it an essential piece for modern kitchens and elegant hosting.",
-      "shortDescription": "Luxury rectangular wooden serving and cutting board designed for elegant presentation and everyday sophistication.",
-      "badge": "NEW ARRIVAL",
-      "features": [
-        "Premium solid natural wood",
-        "Minimalist elegant rectangular design",
-        "Dual use: cutting and serving",
-        "Ideal for cheeses, fruits, appetizers, and desserts",
-        "Strong, durable, and easy to maintain",
-        "Perfect for everyday use and hosting"
-      ],
-      "price_en": "605 EG",
-      "price_ar": "605 جنية",
-      "price": "550 EG",
-      "media": [
-        {
-          "type": "image",
-          "url": "https://drive.google.com/thumbnail?id=14OYU2Lul5Lg84uvQTcLblVqLo7VjBI3l&sz=w1200"
-        }
-      ],
-      "image": "https://drive.google.com/thumbnail?id=14OYU2Lul5Lg84uvQTcLblVqLo7VjBI3l&sz=w1200",
-      "images": [
-        "https://drive.google.com/thumbnail?id=14OYU2Lul5Lg84uvQTcLblVqLo7VjBI3l&sz=w1200"
+        "https://drive.google.com/file/d/1IRln4-33Dq7Yk2RU6nNiioHKEaBftLzw/view?usp=drive_link",
+        "https://drive.google.com/file/d/1ztiqZaG6UlMn1IZZy3KpoNtfLCDWrQZ3/view?usp=drive_link"
       ]
     },
     {
