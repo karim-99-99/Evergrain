@@ -462,6 +462,8 @@ const Admin = () => {
                 const data = {
                   removedIds: [], // Empty since default products are removed from code
                   customProducts: allProductsToExport, // All products (default + custom) with all categories
+                  hiddenCategoryKeys,
+                  hiddenProductIds,
                 };
 
                 const blob = new Blob([JSON.stringify(data, null, 2)], {

@@ -4,6 +4,12 @@ const STORAGE_KEY = "evergrain_products";
 /** Visibility toggles live here so a fetch of initial-products.json never wipes them. */
 const VISIBILITY_STORAGE_KEY = "evergrain_visibility";
 
+/**
+ * Category keys match `badge_en` (see Shop / Admin). Hidden for every new visitor
+ * until they use Admin "Show" (stored in evergrain_visibility).
+ */
+export const DEFAULT_HIDDEN_CATEGORY_KEYS = ["RAMADAN"];
+
 // localStorage has ~5MB limit; product data with base64 images/videos often exceeds it — never crash, just skip saving
 const safeSaveToStorage = (payload) => {
   try {
@@ -27,7 +33,7 @@ const safeSaveVisibility = (hiddenCategoryKeys, hiddenProductIds) => {
 const loadVisibility = () => {
   try {
     const raw = localStorage.getItem(VISIBILITY_STORAGE_KEY);
-    if (raw) {
+    if (raw !== null) {
       const data = JSON.parse(raw);
       return {
         hiddenCategoryKeys: Array.isArray(data.hiddenCategoryKeys)
@@ -39,28 +45,31 @@ const loadVisibility = () => {
       };
     }
   } catch {
-    // fall through to legacy
+    // fall through to legacy / defaults
   }
   // Migrate from older payloads stored under evergrain_products
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return { hiddenCategoryKeys: [], hiddenProductIds: [] };
+    if (raw) {
+      const data = JSON.parse(raw);
+      const hiddenCategoryKeys = Array.isArray(data.hiddenCategoryKeys)
+        ? data.hiddenCategoryKeys
+        : [];
+      const hiddenProductIds = Array.isArray(data.hiddenProductIds)
+        ? data.hiddenProductIds
+        : [];
+      if (hiddenCategoryKeys.length > 0 || hiddenProductIds.length > 0) {
+        safeSaveVisibility(hiddenCategoryKeys, hiddenProductIds);
+        return { hiddenCategoryKeys, hiddenProductIds };
+      }
     }
-    const data = JSON.parse(raw);
-    const hiddenCategoryKeys = Array.isArray(data.hiddenCategoryKeys)
-      ? data.hiddenCategoryKeys
-      : [];
-    const hiddenProductIds = Array.isArray(data.hiddenProductIds)
-      ? data.hiddenProductIds
-      : [];
-    if (hiddenCategoryKeys.length > 0 || hiddenProductIds.length > 0) {
-      safeSaveVisibility(hiddenCategoryKeys, hiddenProductIds);
-    }
-    return { hiddenCategoryKeys, hiddenProductIds };
   } catch {
-    return { hiddenCategoryKeys: [], hiddenProductIds: [] };
+    // fall through
   }
+  return {
+    hiddenCategoryKeys: [...DEFAULT_HIDDEN_CATEGORY_KEYS],
+    hiddenProductIds: [],
+  };
 };
 
 const loadSaved = () => {
@@ -141,7 +150,22 @@ export const ProductsProvider = ({ children }) => {
             console.log(`Loaded ${products.length} products from ${apiBase ? "API" : "initial-products.json"}`);
             setCustomProducts(products);
             setRemovedIds(ids);
-            // Do not reset visibility from JSON — it is stored in evergrain_visibility
+            // First load on a device with no visibility file yet: apply defaults from JSON
+            // (so mobile matches laptop / new link visitors get repo defaults).
+            if (
+              typeof localStorage !== "undefined" &&
+              localStorage.getItem(VISIBILITY_STORAGE_KEY) === null
+            ) {
+              const fileCats = Array.isArray(data.hiddenCategoryKeys)
+                ? data.hiddenCategoryKeys
+                : [...DEFAULT_HIDDEN_CATEGORY_KEYS];
+              const fileProds = Array.isArray(data.hiddenProductIds)
+                ? data.hiddenProductIds
+                : [];
+              setHiddenCategoryKeys(fileCats);
+              setHiddenProductIds(fileProds);
+            }
+            // Do not reset visibility when evergrain_visibility already exists
             safeSaveToStorage({
               removedIds: ids,
               customProducts: products,
