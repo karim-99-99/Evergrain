@@ -483,6 +483,7 @@ const Admin = () => {
               onClick={() => {
                 if (confirm(t.admin.clearCacheHint || "Clear cached data?")) {
                   localStorage.removeItem("evergrain_products");
+                  localStorage.removeItem("evergrain_visibility");
                   localStorage.removeItem("evergrain_cart");
                   window.location.reload();
                 }

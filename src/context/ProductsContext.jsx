@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 const STORAGE_KEY = "evergrain_products";
+/** Visibility toggles live here so a fetch of initial-products.json never wipes them. */
+const VISIBILITY_STORAGE_KEY = "evergrain_visibility";
 
 // localStorage has ~5MB limit; product data with base64 images/videos often exceeds it — never crash, just skip saving
 const safeSaveToStorage = (payload) => {
@@ -11,6 +13,56 @@ const safeSaveToStorage = (payload) => {
   }
 };
 
+const safeSaveVisibility = (hiddenCategoryKeys, hiddenProductIds) => {
+  try {
+    localStorage.setItem(
+      VISIBILITY_STORAGE_KEY,
+      JSON.stringify({ hiddenCategoryKeys, hiddenProductIds })
+    );
+  } catch {
+    // ignore
+  }
+};
+
+const loadVisibility = () => {
+  try {
+    const raw = localStorage.getItem(VISIBILITY_STORAGE_KEY);
+    if (raw) {
+      const data = JSON.parse(raw);
+      return {
+        hiddenCategoryKeys: Array.isArray(data.hiddenCategoryKeys)
+          ? data.hiddenCategoryKeys
+          : [],
+        hiddenProductIds: Array.isArray(data.hiddenProductIds)
+          ? data.hiddenProductIds
+          : [],
+      };
+    }
+  } catch {
+    // fall through to legacy
+  }
+  // Migrate from older payloads stored under evergrain_products
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      return { hiddenCategoryKeys: [], hiddenProductIds: [] };
+    }
+    const data = JSON.parse(raw);
+    const hiddenCategoryKeys = Array.isArray(data.hiddenCategoryKeys)
+      ? data.hiddenCategoryKeys
+      : [];
+    const hiddenProductIds = Array.isArray(data.hiddenProductIds)
+      ? data.hiddenProductIds
+      : [];
+    if (hiddenCategoryKeys.length > 0 || hiddenProductIds.length > 0) {
+      safeSaveVisibility(hiddenCategoryKeys, hiddenProductIds);
+    }
+    return { hiddenCategoryKeys, hiddenProductIds };
+  } catch {
+    return { hiddenCategoryKeys: [], hiddenProductIds: [] };
+  }
+};
+
 const loadSaved = () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -18,8 +70,6 @@ const loadSaved = () => {
       return {
         removedIds: [],
         customProducts: [],
-        hiddenCategoryKeys: [],
-        hiddenProductIds: [],
       };
     const data = JSON.parse(raw);
     return {
@@ -27,19 +77,11 @@ const loadSaved = () => {
       customProducts: Array.isArray(data.customProducts)
         ? data.customProducts
         : [],
-      hiddenCategoryKeys: Array.isArray(data.hiddenCategoryKeys)
-        ? data.hiddenCategoryKeys
-        : [],
-      hiddenProductIds: Array.isArray(data.hiddenProductIds)
-        ? data.hiddenProductIds
-        : [],
     };
   } catch {
     return {
       removedIds: [],
       customProducts: [],
-      hiddenCategoryKeys: [],
-      hiddenProductIds: [],
     };
   }
 };
@@ -60,13 +102,14 @@ const RETRY_DELAY_MS = 2000;
 export const ProductsProvider = ({ children }) => {
   // Load from localStorage FIRST for instant display, then update from initial-products.json
   const saved = loadSaved();
+  const initialVisibility = loadVisibility();
   const [removedIds, setRemovedIds] = useState(saved.removedIds || []);
   const [customProducts, setCustomProducts] = useState(saved.customProducts || []);
   const [hiddenCategoryKeys, setHiddenCategoryKeys] = useState(
-    saved.hiddenCategoryKeys || []
+    initialVisibility.hiddenCategoryKeys
   );
   const [hiddenProductIds, setHiddenProductIds] = useState(
-    saved.hiddenProductIds || []
+    initialVisibility.hiddenProductIds
   );
   // Show loading only when we have no cached data (e.g. first mobile visit)
   const [isLoading, setIsLoading] = useState(saved.customProducts?.length === 0);
@@ -95,30 +138,19 @@ export const ProductsProvider = ({ children }) => {
               ? data.customProducts
               : [];
             const ids = Array.isArray(data.removedIds) ? data.removedIds : [];
-            const hiddenCats = Array.isArray(data.hiddenCategoryKeys)
-              ? data.hiddenCategoryKeys
-              : [];
-            const hiddenProds = Array.isArray(data.hiddenProductIds)
-              ? data.hiddenProductIds
-              : [];
             console.log(`Loaded ${products.length} products from ${apiBase ? "API" : "initial-products.json"}`);
             setCustomProducts(products);
             setRemovedIds(ids);
-            setHiddenCategoryKeys(hiddenCats);
-            setHiddenProductIds(hiddenProds);
+            // Do not reset visibility from JSON — it is stored in evergrain_visibility
             safeSaveToStorage({
               removedIds: ids,
               customProducts: products,
-              hiddenCategoryKeys: hiddenCats,
-              hiddenProductIds: hiddenProds,
             });
           } else {
             console.warn("initial-products.json is empty, using localStorage fallback");
             if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
               setCustomProducts(saved.customProducts);
               setRemovedIds(saved.removedIds);
-              setHiddenCategoryKeys(saved.hiddenCategoryKeys || []);
-              setHiddenProductIds(saved.hiddenProductIds || []);
             }
           }
           setIsLoading(false);
@@ -131,8 +163,6 @@ export const ProductsProvider = ({ children }) => {
             if (saved.customProducts.length > 0 || saved.removedIds.length > 0) {
               setCustomProducts(saved.customProducts);
               setRemovedIds(saved.removedIds);
-              setHiddenCategoryKeys(saved.hiddenCategoryKeys || []);
-              setHiddenProductIds(saved.hiddenProductIds || []);
             }
             setIsLoading(false);
           }
@@ -141,15 +171,18 @@ export const ProductsProvider = ({ children }) => {
     doFetch();
   }, []);
 
-  // Save to localStorage when data changes
+  // Save products bundle (no visibility — avoids fetch overwriting toggles)
   useEffect(() => {
     safeSaveToStorage({
       removedIds,
       customProducts,
-      hiddenCategoryKeys,
-      hiddenProductIds,
     });
-  }, [removedIds, customProducts, hiddenCategoryKeys, hiddenProductIds]);
+  }, [removedIds, customProducts]);
+
+  // Persist visibility separately so refresh + initial-products fetch keep toggles
+  useEffect(() => {
+    safeSaveVisibility(hiddenCategoryKeys, hiddenProductIds);
+  }, [hiddenCategoryKeys, hiddenProductIds]);
 
   const toggleHiddenCategory = (categoryKey) => {
     const key = String(categoryKey || "").trim();
